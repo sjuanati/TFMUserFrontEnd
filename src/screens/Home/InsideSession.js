@@ -127,16 +127,10 @@ const insideSession = (props) => {
                 <Body style={styles.body}>
                     <Image
                         style={styles.logo}
-                        //source={require('../images/DrMax.png')}
                         source={drmax}
                     />
                 </Body>
                 <Right style={styles.right}>
-                    <TouchableOpacity onPress={showProfile}>
-                        <Image
-                            style={styles.iconHeader}
-                            source={profileYellow} />
-                    </TouchableOpacity>
                 </Right>
             </Header>
             <ImageBackground
@@ -176,7 +170,7 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: 'white',
-        height: 60
+        height: 60,
     },
     iconHeader: {
         height: 25,
@@ -189,7 +183,8 @@ const styles = StyleSheet.create({
     },
     body: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: -20,
     },
     right: {
         flex: 1

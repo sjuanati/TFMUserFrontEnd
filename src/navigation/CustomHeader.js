@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: -20,
   },
   right: {
     flex: 1
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: 'contain',
-    width: 170
+    width: 150,
   },
   button: {
     paddingLeft: 10,
