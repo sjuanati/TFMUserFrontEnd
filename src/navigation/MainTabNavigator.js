@@ -18,7 +18,7 @@ import MakeOrder from '../screens/Order/MakeOrder';
 import OrderSummary from '../screens/Order/OrderSummary';
 import OrderItem from '../screens/Order/MakeOrderDetail';
 import FullScreenImage from '../screens/Order/GetOrderImage';
-//import Ionicons from 'react-native-vector-icons/Ionicons';
+import OrderTrace from '../screens/Order/GetOrderTrace';
 
 const homeYellow = require('../assets/images/bottomBar/yellow/home.png');
 const homeGrey = require('../assets/images/bottomBar/grey/home.png');
@@ -100,7 +100,13 @@ const OrdersStack = createStackNavigator({
       navigationOptions: {
         headerShown: false
       }
-    }
+    },
+    OrderTrace: {
+        screen: OrderTrace,
+        navigationOptions: {
+          headerShown: false
+        }
+    },
   },
   {
     defaultNavigationOptions: {

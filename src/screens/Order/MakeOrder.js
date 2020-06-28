@@ -51,23 +51,23 @@ const makeOrder = (props) => {
         // Set quality depending on device (iOS, Android)
         let setting: object;
         Platform.OS === 'ios' ?
-        setting = {
-            quality: 0,
-            noData: true,
-            maxWidth: 1000,
-            maxHeight: 1000,
-            storageOptions: {
-                skipBackup: true,
+            setting = {
+                quality: 0,
+                noData: true,
+                maxWidth: 1000,
+                maxHeight: 1000,
+                storageOptions: {
+                    skipBackup: true,
+                }
             }
-        }
-        :
-        setting = {
-            quality: 0.2,
-            noData: true,
-            storageOptions: {
-                skipBackup: true,
+            :
+            setting = {
+                quality: 0.2,
+                noData: true,
+                storageOptions: {
+                    skipBackup: true,
+                }
             }
-        }
 
         // Take photo from Camera or choose photo from Library
         ImagePicker.showImagePicker(
@@ -130,77 +130,78 @@ const makeOrder = (props) => {
     };
 
     return (
-        <View style={{flex: 1}}>
-        <CustomHeaderBack {...props} />
+        <View style={{ flex: 1 }}>
+            <CustomHeaderBack {...props} />
             <KeyboardAvoidingView
                 style={styles.keyboard}
                 behavior={Platform.OS == "ios" ? "position" : "height"}
                 enabled
                 keyboardVerticalOffset={Platform.OS === 'ios' ? -20 : 90}
             >
-            <ScrollView>
-                <View style={styles.container}>
-                    <Text style={styles.textHeader}>Nuevo Pedido</Text>
-                    <Text style={styles.textPharmacy}> Farmacia {user.favPharmacyDesc}</Text>
-                    {/* <Text style={styles.textSubHeader}>Haz una foto de tu Receta o de tu tarjeta sanitaria si es electrónica:</Text> */}
-                    <Text style={styles.textSubHeader}></Text>
-                    <View style={styles.containerPhoto}>
-                        {(photoOrder) ? 
-                            <View style={styles.image}>
-                                <Image
-                                    source={photoOrder ? { uri: photoOrder } : null}
-                                    style={styles.photoOrder}
-                                />
-                            </View>
-                            : null
-                        }
-                        <TouchableOpacity
-                            style={globalStyles.button}
-                            onPress={() => addPhoto()}>
-                            {(photoOrder.length === 0) ?
-                                <View style={styles.containerIconButton}>
-                                    <Icon name="ios-camera" size={35} color='gray' />
-                                    <Text style={[globalStyles.buttonText, {fontSize: FONT_SIZE}]}> Añadir foto </Text>
+                <ScrollView>
+                    <View style={styles.container}>
+                        <Text style={styles.textHeader}>Nuevo Pedido</Text>
+                        <Text style={styles.textPharmacy}> Farmacia {user.favPharmacyDesc}</Text>
+                        {/* <Text style={styles.textSubHeader}>Haz una foto de tu Receta o de tu tarjeta sanitaria si es electrónica:</Text> */}
+                        <Text style={styles.textSubHeader}></Text>
+                        <View style={styles.containerPhoto}>
+                            {(photoOrder) ?
+                                <View style={styles.image}>
+                                    <Image
+                                        source={photoOrder ? { uri: photoOrder } : null}
+                                        style={styles.photoOrder}
+                                    />
                                 </View>
-                                :
-                                <Text style={[globalStyles.buttonText,{fontSize: FONT_SIZE}]}> Repetir foto </Text>
+                                : null
                             }
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.textSubHeader}>¿Quieres pedir más cosas?, escríbelo a continuación:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={` Productos sin receta, \n parafarmacia...`}
-                        multiline={true}
-                        maxLength={999}
-                        onChangeText={handleItemDescription}
-                        ref={input => { itemDescriptionTextInput = input }}>
-                    </TextInput>
-                    <View style={styles.containerButton}>
-                        <View style={styles.item}>
-                            <TouchableOpacity
-                                style={(order.length >= maxItemsPerOrder) ? globalStyles.buttonDisabled : globalStyles.button}
-                                onPress={() => handleOrder('add')}
-                                disabled={(order.length >= maxItemsPerOrder ? true : false)}>
-                                <Text style={[globalStyles.buttonText,{fontSize: FONT_SIZE}]}> {`Pide algo más`} </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.item}>
                             <TouchableOpacity
                                 style={globalStyles.button}
-                                onPress={() => handleOrder('confirm')}>
-                                <Text style={[globalStyles.buttonText,{fontSize: FONT_SIZE}]}> {`Siguiente `} </Text>
+                                onPress={() => addPhoto()}>
+                                {(photoOrder.length === 0) ?
+                                    <View style={styles.containerIconButton}>
+                                        <Icon name="ios-camera" size={35} color='gray' />
+                                        <Text style={[globalStyles.buttonText, { fontSize: FONT_SIZE }]}> Añadir foto </Text>
+                                    </View>
+                                    :
+                                    <Text style={[globalStyles.buttonText, { fontSize: FONT_SIZE }]}> Repetir foto </Text>
+                                }
                             </TouchableOpacity>
                         </View>
+                        <Text style={styles.textSubHeader}>¿Quieres pedir más cosas?, escríbelo a continuación:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder={` Productos sin receta, \n parafarmacia...`}
+                            multiline={true}
+                            maxLength={999}
+                            autoCorrect={false}
+                            onChangeText={handleItemDescription}
+                            ref={input => { itemDescriptionTextInput = input }}>
+                        </TextInput>
+                        <View style={styles.containerButton}>
+                            <View style={styles.item}>
+                                <TouchableOpacity
+                                    style={(order.length >= maxItemsPerOrder) ? globalStyles.buttonDisabled : globalStyles.button}
+                                    onPress={() => handleOrder('add')}
+                                    disabled={(order.length >= maxItemsPerOrder ? true : false)}>
+                                    <Text style={[globalStyles.buttonText, { fontSize: FONT_SIZE }]}> {`Pide algo más`} </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.item}>
+                                <TouchableOpacity
+                                    style={globalStyles.button}
+                                    onPress={() => handleOrder('confirm')}>
+                                    <Text style={[globalStyles.buttonText, { fontSize: FONT_SIZE }]}> {`Siguiente `} </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        {/* <View style={styles.containerButton}> */}
+                        {(order.length >= maxItemsPerOrder) ?
+                            Alert.alert(`Se ha llegado al número máximo de productos por pedido (${maxItemsPerOrder})`)
+                            : null
+                        }
                     </View>
-                    {/* <View style={styles.containerButton}> */}
-                    {(order.length >= maxItemsPerOrder) ?
-                        Alert.alert(`Se ha llegado al número máximo de productos por pedido (${maxItemsPerOrder})`)
-                        : null
-                    }
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </View>
     );
 
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     textPharmacy: {
         //padding: 5,
         paddingTop: 5,
-        fontSize: FONT_SIZE -2,
+        fontSize: FONT_SIZE - 2,
         // color: Cons.COLORS.DARK_GREY,
     },
     photoOrder: {

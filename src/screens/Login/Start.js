@@ -32,7 +32,7 @@ const start = props => {
     Toast.show({
       text: text,
       position: "bottom",
-      buttonText: "Okay"
+      duration: 3000,
     });
   };
 

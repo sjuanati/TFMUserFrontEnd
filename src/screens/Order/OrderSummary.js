@@ -106,8 +106,7 @@ const orderSummary = (props) => {
 
     // Save Order into PostgreSQL
     const saveOrderToDB = async () => {
-        // Get current user ID
-        //const pharmacy=[]; pharmacy.push({favPharmacyID: user.favPharmacyID}); console.log('**TEST:',pharmacy[0].favPharmacyID); //****TEST v2.4*****/
+
         if ((user.id) && (user.favPharmacyID) && (order)) {
             await axios.post(`${httpUrl}/order/add`, {
                 order,
