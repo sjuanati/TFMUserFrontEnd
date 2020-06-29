@@ -3,12 +3,13 @@ import {
     Text,
     View,
     FlatList,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
 import axios from 'axios';
+import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
+import { ListItem } from 'react-native-elements';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 const box_width = 50;
@@ -30,47 +31,33 @@ const getOrderTrace = (props) => {
         }).then(res => {
             setOrder(res.data);
         }).catch(err => {
-            console.log('Erroriki: ', err);
+            console.log('Error in GetOrderTrace.js -> getOrderTrace() -> fetchOrderTrace(): ', err);
         });
     }
 
     // Render list of Order items
     const renderOrderItems = (values) => (
         <ListItem
-            //title={values.item.trace_id}
+            title={<Text style={styles.textHeader}>{values.item.order_status} - {values.item.status_desc}</Text>}
             subtitle={
                 <View>
                     <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Status: </Text>
-                        <Text style={styles.rowValue}> {values.item.order_status} </Text>
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Trace ID: </Text>
-                        <Text style={styles.rowValue}> {values.item.trace_id} </Text>
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Order ID: </Text>
-                        <Text style={styles.rowValue}> {values.item.order_id} </Text>
-                    </View>
-                    <View style={styles.rowContainer}>
                         <Text style={styles.rowHeader}> Timestamp: </Text>
-                        <Text style={styles.rowValue}> {values.item.order_date} </Text>
+                        <Text style={styles.rowValue}> {moment.unix(values.item.order_date).format('DD-MM-YYYY H:mm:ss')} </Text>
                     </View>
                     <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Item: </Text>
-                        <Text style={styles.rowValue}> {values.item.order_item} </Text>
+                        <Text style={styles.rowHeader}> Checksum: </Text>
+                        {/* <Text style={styles.rowValue}> {(values.item.tx_hash) ? values.item.tx_hash : 'vvv'} </Text> */}
+                        <Text style={styles.rowValue}> 
+                            {(values.item.checksum) ? 
+                                <Text style={styles.textValidated}> Validated </Text> : 
+                                <Text style={styles.textNotValidated}> Not Validated </Text>
+                            } 
+                        </Text>
                     </View>
                     <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Pharmacy: </Text>
-                        <Text style={styles.rowValue}> {values.item.pharmacy_id} </Text>
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> DB Hash: </Text>
-                        <Text style={styles.rowValue}> {values.item.hash} </Text>
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.rowHeader}> Eth Hash: </Text>
-                        <Text style={styles.rowValue}> ... </Text>
+                        <Text style={styles.rowHeader}> Hash: </Text>
+                        <Text style={styles.rowValue}> {values.item.db_hash} </Text>
                     </View>
                 </View>}
             bottomDivider
@@ -97,9 +84,8 @@ const getOrderTrace = (props) => {
     )
 }
 
-
-
 export default getOrderTrace;
+
 
 const styles = StyleSheet.create({
     container: {
@@ -107,15 +93,12 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: 'row',
-        //marginTop: 10,
     },
     rowHeader: {
         color: 'grey',
         width: 80,
-        //fontSize: 16,
     },
     rowValue: {
-        //fontSize: 16,
         width: 300
     },
     box: {
@@ -123,5 +106,16 @@ const styles = StyleSheet.create({
         height: box_width,
         borderRadius: box_width / 2,
         backgroundColor: 'green',
+    },
+    textHeader: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    textValidated: {
+        color: 'green',
+    },
+    textNotValidated: {
+        color: 'red',
     }
 });
