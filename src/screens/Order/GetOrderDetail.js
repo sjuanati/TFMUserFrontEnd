@@ -259,7 +259,7 @@ const getOrderDetail = (props) => {
             <View style={styles.sectionContainer}>
 
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Pedido: </Text>
+                    <Text style={styles.rowHeader}> Referencia: </Text>
                     <Text style={styles.rowValue}> #{order[0].order_id_app} </Text>
                 </View>
 
@@ -287,7 +287,6 @@ const getOrderDetail = (props) => {
                         name='ios-checkmark-circle-outline'
                         size={20}
                         color='green'
-                        ///style={{ marginTop: 5 }}
                     />
                     <TouchableOpacity
                         style={styles.button2}
@@ -392,7 +391,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     titleText: {
-        fontSize: 18,
+        fontSize: 26,
         fontWeight: 'bold',
     },
     buttonText: {
