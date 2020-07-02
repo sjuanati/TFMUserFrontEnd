@@ -40,9 +40,9 @@ const orderSummary = (props) => {
     // Show medicine item in List
     const renderItem = ({ item }) => (
         <ListItem
-            rightAvatar={
-                (order[item].itemPhoto.length > 0) ? <Icon name="ios-attach" size={30} color='gray' /> : null
-            }
+            // rightAvatar={
+            //     (order[item].itemPhoto.length > 0) ? <Icon name="ios-attach" size={30} color='gray' /> : null
+            // }
             title={order[item].item_description}
             // subtitle = "Farmacia X"
             // onPress = {() => navigation.navigate('OrderItem',
@@ -79,7 +79,6 @@ const orderSummary = (props) => {
     );
 
     const confirmOrder = async () => {
-        console.log('order when confirming :', order);
 
         setIsLoding(true);
         await saveOrderToDB();
@@ -122,8 +121,6 @@ const orderSummary = (props) => {
                     dispatch(clearCart(true));
                     console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`)
                     props.navigation.navigate('Home');
-                    savePhotoToS3(response.data);
-
                 })
                 .catch(async err => {
                     if (err.response && (err.response.status === 401 || err.response.status === 403)) {
@@ -141,48 +138,6 @@ const orderSummary = (props) => {
         } else {
             logger('WRN', 'FRONT-USER', `OrderSummary.js -> saveOrderToDB() `, user, 'No User, Product/s or Pharmacy to save Order');
             console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
-        }
-    };
-
-    const savePhotoToS3 = async (photos) => {
-
-        // For every Order item, check if any photo is assigned
-        for (let i = 0; i < order.length; i++) {
-            for (let j = 0; j < photos.length; j++) {
-                if ((order[i].itemPhoto) && (order[i].itemPhoto === photos[j].photo_url)) {
-
-                    // Add photo to FormData() structure
-                    let photo = new FormData();
-                    let URI = order[i].itemPhoto;
-                    const photoName = `${photos[j].order_id}_${photos[j].order_item}.jpg`;
-                    photo.append('image', {
-                        uri: (Platform.OS === "ios") ? URI : `file://${URI}`,
-                        name: photoName,
-                        type: `image/jpg`
-                    });
-
-                    // Save photo into Server folder '/upload'
-                    await axios.post(`${httpUrl}/chat/uploadPhoto`, photo, {
-                        headers: { authorization: user.token }
-                    }).then(async res => {
-                        if (res.status === 200) console.log(`Order item ${i + 1} saved at '/upload'`)
-                    }).catch(err => {
-                        console.log('Error in OrderSummary.js -> savePhotoToS3() -> uploadPhoto: ', err);
-                        logger('ERR', 'FRONT-USER', `OrderSummary.js -> savePhotoToS3(): ${err}`, user, `photo: ${photoName}`);
-                        // TODO: if path is not reachable, server fails and exception is not captured.
-                    })
-
-                    // Transfer photo from Server to S3 and delete from '/upload'
-                    await axios.post(`${httpUrl}/order/toS3`, [photo], {
-                        headers: { authorization: user.token }
-                    }).then(async res => {
-                        if (res.status === 200) console.log(`Order item ${i} transferred to S3`)
-                    }).catch(err => {
-                        console.log('Error in OrderSummary.js -> savePhotoToS3() -> sendToS3: ', err);
-                        logger('ERR', 'FRONT-USER', `OrderSummary.js -> savePhotoToS3(): ${err}`, user, `photo: ${photoName}`);
-                    })
-                }
-            }
         }
     };
 

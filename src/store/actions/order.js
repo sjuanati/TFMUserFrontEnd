@@ -4,7 +4,7 @@ export const addItem = (item_id_tmp, item_description, itemPhoto) => ({
     type: actionTypes.ADD_TO_CART,
     item_id_tmp: item_id_tmp,
     item_description: item_description,
-    itemPhoto: itemPhoto,
+    //itemPhoto: itemPhoto,
 });
 
 export const removeItem = (item_id_tmp) => ({

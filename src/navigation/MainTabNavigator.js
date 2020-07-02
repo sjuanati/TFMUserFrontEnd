@@ -1,20 +1,18 @@
 import React from 'react';
-import { Platform, Image, StyleSheet } from 'react-native';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import Home from '../screens/Home/Home';
 import Orders from '../screens/Order/GetOrder';
 import OrderDetail from '../screens/Order/GetOrderDetail';
-
 import Profile from '../screens/Profile/Profile';
 import CustomHeader from '../navigation/CustomHeader';
 import InsideSession from '../screens/Home/InsideSession';
-
 import PharmacySearch from '../screens/Pharmacy/PharmacySearch';
 import PharmacyDetails from '../screens/Pharmacy/PharmacyDetail';
 import MakeOrder from '../screens/Order/MakeOrder';
+import MakeOrderScan from '../screens/Order/MakeOrderScan';
 import OrderSummary from '../screens/Order/OrderSummary';
 import OrderItem from '../screens/Order/MakeOrderDetail';
 import FullScreenImage from '../screens/Order/GetOrderImage';
@@ -47,6 +45,12 @@ const HomeStack = createStackNavigator({
       navigationOptions: {
         headerShown: false
       }
+    },
+    MakeOrderScan: {
+        screen: MakeOrderScan,
+        navigationOptions: {
+          headerShown: false
+        }
     },
     OrderSummary: {
       screen: OrderSummary,

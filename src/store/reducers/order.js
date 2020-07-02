@@ -13,7 +13,7 @@ const addItem = (state, action) => {
     const newItem = [{
         item_id_tmp: action.item_id_tmp,
         item_description: action.item_description,
-        itemPhoto: action.itemPhoto
+        //itemPhoto: action.itemPhoto
     }];
     state.items = [...state.items, ...newItem];
     return state;
@@ -29,7 +29,6 @@ const removeItem = (state, action) => {
 const clearCart = (state, action) => {
     state = {
         items: [],
-        //ordered: true,
         ordered: action.ordered
     };
     return state;
