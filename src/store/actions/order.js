@@ -26,3 +26,8 @@ export const setOrdersPage = (ordersPage) => ({
   type: actionTypes.SET_ORDERS_PAGE,
   ordersPage: ordersPage,
 });
+
+export const setScanned = (scanned) => ({
+    type: actionTypes.SET_SCANNED,
+    scanned: scanned,
+});

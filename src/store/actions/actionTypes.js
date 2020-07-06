@@ -6,3 +6,4 @@ export const SET_FAV_PHARMACY = 'SET_FAV_PHARMACY';
 export const SET_DATA = 'SET_DATA';
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const SET_ORDERS_PAGE = 'SET_ORDERS_PAGE';
+export const SET_SCANNED = 'SET_SCANNED';

@@ -6,6 +6,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     items: [],
     ordered: false,
+    scanned: false,
 };
 
 // // Add item to the Order
@@ -46,6 +47,12 @@ const setOrdersPage = (state, action) => {
   return state;
 };
 
+// Set Scanned
+const setScanned = (state, action) => {
+    state.scanned = action.scanned;
+    return state;
+  };
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_CART: return addItem(state, action);
@@ -53,6 +60,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CLEAR_CART: return clearCart(state, action);
         case actionTypes.SET_ORDERED: return setOrdered(state, action);
         case actionTypes.SET_ORDERS_PAGE: return setOrdersPage(state, action);
+        case actionTypes.SET_SCANNED: return setScanned(state, action);
         default: return state;
     }
 };
