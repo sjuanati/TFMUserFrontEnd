@@ -38,12 +38,14 @@ const orderSummary = (props) => {
     const [isLoading, setIsLoding] = useState(false);
 
     // Show medicine item in List
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item }) => {
+        order[item].screen = 'OrderSummary';
+        return (
         <ListItem
             // rightAvatar={
             //     (order[item].itemPhoto.length > 0) ? <Icon name="ios-attach" size={30} color='gray' /> : null
             // }
-            title={order[item].item_description}
+            title={order[item].product_desc}
             // subtitle = "Farmacia X"
             // onPress = {() => navigation.navigate('OrderItem',
             //     {itemNumber: order[item].itemNumber,
@@ -52,7 +54,7 @@ const orderSummary = (props) => {
             bottomDivider
             chevron
         />
-    );
+    )};
 
     const renderAddItem = () => (
         <View style={styles.container_body}>
@@ -64,44 +66,49 @@ const orderSummary = (props) => {
     const renderOrderOverview = () => (
         <View style={styles.container_body}>
             <Text style={styles.itemHeader}>Resumen del pedido</Text>
-            {(user.favPharmacyID) ?
-                <View style={styles.container_pharmacy}>
-                    <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
-                    <Button target='PharmacySearch' desc='Cambiar' nav={props.navigation} />
-                </View>
-                :
-                <View style={styles.container_pharmacy}>
-                    <Text style={styles.subText}> Ninguna farmacia seleccionada </Text>
-                    <Button target='PharmacySearch' desc='Seleccionar' nav={props.navigation} />
-                </View>
-            }
+            <TouchableOpacity
+                onPress={() => props.navigation.navigate('PharmacySearch')}>
+                {(user.favPharmacyID)
+                    ? <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
+                    : <Text style={styles.subText}> Ninguna farmacia seleccionada </Text>}
+            </TouchableOpacity>
         </View>
     );
 
-    const confirmOrder = async () => {
+    const confirmOrder = /*async*/ () => {
+        Alert.alert(
+            '¿Deseas confirmar el pedido?', '',
+            [{
+                text: 'Cancelar',
+                style: 'cancel'
+            }, {
+                text: 'Sí',
+                onPress: async () => {
+                    setIsLoding(true);
+                    await saveOrderToDB();
+                    await saveLastPharmacyToDB();
+                    setIsLoding(false);
+                }
+            }],
+            { cancelable: false }
+        );
 
-        setIsLoding(true);
-        await saveOrderToDB();
-        await saveLastPharmacyToDB();
-        setIsLoding(false);
     };
 
     const removeOrder = () => {
         Alert.alert(
             '¿Seguro que quieres cancelar el pedido?', '',
-            [
-                { text: 'Cancel', onPress: () => { }, style: 'cancel' },
-                {
-                    text: 'OK', onPress: async () => {
-                        dispatch(clearCart(false));
-                        props.navigation.navigate('Home');
-                    }
-                },
-            ],
+            [{
+                text: 'Cancel', onPress: () => { }, style: 'cancel'
+            }, {
+                text: 'OK', onPress: async () => {
+                    dispatch(clearCart(false));
+                    props.navigation.navigate('Home');
+                }
+            }],
             { cancelable: false }
         )
     }
-
 
     // Save Order into PostgreSQL
     const saveOrderToDB = async () => {
@@ -174,28 +181,19 @@ const orderSummary = (props) => {
     return (
         <View style={styles.container}>
             <CustomHeaderBack {...props} />
-
-            {/* HEADER */}
             {(order.length === 0) ? renderAddItem() : renderOrderOverview()}
-
-            {/* ORDER ITEMS */}
             <View style={styles.list}>
-                {(order.length > 0) ?
-                    <FlatList
+                {(order.length > 0)
+                    ? <FlatList
                         data={Object.keys(order)}
                         keyExtractor={item => item}
-                        renderItem={renderItem}
-                    />
+                        renderItem={renderItem} />
                     : null}
             </View>
-
             <View>
                 <ActivityIndicator isLoading={isLoading} />
             </View>
-
-            {/* CONFIRM */}
             <View style={styles.container_bottom}>
-
                 {(order.length > 0 && (user.favPharmacyID !== null)) ?
                     <View style={styles.item}>
                         <TouchableOpacity
@@ -206,22 +204,18 @@ const orderSummary = (props) => {
                     </View>
                     :
                     null}
-
                 <View style={styles.item}>
                     <TouchableOpacity
-                        style={(order.length > 0 && (user.favPharmacyID !== null)) ?
-                            globalStyles.button
-                            :
-                            globalStyles.buttonDisabled}
+                        style={(order.length > 0 && (user.favPharmacyID !== null))
+                            ? globalStyles.button
+                            : globalStyles.buttonDisabled}
                         onPress={() => confirmOrder()}
-                        disabled={(order.length > 0 && (user.favPharmacyID !== null)) ?
-                            false
-                            :
-                            true}>
+                        disabled={(order.length > 0 && (user.favPharmacyID !== null))
+                            ? false
+                            : true}>
                         <Text style={globalStyles.buttonText}> Pedir Precio </Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
         </View>
     );
@@ -241,12 +235,6 @@ const styles = StyleSheet.create({
     container_pharmacy: {
         alignItems: 'center'
     },
-    // container_bottom: {
-    //     flex: 1,
-    //     alignItems: 'center',
-    //     justifyContent: 'flex-end',
-    //     marginBottom: 15,
-    // },
     container_bottom: {
         flex: 1,
         flexDirection: 'row',
@@ -265,6 +253,7 @@ const styles = StyleSheet.create({
     subText: {
         marginBottom: 10,
         fontSize: FONT_SIZE,
+        color: Cons.COLORS.BLUE,
     },
     list: {
         padding: 10,

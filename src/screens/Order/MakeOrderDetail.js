@@ -1,54 +1,57 @@
-// Libs
 import React from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native';
 import { useDispatch } from 'react-redux';
-import { removeItem } from '../../store/actions/order';
-
-// Components
+import { addItem, removeItem } from '../../store/actions/order';
 import globalStyles from '../../UI/Style';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
-import DeletePhoto from '../../shared/DeletePhoto';
 import Cons from '../../shared/Constants';
 
 const makeOrderDetail = (props) => {
 
-    const item_id_tmp = props.navigation.getParam('item_id_tmp');
-    const item_description = props.navigation.getParam('item_description');
-    const itemPhoto = props.navigation.getParam('itemPhoto');
+    const item_id = props.navigation.getParam('item_id');
+    const product_id = props.navigation.getParam('product_id');
+    const product_desc = props.navigation.getParam('product_desc');
+    const dose_qty = props.navigation.getParam('dose_qty');
+    const dose_form = props.navigation.getParam('dose_form');
+    const prescription = props.navigation.getParam('prescription');
+    const price = props.navigation.getParam('price');
+    const screen = props.navigation.getParam('screen');
     const dispatch = useDispatch();
 
     const handleRemoveItem = () => {
-        DeletePhoto([{itemPhoto: itemPhoto}])
-        dispatch(removeItem(item_id_tmp));
+        dispatch(removeItem(item_id));
         props.navigation.goBack()
     };
 
-    const showPhoto = () => (
-        <Image
-            source={itemPhoto ? { uri: itemPhoto } : null}
-            style={styles.photoOrder} />
-    );
+    const handleAddItem = () => {
+        dispatch(addItem(
+            5, // TODO: count del número actual d'items
+            product_id,
+            product_desc,
+            price,
+        ));
+        props.navigation.goBack()
+    }
 
-    const showOverview = () => (
-        <View style={styles.container_body}>
-            <Text style={styles.itemHeader}> Detalle Item {item_id_tmp}</Text>
-        </View>
-    );
-
-    const showItem = () => (
-        <View style={styles.text}>
-            <Text> {item_description} </Text>
-        </View>
-    )
-
+    // Order detail can be reached from two different screens:
+    // 'OrderSummary': the item can be removed
+    // 'MakeOrderChoose': the item can be added
     const showButtons = () => (
         <View style={styles.container_bottom}>
             <TouchableOpacity
                 style={globalStyles.button}
-                onPress={() => handleRemoveItem()}>
-                <Text style={globalStyles.buttonText}> Eliminar </Text>
+                onPress={() => {
+                    (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem()
+                }}>
+                <Text style={[globalStyles.buttonText, styles.bold]}> 
+                    {(screen === 'OrderSummary') ? 'Eliminar' : 'Añadir'}
+                </Text>
             </TouchableOpacity>
-
             <TouchableOpacity
                 style={globalStyles.button}
                 onPress={() => props.navigation.goBack()}>
@@ -59,17 +62,29 @@ const makeOrderDetail = (props) => {
 
     return (
         <View style={styles.container}>
-
             <CustomHeaderBack {...props} />
-
-            {showOverview()}
-
-            {showItem()}
-
-            {showPhoto()}
-
+            <View style={styles.headerContainer}>
+                <Text style={styles.titleText}>{product_desc}</Text>
+            </View>
+            <View style={styles.sectionContainer}>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.rowHeader}> Dose: </Text>
+                    <Text style={styles.rowValue}> {dose_qty} </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.rowHeader}> Form: </Text>
+                    <Text style={styles.rowValue}> {dose_form} </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.rowHeader}> Price: </Text>
+                    <Text style={styles.rowValue}> {price} </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.rowHeader}> Prescription: </Text>
+                    <Text style={styles.rowValue}> {(prescription) ? 'Yes' : 'No'} </Text>
+                </View>
+            </View>
             {showButtons()}
-
         </View>
     );
 };
@@ -79,12 +94,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-    },
-    container_body: {
-        flexDirection: 'column',
-        alignItems: 'center',
         backgroundColor: Cons.COLORS.WHITE,
-        paddingBottom: 20,
     },
     container_bottom: {
         flex: 1,
@@ -93,21 +103,35 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginBottom: 25,
     },
-    text: {
-        margin: 20,
+    headerContainer: {
+        margin: 15,
+        borderBottomWidth: 0.3,
+        borderColor: 'orange',
+        paddingBottom: 10,
+        alignItems: 'center'
+    },
+    titleText: {
         fontSize: 20,
-    },
-    itemHeader: {
-        paddingTop: 10,
-        paddingBottom: 5,
-        fontSize: 30,
         fontWeight: 'bold',
-        color: 'black',  // gray
-        flexDirection: 'row',
     },
-    photoOrder: {
-        width: '100%',
-        height: 200
+    bold: {
+        fontWeight: 'bold'
+    },
+    sectionContainer: {
+        marginLeft: 25,
+        marginTop: 5,
+    },
+    rowContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+    },
+    rowHeader: {
+        color: 'grey',
+        width: 110,
+        fontSize: 16,
+    },
+    rowValue: {
+        fontSize: 16,
     },
 });
 

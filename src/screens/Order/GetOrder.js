@@ -223,9 +223,9 @@ const getOrder = (props) => {
         if (status === 0) {
             return (<Text style={{ color: 'grey', fontSize: 12 }}>BORRADOR</Text>)
         } else if (status === 1) {
-            return (<Text style={{ color: 'grey', fontSize: 10 }}>PRECIO SOLICITADO</Text>)
+            return (<Text style={{ color: 'grey', fontSize: 10 }}>SOLICITADO</Text>)
         } else if (status === 2) {
-            return (<Text style={{ color: '#f0ad4e', fontSize: 10 }}>PENDIENTE CONFIRMACIÓN</Text>)
+            return (<Text style={{ color: '#f0ad4e', fontSize: 10 }}>CONFIRMADO</Text>)
         } else if (status === 3) {
             return (<Text style={{ color: 'grey', fontSize: 10 }}>EN{"\n"}PREPARACIÓN</Text>)
         } else if (status === 4) {
@@ -253,7 +253,7 @@ const getOrder = (props) => {
             {(orders.length === 0 || orders.length === 1) ?
                 <View style={styles.viewContent}>
                     <Text style={styles.noItems}>
-                        No hay ningun pedido
+                        No hay ningún pedido
           </Text>
                 </View>
                 :
@@ -286,13 +286,6 @@ const getOrder = (props) => {
             <Header noShadow searchBar rounded
                 style={styles.header}>
                 <Item>
-                    {/*<SearchBar*/}
-                    {/*placeholder="Busca un pedido ..."*/}
-                    {/*// onChangeText={updateSearch}*/}
-                    {/*// value={search}*/}
-                    {/*autoCapitalize='none'*/}
-                    {/*maxLength={100}*/}
-                    {/*platform={Platform.OS == 'ios' ? 'ios' : 'android'} />*/}
                     <Item>
                         <Icon name="ios-search" />
                         <Input placeholder="Farmacia ..."

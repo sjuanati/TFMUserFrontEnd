@@ -37,7 +37,7 @@ const start = props => {
   };
 
   const login = () => {
-    console.log('credentials:', user.email, user.password);
+    //console.log('credentials:', user.email, user.password);
     if(user.email && user.password) {
       setLoading(true);
       axios.post(`${httpUrl}/users/login`, {

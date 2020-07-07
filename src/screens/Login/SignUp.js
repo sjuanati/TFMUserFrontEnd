@@ -115,7 +115,7 @@ const signup = ( props ) => {
 //   )
 
   const register = () => {
-    console.log('credentials:', user.email, user.password, user.name, user.phone);
+    //console.log('credentials:', user.email, user.password, user.name, user.phone);
     if(user.email && user.password) {
       if(user.password === user.repeatPassword) {
         setLoading(true);

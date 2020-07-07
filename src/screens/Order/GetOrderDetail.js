@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Spinner, Grid, Col, Button, Icon, Container, Toast, ListItem, Right, Body } from "native-base";
-import { View, StyleSheet, FlatList, Alert, Text, TouchableOpacity } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    FlatList,
+    Alert,
+    Text,
+    TouchableOpacity
+} from 'react-native';
+import {
+    Spinner,
+    Grid,
+    Col,
+    Button,
+    Icon,
+    Container,
+    Toast,
+    ListItem,
+    Right,
+    Body
+} from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -10,6 +28,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const getOrderDetail = (props) => {
+
     const [loading, setLoading] = useState(true);
     const [order, setOrder] = useState([]);
     const user = useSelector(state => state.user);
@@ -113,7 +132,7 @@ const getOrderDetail = (props) => {
 
     const acceptPriceOrder = async () => {
         Alert.alert(
-            "Estas seguro que quieres aceptar el siguiente precio?",
+            "¿Estás seguro que quieres aceptar el siguiente precio?",
             order[0].total_price + ' €',
             [
                 {
@@ -190,6 +209,7 @@ const getOrderDetail = (props) => {
     };
 
     const renderItem = ({ item, index }) => {
+        console.log('--> item: ', item);
         return (
             <View>
                 {(item.photo && item.photo !== '') ?
@@ -201,7 +221,7 @@ const getOrderDetail = (props) => {
                                 Item {index + 1}:
                             </Text>
                             <Text>
-                                {item.item_desc}
+                                {item.product_desc}
                             </Text>
                         </Body>
                         <Right style={{ flex: 0.2 }}>
@@ -215,7 +235,7 @@ const getOrderDetail = (props) => {
                                 Item {index + 1}:
                             </Text>
                             <Text>
-                                {item.item_desc}
+                                {item.product_desc}
                             </Text>
                         </Body>
                         <Right style={{ flex: 0.2 }}>
@@ -291,7 +311,7 @@ const getOrderDetail = (props) => {
                     <TouchableOpacity
                         style={styles.button2}
                         onPress={() => openTrace(order[0].order_id)}
-                        >
+                    >
                         <Text style={[styles.rowValue, styles.buttonText]}> Detalles </Text>
                     </TouchableOpacity>
                 </View>
@@ -299,13 +319,8 @@ const getOrderDetail = (props) => {
                 <RenderList />
             </View>
 
-            {/* <View style={styles.headerContainer}>
-                <Text style={styles.titleText}> Acciones </Text>
-            </View> */}
-
             {(order[0].status === 2) ?
                 <View>
-                    {/* <Text style={{ marginTop:25, marginLeft: 5 }}>Cambiar estado:</Text> */}
                     <Grid>
                         <Col style={styles.colButton}>
                             <Button block bordered rounded danger
@@ -347,13 +362,7 @@ const getOrderDetail = (props) => {
                         </Grid>
                     </View> : null
             }
-            {/* <View style={styles.headerContainer}>
-                    <Text style={styles.titleText}> Trazabilidad </Text>
-                </View> */}
-
         </View>
-
-
     );
 
     return (
@@ -379,7 +388,6 @@ const styles = StyleSheet.create({
     },
     rowHeader: {
         color: 'grey',
-        //marginLeft: 25,
         width: 110,
         fontSize: 16,
     },
@@ -399,16 +407,10 @@ const styles = StyleSheet.create({
     },
     button2: {
         backgroundColor: '#00A591',
-        //padding: 10,
         marginLeft: 10,
         paddingLeft: 5,
         paddingRight: 5,
         borderRadius: 15,
-        //elevation:4,
-        // shadowOffset: { width: 3, height: 3 },
-        // shadowColor: "grey",
-        // shadowOpacity: 0.5,
-        // shadowRadius: 10,
     },
     button: {
         backgroundColor: '#F4B13E'

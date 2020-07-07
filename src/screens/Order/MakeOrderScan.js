@@ -24,16 +24,18 @@ const makeOrderScan = (props) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const [barcode, setBarcode] = useState(null);
+    const [isAlreadyScanned, setIsAlreadyScanned] = useState(false);
     const [isFlashOn, setIsFlashOn] = useState(false);
 
     useEffect(() => {
-        if (barcode) fetchPrescription(barcode);
+        if (barcode && !isAlreadyScanned) fetchPrescription(barcode);
     }, [barcode]);
 
     const onBarCodeRead = (elem) => {
-
         // Scan only if barcode is EAN13 compatible
-        if (elem.type === 'org.gs1.EAN-13' && !barcode) setBarcode(elem.data);
+        if (elem.type === 'org.gs1.EAN-13' && !barcode) {
+            setBarcode(elem.data);
+        }
     }
 
     const toggleFlash = () => {
@@ -41,7 +43,7 @@ const makeOrderScan = (props) => {
     }
 
     const fetchPrescription = async (ean13) => {
-
+        setIsAlreadyScanned(true);
         await axios.get(`${httpUrl}/prescription/get`, {
             params: { ean13: ean13 },
             headers: { authorization: user.token }
@@ -65,12 +67,17 @@ const makeOrderScan = (props) => {
 
         // Add every prescription item in the Order (redux)
         data.forEach(elem => {
+            console.log('price1: ', elem.price);
             dispatch(addItem(
                 elem.prescription_item,
-                elem.product_desc));
+                elem.product_id,
+                elem.product_desc,
+                elem.price,
+            ));
         })
 
         // Go to Order Summary screen
+        setBarcode(null);
         props.navigation.navigate('OrderSummary');
     }
 

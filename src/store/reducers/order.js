@@ -12,9 +12,10 @@ const initialState = {
 // // Add item to the Order
 const addItem = (state, action) => {
     const newItem = [{
-        item_id_tmp: action.item_id_tmp,
-        item_description: action.item_description,
-        //itemPhoto: action.itemPhoto
+        item_id: action.item_id,
+        product_id: action.product_id,
+        product_desc: action.product_desc,
+        price: action.price,
     }];
     state.items = [...state.items, ...newItem];
     return state;
@@ -22,7 +23,7 @@ const addItem = (state, action) => {
 
 // Remove item from the Order
 const removeItem = (state, action) => {
-    state.items = state.items.filter(item => item.item_id_tmp !== action.item_id_tmp);
+    state.items = state.items.filter(item => item.item_id !== action.item_id);
     return state;
 };
 

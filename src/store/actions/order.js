@@ -1,15 +1,16 @@
 import * as actionTypes from './actionTypes';
 
-export const addItem = (item_id_tmp, item_description, itemPhoto) => ({
+export const addItem = (item_id, product_id, product_desc, price) => ({
     type: actionTypes.ADD_TO_CART,
-    item_id_tmp: item_id_tmp,
-    item_description: item_description,
-    //itemPhoto: itemPhoto,
+    item_id: item_id,
+    product_id: product_id,
+    product_desc: product_desc,
+    price: price,
 });
 
-export const removeItem = (item_id_tmp) => ({
+export const removeItem = (item_id) => ({
     type: actionTypes.REMOVE_FROM_CART,
-    item_id_tmp: item_id_tmp,
+    item_id: item_id,
 });
 
 export const setOrdered = (ordered) => ({

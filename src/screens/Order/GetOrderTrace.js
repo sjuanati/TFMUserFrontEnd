@@ -75,9 +75,6 @@ const getOrderTrace = (props) => {
     return (
         <View style={styles.container}>
             <CustomHeaderBack {...props} />
-            <Text> Hallo!! {order_id}</Text>
-            {/* <View style={styles.box}></View>
-            <View style={styles.box}></View> */}
             {renderOrderTrace()}
         </View>
     )
