@@ -221,19 +221,19 @@ const getOrder = (props) => {
 
     const StatusOrder = ({ status }) => {
         if (status === 0) {
-            return (<Text style={{ color: 'grey', fontSize: 12 }}>BORRADOR</Text>)
+            return (<Text style={styles.statusGrey}>DRAFT</Text>)
         } else if (status === 1) {
-            return (<Text style={{ color: 'grey', fontSize: 10 }}>SOLICITADO</Text>)
+            return (<Text style={styles.statusGrey}>REQUESTED</Text>)
         } else if (status === 2) {
-            return (<Text style={{ color: '#f0ad4e', fontSize: 10 }}>CONFIRMADO</Text>)
+            return (<Text style={styles.statusYellow}>CONFIRMED</Text>)
         } else if (status === 3) {
-            return (<Text style={{ color: 'grey', fontSize: 10 }}>EN{"\n"}PREPARACIÓN</Text>)
+            return (<Text style={styles.statusGrey}>PICK UP READY</Text>)
         } else if (status === 4) {
-            return (<Text style={{ color: '#f0ad4e', fontSize: 10 }}>LISTO PARA{"\n"}RECOGER</Text>)
+            return (<Text style={styles.statusYellow}>IN TRANSIT</Text>)
         } else if (status === 5) {
-            return (<Text style={{ color: '#5cb85c', fontSize: 12 }}>ENTREGADO</Text>)
+            return (<Text style={styles.statusGreen}>DELIVERED</Text>)
         } else if (status === 6) {
-            return (<Text style={{ color: '#d9534f', fontSize: 12 }}>CANCELADO</Text>)
+            return (<Text style={styles.statusRed}>CANCELLED</Text>)
         } else {
             return (<Text />)
         }
@@ -513,9 +513,6 @@ const styles = StyleSheet.create({
         color: 'gray',
         fontSize: FONT_SIZE - 8, //12
     },
-    //   searchIcon: {
-    //     fontSize: FONT_SIZE + 5, //25
-    //   },
     header: {
         marginStart: 5,
         backgroundColor: 'white',
@@ -537,7 +534,23 @@ const styles = StyleSheet.create({
         marginHorizontal: 7,
         marginTop: 15,
         opacity: 0.3
-    }
+    },
+    statusGrey: {
+        color: 'grey', 
+        fontSize: 13,
+    },
+    statusYellow: {
+        color: '#f0ad4e', 
+        fontSize: 13,
+    },
+    statusGreen: {
+        color: '#5cb85c', 
+        fontSize: 13,
+    },
+    statusRed: {
+        color: '#d9534f', 
+        fontSize: 13,
+    },
 });
 
 export default getOrder;

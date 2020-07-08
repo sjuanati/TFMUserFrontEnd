@@ -2,16 +2,19 @@ import React from 'react';
 import {
     Text,
     View,
+    Alert,
+    Linking,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { addItem, removeItem } from '../../store/actions/order';
 import globalStyles from '../../UI/Style';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import Cons from '../../shared/Constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem, removeItem } from '../../store/actions/order';
+import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
-const makeOrderDetail = (props) => {
+
+const productDetail = (props) => {
 
     const item_id = props.navigation.getParam('item_id');
     const product_id = props.navigation.getParam('product_id');
@@ -20,8 +23,10 @@ const makeOrderDetail = (props) => {
     const dose_form = props.navigation.getParam('dose_form');
     const prescription = props.navigation.getParam('prescription');
     const price = props.navigation.getParam('price');
+    const leaflet_url = props.navigation.getParam('leaflet_url');
     const screen = props.navigation.getParam('screen');
     const dispatch = useDispatch();
+    const order = useSelector(state => state.order.items);
 
     const handleRemoveItem = () => {
         dispatch(removeItem(item_id));
@@ -30,25 +35,42 @@ const makeOrderDetail = (props) => {
 
     const handleAddItem = () => {
         dispatch(addItem(
-            5, // TODO: count del número actual d'items
+            order.length + 1,
             product_id,
             product_desc,
             price,
+            dose_qty,
+            dose_form,
+            leaflet_url,
         ));
         props.navigation.goBack()
     }
 
+    const handleURL = url => {
+
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    Alert.alert(`No se puede abrir el navegador`);
+                }
+            })
+            .catch(err => console.warn('Error on MakeOrderDetail.js -> handleURL(): ', err))
+    };
+
     // Order detail can be reached from two different screens:
     // 'OrderSummary': the item can be removed
-    // 'MakeOrderChoose': the item can be added
+    // 'MakeOrderChoose' or 'GetOrderItem': the item can be added
     const showButtons = () => (
         <View style={styles.container_bottom}>
+            
             <TouchableOpacity
                 style={globalStyles.button}
                 onPress={() => {
                     (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem()
                 }}>
-                <Text style={[globalStyles.buttonText, styles.bold]}> 
+                <Text style={[globalStyles.buttonText, styles.bold]}>
                     {(screen === 'OrderSummary') ? 'Eliminar' : 'Añadir'}
                 </Text>
             </TouchableOpacity>
@@ -77,11 +99,23 @@ const makeOrderDetail = (props) => {
                 </View>
                 <View style={styles.rowContainer}>
                     <Text style={styles.rowHeader}> Price: </Text>
-                    <Text style={styles.rowValue}> {price} </Text>
+                    <Text style={styles.rowValue}> {price} €</Text>
                 </View>
                 <View style={styles.rowContainer}>
                     <Text style={styles.rowHeader}> Prescription: </Text>
                     <Text style={styles.rowValue}> {(prescription) ? 'Yes' : 'No'} </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.rowHeader}> Leaflet: </Text>
+                    {(leaflet_url)
+                        ? <TouchableOpacity
+                            onPress={() => handleURL(leaflet_url)}>
+                            <Text style={[styles.rowValue, styles.availableText]}> Available </Text>
+                        </TouchableOpacity>
+                        : <Text style={styles.rowValue}> Not available </Text>
+                    }
+
+
                 </View>
             </View>
             {showButtons()}
@@ -117,6 +151,9 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: 'bold'
     },
+    availableText: {
+        color: Cons.COLORS.BLUE,
+    },
     sectionContainer: {
         marginLeft: 25,
         marginTop: 5,
@@ -135,4 +172,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default makeOrderDetail;
+export default productDetail;

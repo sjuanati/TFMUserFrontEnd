@@ -7,6 +7,7 @@ const initialState = {
     items: [],
     ordered: false,
     scanned: false,
+    price: 0,
 };
 
 // // Add item to the Order
@@ -16,14 +17,27 @@ const addItem = (state, action) => {
         product_id: action.product_id,
         product_desc: action.product_desc,
         price: action.price,
+        dose_qty: action.dose_qty,
+        dose_form: action.dose_form,
+        leaflet_url: action.leaflet_url,
     }];
     state.items = [...state.items, ...newItem];
+
+    let totalPrice = 0;
+    state.items.forEach(elem => totalPrice += elem.price)
+    state.price = totalPrice;
+
     return state;
 };
 
 // Remove item from the Order
 const removeItem = (state, action) => {
     state.items = state.items.filter(item => item.item_id !== action.item_id);
+    
+    let totalPrice = 0;
+    state.items.forEach(elem => totalPrice += elem.price)
+    state.price = totalPrice;
+    
     return state;
 };
 

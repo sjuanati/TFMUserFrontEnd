@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
     View,
-    StyleSheet,
-    FlatList,
-    Alert,
     Text,
+    Alert,
+    FlatList,
+    StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import {
@@ -19,12 +19,12 @@ import {
     Right,
     Body
 } from "native-base";
-import AsyncStorage from '@react-native-community/async-storage';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-community/async-storage';
+import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 
 const getOrderDetail = (props) => {
@@ -63,31 +63,23 @@ const getOrderDetail = (props) => {
                 setOrder(ordr => [...ordr, ...order]);
                 setLoading(false);
             } else {
-                {
-                    showToast("Ha ocurrido un error")
-                }
+                showToast("Ha ocurrido un error")
             }
         }).catch(async err => {
             if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                {
-                    showToast("Por favor, vuelve a entrar")
-                }
+                showToast("Por favor, vuelve a entrar")
                 await AsyncStorage.clear();
                 props.navigation.navigate('StartScreen');
             } else if (err.response && err.response.status === 400) {
-                {
-                    showToast("Ha ocurrido un error")
-                }
+                showToast("Ha ocurrido un error")
             } else {
-                {
-                    showToast("Ups... parece que no hay conexión")
-                }
+                showToast("Ups... parece que no hay conexión")
             }
             setLoading(false);
         });
     };
 
-    const canceledOrder = async () => {
+    const cancelOrder = async () => {
         Alert.alert(
             "Estas seguro que quieres cancelar el pedido?",
             null,
@@ -130,47 +122,47 @@ const getOrderDetail = (props) => {
         );
     };
 
-    const acceptPriceOrder = async () => {
-        Alert.alert(
-            "¿Estás seguro que quieres aceptar el siguiente precio?",
-            order[0].total_price + ' €',
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                {
-                    text: "OK", onPress: () => {
-                        axios.post(`${httpUrl}/order/acceptPriceOrder`, {
-                            order_id: order[0].order_id,
-                            user_id: order[0].user_id
-                        }, {
-                            headers: { authorization: user.token }
-                        }).then(async res => {
-                            if (res.status === 200 && res.data.order) {
-                                let ordr = res.data.order;
-                                setOrder(ordr);
-                            } else {
-                                { showToast("Ha ocurrido un error") }
-                            }
-                        }).catch(async err => {
-                            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                                { showToast("Por favor, vuelve a entrar") }
-                                await AsyncStorage.clear();
-                                props.navigation.navigate('StartScreen');
-                            } else if (err.response && err.response.status === 400) {
-                                { showToast("Ha ocurrido un error") }
-                            } else {
-                                { showToast("Ups... parece que no hay conexión") }
-                            }
-                        });
-                    }
-                }
-            ],
-            { cancelable: false }
-        );
-    };
+    // const acceptPriceOrder = async () => {
+    //     Alert.alert(
+    //         "¿Estás seguro que quieres aceptar el siguiente precio?",
+    //         order[0].total_price + ' €',
+    //         [
+    //             {
+    //                 text: "Cancel",
+    //                 onPress: () => console.log("Cancel Pressed"),
+    //                 style: "cancel"
+    //             },
+    //             {
+    //                 text: "OK", onPress: () => {
+    //                     axios.post(`${httpUrl}/order/acceptPriceOrder`, {
+    //                         order_id: order[0].order_id,
+    //                         user_id: order[0].user_id
+    //                     }, {
+    //                         headers: { authorization: user.token }
+    //                     }).then(async res => {
+    //                         if (res.status === 200 && res.data.order) {
+    //                             let ordr = res.data.order;
+    //                             setOrder(ordr);
+    //                         } else {
+    //                             { showToast("Ha ocurrido un error") }
+    //                         }
+    //                     }).catch(async err => {
+    //                         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+    //                             { showToast("Por favor, vuelve a entrar") }
+    //                             await AsyncStorage.clear();
+    //                             props.navigation.navigate('StartScreen');
+    //                         } else if (err.response && err.response.status === 400) {
+    //                             { showToast("Ha ocurrido un error") }
+    //                         } else {
+    //                             { showToast("Ups... parece que no hay conexión") }
+    //                         }
+    //                     });
+    //                 }
+    //             }
+    //         ],
+    //         { cancelable: false }
+    //     );
+    // };
 
     const showToast = (text) => {
         Toast.show({
@@ -190,59 +182,44 @@ const getOrderDetail = (props) => {
 
     const StatusOrder = ({ status }) => {
         if (status === 0) {
-            return (<Text style={{ color: 'grey' }}>BORRADOR</Text>)
+            return (<Text style={styles.statusGrey}>DRAFT</Text>)
         } else if (status === 1) {
-            return (<Text style={{ color: 'grey' }}>PRECIO SOLICITADO</Text>)
+            return (<Text style={styles.statusGrey}>REQUESTED</Text>)
         } else if (status === 2) {
-            return (<Text style={{ color: '#f0ad4e' }}>PENDIENTE CONFIRMACIÓN</Text>)
+            return (<Text style={styles.statusYellow}>CONFIRMED</Text>)
         } else if (status === 3) {
-            return (<Text style={{ color: 'grey' }}>EN PREPARACIÓN</Text>)
+            return (<Text style={styles.statusGrey}>PICK UP READY</Text>)
         } else if (status === 4) {
-            return (<Text style={{ color: '#f0ad4e' }}>LISTO PARA RECOGER</Text>)
+            return (<Text style={styles.statusYellow}>IN TRANSIT</Text>)
         } else if (status === 5) {
-            return (<Text style={{ color: '#5cb85c' }}>ENTREGADO</Text>)
+            return (<Text style={styles.statusGreen}>DELIVERED</Text>)
         } else if (status === 6) {
-            return (<Text style={{ color: '#d9534f' }}>CANCELADO</Text>)
+            return (<Text style={styles.statusRed}>CANCELLED</Text>)
         } else {
             return (<Text />)
         }
     };
 
     const renderItem = ({ item, index }) => {
-        console.log('--> item: ', item);
+    console.log(' -- ', item);
+        item.screen = 'GetOrderDetail'
         return (
-            <View>
-                {(item.photo && item.photo !== '') ?
-                    <ListItem style={{ marginLeft: 0 }}
-                        onPress={() => openImage(item)}
-                        id={item.order_item}>
-                        <Body style={{ flex: 0.8 }}>
-                            <Text note>
-                                Item {index + 1}:
-                            </Text>
-                            <Text>
-                                {item.product_desc}
-                            </Text>
-                        </Body>
-                        <Right style={{ flex: 0.2 }}>
-                            <Icon name="ios-attach" color='gray' />
-                        </Right>
-                    </ListItem> :
-                    <ListItem style={{ marginLeft: 0 }}
-                        id={item.order_item}>
-                        <Body style={{ flex: 0.8 }}>
-                            <Text note>
-                                Item {index + 1}:
-                            </Text>
-                            <Text>
-                                {item.product_desc}
-                            </Text>
-                        </Body>
-                        <Right style={{ flex: 0.2 }}>
-                        </Right>
-                    </ListItem>
-                }
-            </View>
+            <ListItem
+                id={item.order_item}
+                onPress={() => props.navigation.navigate('ProductDetail', item)}
+                bottomDivider
+                chevron
+                >
+                <View>
+                    <Text style={styles.subtitleText}>Item {index}: </Text>
+                    <Text>{item.product_desc}</Text>
+                    <Text style={styles.subtitleText}>{item.price} € </Text>
+                </View>
+            </ListItem>
+            //}
+            //onPress={() => props.navigation.navigate('OrderItem', item)}
+            //bottomDivider
+            //chevron />
         )
     };
 
@@ -263,7 +240,6 @@ const getOrderDetail = (props) => {
     };
 
     const openTrace = (item) => {
-        console.log('item: ', item);
         props.navigation.navigate('OrderTrace', {
             order_id: item
         });
@@ -271,38 +247,31 @@ const getOrderDetail = (props) => {
 
     const RenderPage = () => (
         <View>
-
             <View style={styles.headerContainer}>
-                <Text style={styles.titleText}> Pedido </Text>
+                <Text style={styles.titleText}> Order </Text>
             </View>
-
             <View style={styles.sectionContainer}>
-
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Referencia: </Text>
+                    <Text style={styles.rowHeader}> Reference: </Text>
                     <Text style={styles.rowValue}> #{order[0].order_id_app} </Text>
                 </View>
-
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Farmacia: </Text>
+                    <Text style={styles.rowHeader}> Pharmacy: </Text>
                     <Text style={styles.rowValue}> {order[0].pharmacy_desc} </Text>
                 </View>
-
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Estado: </Text>
+                    <Text style={styles.rowHeader}> Status: </Text>
                     <Text style={styles.rowValue}> <StatusOrder status={order[0].status} /> </Text>
                 </View>
-
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Precio: </Text>
-                    {(order[0].total_price)
+                    <Text style={styles.rowHeader}> Price: </Text>
+                    {/* {(order[0].total_price)
                         ? <Text style={styles.rowValue}> {order[0].total_price} € </Text>
-                        : <Text style={styles.rowValue}> Pendiente </Text>}
-
+                        : <Text style={styles.rowValue}> Pending </Text>} */}
+                    <Text style={styles.rowValue}> {order[0].total_price} € </Text>
                 </View>
-
                 <View style={styles.rowContainer}>
-                    <Text style={styles.rowHeader}> Trazabilidad: </Text>
+                    <Text style={styles.rowHeader}> Trace: </Text>
                     <Ionicons
                         name='ios-checkmark-circle-outline'
                         size={20}
@@ -312,55 +281,28 @@ const getOrderDetail = (props) => {
                         style={styles.button2}
                         onPress={() => openTrace(order[0].order_id)}
                     >
-                        <Text style={[styles.rowValue, styles.buttonText]}> Detalles </Text>
+                        <Text style={[styles.rowValue, styles.buttonText]}> Details </Text>
                     </TouchableOpacity>
                 </View>
-
                 <RenderList />
             </View>
-
-            {(order[0].status === 2) ?
-                <View>
+            {(order[0].status === 1 || order[0].status === 2)
+                ? <View>
                     <Grid>
-                        <Col style={styles.colButton}>
+                        <Col size={1} />
+                        <Col size={2} style={styles.colButton}>
                             <Button block bordered rounded danger
                                 style={styles.buttonCanceled}
-                                onPress={canceledOrder}>
-                                <Text numberOfLines={1}
-                                    style={styles.smallFont}>
-                                    Cancelado
-                                    </Text>
+                                onPress={cancelOrder}>
+                                <Text numberOfLines={1}>
+                                    Cancel Order
+                                </Text>
                             </Button>
                         </Col>
-                        <Col style={styles.colButton}>
-                            <Button block bordered rounded success
-                                style={styles.buttonDelivered}
-                                onPress={acceptPriceOrder}>
-                                <Text numberOfLines={1}
-                                    style={styles.smallFont}>
-                                    Aceptar Precio
-                                    </Text>
-                            </Button>
-                        </Col>
+                        <Col size={1} />
                     </Grid>
-                </View> :
-                (order[0].status !== 5 && order[0].status !== 6) ?
-                    <View style={{ marginTop: 15 }}>
-                        <Grid>
-                            <Col size={1} />
-                            <Col size={2} style={styles.colButton}>
-                                <Button block bordered rounded danger
-                                    style={styles.buttonCanceled}
-                                    onPress={canceledOrder}>
-                                    <Text numberOfLines={1}
-                                        style={styles.smallFont}>
-                                        Cancelar pedido
-                                        </Text>
-                                </Button>
-                            </Col>
-                            <Col size={1} />
-                        </Grid>
-                    </View> : null
+                </View>
+                : null
             }
         </View>
     );
@@ -444,6 +386,26 @@ const styles = StyleSheet.create({
     buttonDelivered: {
         marginTop: '2%'
     },
+    statusGrey: {
+        color: 'grey',
+        fontSize: 16,
+    },
+    statusYellow: {
+        color: '#f0ad4e',
+        fontSize: 16,
+    },
+    statusGreen: {
+        color: '#5cb85c',
+        fontSize: 16,
+    },
+    statusRed: {
+        color: '#d9534f',
+        fontSize: 16,
+    },
+    subtitleText: {
+        color: 'grey',
+        fontSize: 16,
+    }
 });
 
 export default getOrderDetail;

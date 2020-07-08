@@ -1,79 +1,43 @@
 // Libs
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     View,
-    TouchableOpacity,
     Alert,
     FlatList,
+    PixelRatio,
     StyleSheet,
-    Platform,
-    PixelRatio
+    TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
 import { ListItem } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
-import axios from 'axios';
 
 // Components
+import Button from '../../UI/Button';
+import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
+import showToast from '../../shared/Toast';
+import fontSize from '../../shared/FontSize';
 import { httpUrl } from '../../../urlServer';
+import logger from '../../shared/logRecorder';
 import { clearCart } from '../../store/actions/order';
 import ActivityIndicator from '../../UI/ActivityIndicator';
-import Button from '../../UI/Button';
-import fontSize from '../../shared/FontSize';
+import CustomHeaderBack from '../../navigation/CustomHeaderBack';
+
+// Constants
 const FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
-import showToast from '../../shared/Toast';
-import Cons from '../../shared/Constants';
-import logger from '../../shared/logRecorder';
 
 
 const orderSummary = (props) => {
 
     // Get orders from state
     const order = useSelector(state => state.order.items);
+    const price = useSelector(state => state.order.price);
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const [isLoading, setIsLoding] = useState(false);
 
-    // Show medicine item in List
-    const renderItem = ({ item }) => {
-        order[item].screen = 'OrderSummary';
-        return (
-        <ListItem
-            // rightAvatar={
-            //     (order[item].itemPhoto.length > 0) ? <Icon name="ios-attach" size={30} color='gray' /> : null
-            // }
-            title={order[item].product_desc}
-            // subtitle = "Farmacia X"
-            // onPress = {() => navigation.navigate('OrderItem',
-            //     {itemNumber: order[item].itemNumber,
-            //      item_description: order[item].item_description})}
-            onPress={() => props.navigation.navigate('OrderItem', order[item])}
-            bottomDivider
-            chevron
-        />
-    )};
-
-    const renderAddItem = () => (
-        <View style={styles.container_body}>
-            <Text style={styles.text}> Ningún producto en la cesta </Text>
-            <Button target='Order' desc='Añadir producto' nav={props.navigation} />
-        </View>
-    );
-
-    const renderOrderOverview = () => (
-        <View style={styles.container_body}>
-            <Text style={styles.itemHeader}>Resumen del pedido</Text>
-            <TouchableOpacity
-                onPress={() => props.navigation.navigate('PharmacySearch')}>
-                {(user.favPharmacyID)
-                    ? <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
-                    : <Text style={styles.subText}> Ninguna farmacia seleccionada </Text>}
-            </TouchableOpacity>
-        </View>
-    );
 
     const confirmOrder = /*async*/ () => {
         Alert.alert(
@@ -117,7 +81,7 @@ const orderSummary = (props) => {
             await axios.post(`${httpUrl}/order/add`, {
                 order,
                 user,
-                user_id: user.id,
+                total_price: price,
             }, {
                 headers: {
                     authorization: user.token,
@@ -178,6 +142,39 @@ const orderSummary = (props) => {
         }
     };
 
+    // Show medicine item in List
+    const renderItem = ({ item }) => {
+        order[item].screen = 'OrderSummary';
+        return (
+            <ListItem
+                title={order[item].product_desc}
+                subtitle={<Text style={styles.subtitleText}>{order[item].price} € </Text>}
+                onPress={() => props.navigation.navigate('ProductDetail', order[item])}
+                bottomDivider
+                chevron />
+        )
+    };
+
+    const renderAddItem = () => (
+        <View style={styles.container_body}>
+            <Text style={styles.text}> Ningún producto en la cesta </Text>
+            <Button target='Order' desc='Añadir producto' nav={props.navigation} />
+        </View>
+    );
+
+    const renderOrderOverview = () => (
+        <View style={styles.container_body}>
+            <Text style={styles.itemHeader}>Order Summary</Text>
+            <TouchableOpacity
+                onPress={() => props.navigation.navigate('PharmacySearch')}>
+                {(user.favPharmacyID)
+                    ? <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
+                    : <Text style={styles.subText}> Ninguna farmacia seleccionada </Text>}
+            </TouchableOpacity>
+            <Text style={styles.priceText}>Total price: <Text style={styles.bold}>{price} €</Text></Text> 
+        </View>
+    );
+
     return (
         <View style={styles.container}>
             <CustomHeaderBack {...props} />
@@ -232,9 +229,6 @@ const styles = StyleSheet.create({
         backgroundColor: Cons.COLORS.WHITE,
         paddingBottom: 10,
     },
-    container_pharmacy: {
-        alignItems: 'center'
-    },
     container_bottom: {
         flex: 1,
         flexDirection: 'row',
@@ -255,6 +249,12 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZE,
         color: Cons.COLORS.BLUE,
     },
+    priceText: {
+        fontSize: 16,
+    },
+    bold: {
+        fontWeight: 'bold',
+    },
     list: {
         padding: 10,
         fontSize: 20,
@@ -268,6 +268,10 @@ const styles = StyleSheet.create({
         color: Cons.COLORS.BLACK,
         flexDirection: 'row',
     },
+    subtitleText: {
+        color: 'grey',
+        fontSize: 16,
+    }
 });
 
 export default orderSummary;

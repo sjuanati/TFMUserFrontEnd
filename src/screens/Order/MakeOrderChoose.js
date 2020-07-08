@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     View,
+    Text,
     FlatList,
     Platform,
     StyleSheet,
@@ -46,8 +47,12 @@ const makeOrderChoose = (props) => {
         return (
             <ListItem
                 title={values.item.product_desc}
-                //rightTitle={formatDistance(values.item.distance)}
-                onPress={() => props.navigation.navigate('OrderItem', values.item)}
+                subtitle={
+                    <View>
+                        <Text style={styles.subtitleText}>{values.item.price} € </Text>
+                    </View>
+                }
+                onPress={() => props.navigation.navigate('ProductDetail', values.item)}
                 bottomDivider
                 chevron />
         )
@@ -109,6 +114,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         backgroundColor: 'white',
     },
+    subtitleText: {
+        color: 'grey',
+        fontSize: 16,
+    }
 })
 
 export default makeOrderChoose;
