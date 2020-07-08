@@ -253,7 +253,7 @@ const getOrder = (props) => {
             {(orders.length === 0 || orders.length === 1) ?
                 <View style={styles.viewContent}>
                     <Text style={styles.noItems}>
-                        No hay ningún pedido
+                        No Orders found
           </Text>
                 </View>
                 :
@@ -510,8 +510,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     noItems: {
+        marginTop: 20,
         color: 'gray',
-        fontSize: FONT_SIZE - 8, //12
+        fontSize: FONT_SIZE,
     },
     header: {
         marginStart: 5,

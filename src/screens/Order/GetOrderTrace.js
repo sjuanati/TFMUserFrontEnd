@@ -38,7 +38,7 @@ const getOrderTrace = (props) => {
     // Render list of Order items
     const renderOrderItems = (values) => (
         <ListItem
-            title={<Text style={styles.textHeader}>{values.item.order_status} - {values.item.status_desc}</Text>}
+            title={<Text style={styles.textHeader}>{values.item.status_desc}</Text>}
             subtitle={
                 <View>
                     <View style={styles.rowContainer}>

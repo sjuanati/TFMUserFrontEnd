@@ -8,16 +8,13 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {
-    Spinner,
-    Grid,
     Col,
-    Button,
-    Icon,
-    Container,
+    Grid,
     Toast,
+    Button,
+    Spinner,
     ListItem,
-    Right,
-    Body
+    Container,
 } from "native-base";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -91,10 +88,11 @@ const getOrderDetail = (props) => {
                 },
                 {
                     text: "OK", onPress: () => {
-                        axios.post(`${httpUrl}/order/cancelOrderUser`, {
+                        axios.post(`${httpUrl}/order/changeOrderStatus`, {
+                            status: 6,
                             order_id: order[0].order_id,
+                            user_id: order[0].user_id,
                             pharmacy_id: order[0].pharmacy_id,
-                            user_id: order[0].user_id
                         }, {
                             headers: { authorization: user.token }
                         }).then(async res => {
@@ -122,47 +120,6 @@ const getOrderDetail = (props) => {
         );
     };
 
-    // const acceptPriceOrder = async () => {
-    //     Alert.alert(
-    //         "¿Estás seguro que quieres aceptar el siguiente precio?",
-    //         order[0].total_price + ' €',
-    //         [
-    //             {
-    //                 text: "Cancel",
-    //                 onPress: () => console.log("Cancel Pressed"),
-    //                 style: "cancel"
-    //             },
-    //             {
-    //                 text: "OK", onPress: () => {
-    //                     axios.post(`${httpUrl}/order/acceptPriceOrder`, {
-    //                         order_id: order[0].order_id,
-    //                         user_id: order[0].user_id
-    //                     }, {
-    //                         headers: { authorization: user.token }
-    //                     }).then(async res => {
-    //                         if (res.status === 200 && res.data.order) {
-    //                             let ordr = res.data.order;
-    //                             setOrder(ordr);
-    //                         } else {
-    //                             { showToast("Ha ocurrido un error") }
-    //                         }
-    //                     }).catch(async err => {
-    //                         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-    //                             { showToast("Por favor, vuelve a entrar") }
-    //                             await AsyncStorage.clear();
-    //                             props.navigation.navigate('StartScreen');
-    //                         } else if (err.response && err.response.status === 400) {
-    //                             { showToast("Ha ocurrido un error") }
-    //                         } else {
-    //                             { showToast("Ups... parece que no hay conexión") }
-    //                         }
-    //                     });
-    //                 }
-    //             }
-    //         ],
-    //         { cancelable: false }
-    //     );
-    // };
 
     const showToast = (text) => {
         Toast.show({
@@ -216,10 +173,6 @@ const getOrderDetail = (props) => {
                     <Text style={styles.subtitleText}>{item.price} € </Text>
                 </View>
             </ListItem>
-            //}
-            //onPress={() => props.navigation.navigate('OrderItem', item)}
-            //bottomDivider
-            //chevron />
         )
     };
 
@@ -231,12 +184,6 @@ const getOrderDetail = (props) => {
                 keyExtractor={item => item.order_item.toString()}>
             </FlatList>
         );
-    };
-
-    const openImage = (item) => {
-        props.navigation.navigate('FullScreenImage', {
-            order: item
-        });
     };
 
     const openTrace = (item) => {
