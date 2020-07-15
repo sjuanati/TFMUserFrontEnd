@@ -3,10 +3,10 @@ import * as actionTypes from './actionTypes';
 export const setFavPharmacy = (favPharmacyID, favPharmacyDesc) => ({
     type: actionTypes.SET_FAV_PHARMACY,
     favPharmacyID: favPharmacyID,
-    favPharmacyDesc: favPharmacyDesc,
+    favPharmacyDesc: favPharmacyDesc
 });
 
-export const setData = (id, token, birthday, email, gender, name, phone) => ({
+export const setData = (id, token, birthday, email, gender, name, phone, photo, user_status) => ({
     type: actionTypes.SET_DATA,
     id: id,
     token: token,
@@ -15,12 +15,14 @@ export const setData = (id, token, birthday, email, gender, name, phone) => ({
     gender: gender,
     name: name,
     phone: phone,
+    photo: photo,
+    user_status: user_status,
 })
 
-export const setAddress = (address_id, status, street, locality, province, zip_code, country) => ({
+export const setAddress = (address_id, address_status, street, locality, province, zip_code, country) => ({
     type: actionTypes.SET_ADDRESS,
     address_id: address_id,
-    status: status,
+    address_status: address_status,
     street: street,
     locality: locality,
     province: province,

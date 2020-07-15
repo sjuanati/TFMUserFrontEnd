@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, Header, Title, Item, Icon, Input, Text, Container, Content, Toast, List, ListItem, Right, Body, Left, Thumbnail } from "native-base";
 import { View, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 const yellowIcon = require('../../assets/images/global/yellowIcon.png');
@@ -8,18 +8,18 @@ const profileYellow = require('../../assets/images/bottomBar/yellow/profile.png'
 const drmax = require('../../assets/images/global/DrMax.png');
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { decode as atob, encode as btoa } from 'base-64';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
+import { setAvatar } from '../../store/actions/avatar';
 import { httpUrl } from '../../../urlServer';
 import logger from '../../shared/logRecorder';
 
 const insideSession = (props) => {
 
     const dispatch = useDispatch();
-    const showProfile = async () => {
-        await props.navigation.navigate('Perfil', props);
-    };
+    const [isActiveAccount, setIsActiveAccount] = useState(false);
 
     useEffect(() => {
         setUser();
@@ -48,10 +48,22 @@ const insideSession = (props) => {
                             res[0].email,
                             res[0].gender,
                             res[0].name,
-                            res[0].phone
+                            res[0].phone,
+                            res[0].photo,
+                            res[0].status,
                         ));
-                        fetchPharmacy(usr, tkn);
-                        fetchAddress(usr, tkn);
+                        // If User is disabled, go to AccountDisabled screen
+                        if (res[0].status === 0) {
+                            console.log(`User ${usr.id} disabled!`);
+                            props.navigation.navigate('AccountDisabled', {
+                                user_id: usr.id
+                            });
+                        } else {
+                            setIsActiveAccount(true);
+                            fetchPharmacy(usr, tkn);
+                            fetchAddress(usr, tkn);
+                            loadPhotoFromS3(res[0].photo, usr, tkn);
+                        }
                     }
                 })
                 .catch(err => {
@@ -100,7 +112,8 @@ const insideSession = (props) => {
                         res[0].locality,
                         res[0].province,
                         res[0].zip_code,
-                        res[0].country))
+                        res[0].country
+                    ));
                 } else {
                     // Avoid redux getting data from previous session
                     dispatch(setAddress(
@@ -110,7 +123,8 @@ const insideSession = (props) => {
                         null,
                         null,
                         null,
-                        null))
+                        null
+                    ));
                 }
             })
             .catch(err => {
@@ -118,11 +132,41 @@ const insideSession = (props) => {
             })
     };
 
+        // Load profile photo
+        const loadPhotoFromS3 = async (photo, usr, tkn) => {
+            console.log('photo?', photo)
+            if (photo) {
+                //setIsLoding(true);
+                await axios.get(`${httpUrl}/order/getLinePhoto`, {
+                    params: {
+                        photo: photo,
+                        type: 'userProfile',
+                    },
+                    headers: { authorization: tkn }
+                })
+                    .then(response => {
+                        let base64Flag = 'data:image/jpeg;base64,';
+                        let imageStr = response.data.Body.data;
+                        let binary = '';
+                        let bytes = new Uint8Array(imageStr);
+                        let len = bytes.byteLength;
+                        for (let i = 0; i < len; i++) {
+                            binary += String.fromCharCode(bytes[i]);
+                        }
+                        let src = btoa(binary);
+                        dispatch(setAvatar(base64Flag + src));
+                    })
+                    .catch(err => {
+                        console.log('Error at InsideSession.js -> loadPhotoFromS3() :', err);
+                        logger('ERR', 'FRONT-USER', `InsideSession.js -> loadPhotoFromS3(): ${err}`, usr, `photo: ${photo}`);
+                    })
+            }
+        };
+
     return (
         <Container>
             <Header style={styles.header}>
                 <Left style={styles.left}>
-
                 </Left>
                 <Body style={styles.body}>
                     <Image
@@ -142,7 +186,9 @@ const insideSession = (props) => {
                 />
                 <Content padder>
                     <TouchableOpacity activeOpacity={1}
-                        onPress={async () => await props.navigation.navigate('Home')}>
+                        onPress={async () => await props.navigation.navigate('Home')}
+                        disabled={(isActiveAccount ? false : true)}
+                        >
                         <Card style={styles.roundCard}>
                             <Image
                                 style={styles.iconHome}
@@ -150,10 +196,10 @@ const insideSession = (props) => {
                             />
                             <Text style={styles.text}>
                                 Pide en tu
-              </Text>
+                            </Text>
                             <Text style={styles.text}>
                                 FARMACIA
-              </Text>
+                            </Text>
                         </Card>
                     </TouchableOpacity>
                 </Content>
@@ -164,13 +210,10 @@ const insideSession = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'center'
     },
     header: {
         backgroundColor: 'white',
-        height: 60,
+        height: 60
     },
     iconHeader: {
         height: 25,
@@ -183,8 +226,7 @@ const styles = StyleSheet.create({
     },
     body: {
         flex: 1,
-        alignItems: 'center',
-        marginTop: -20,
+        alignItems: 'center'
     },
     right: {
         flex: 1

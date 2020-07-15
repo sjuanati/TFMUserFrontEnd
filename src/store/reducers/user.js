@@ -11,19 +11,21 @@ const initialState = {
     name: null,
     phone: null,
     address_id: null,
-    status: null,
+    user_status: null,
+    address_satus: null,
     street: null,
     locality: null,
     province: null,
     zip_code: null,
-    country: null
+    country: null,
+    photo: null,
 };
 
 const setFavPharmacy = (state, action) => {
     return {
         ...state, 
         ...{favPharmacyID: action.favPharmacyID,
-            favPharmacyDesc: action.favPharmacyDesc
+            favPharmacyDesc: action.favPharmacyDesc,
         }
     }
 };
@@ -37,7 +39,9 @@ const setData = (state, action) => {
             email: action.email,
             gender: action.gender,
             name: action.name,
-            phone: action.phone
+            phone: action.phone,
+            photo: action.photo,
+            user_status: action.user_status,
         }
     }
 }
@@ -46,7 +50,7 @@ const setAddress = (state, action) => {
     return {
         ...state,
         ...{address_id: action.address_id,
-            status: action.status,
+            address_status: action.address_status,
             street: action.street,
             locality: action.locality,
             province: action.province,
