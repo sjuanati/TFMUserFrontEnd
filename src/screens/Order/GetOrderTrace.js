@@ -35,6 +35,10 @@ const getOrderTrace = (props) => {
         });
     }
 
+    const showTrimmedHash = (hash) => {
+        return hash.slice(0,25) + '...' + hash.slice(-5);
+    }
+
     // Render list of Order items
     const renderOrderItems = (values) => (
         <ListItem
@@ -56,7 +60,7 @@ const getOrderTrace = (props) => {
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.rowHeader}> Hash: </Text>
-                        <Text style={styles.rowValue}> {values.item.db_hash} </Text>
+                        <Text style={styles.rowValue}> {showTrimmedHash(values.item.db_hash)} </Text>
                     </View>
                 </View>}
             bottomDivider

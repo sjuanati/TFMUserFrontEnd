@@ -71,13 +71,13 @@ const productDetail = (props) => {
                     (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem()
                 }}>
                 <Text style={[globalStyles.buttonText, styles.bold]}>
-                    {(screen === 'OrderSummary') ? 'Eliminar' : 'Añadir'}
+                    {(screen === 'OrderSummary') ? 'Delete' : 'Add Product'}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={globalStyles.button}
                 onPress={() => props.navigation.goBack()}>
-                <Text style={globalStyles.buttonText}> Volver </Text>
+                <Text style={globalStyles.buttonText}> Back </Text>
             </TouchableOpacity>
         </View>
     );

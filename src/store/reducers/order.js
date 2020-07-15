@@ -10,7 +10,7 @@ const initialState = {
     price: 0,
 };
 
-// // Add item to the Order
+// // Add item to the Order. Price is rounded to two decimals
 const addItem = (state, action) => {
     const newItem = [{
         item_id: action.item_id,
@@ -25,7 +25,7 @@ const addItem = (state, action) => {
 
     let totalPrice = 0;
     state.items.forEach(elem => totalPrice += elem.price)
-    state.price = totalPrice;
+    state.price = Math.round((totalPrice + Number.EPSILON) * 100) / 100
 
     return state;
 };

@@ -20,7 +20,7 @@ const makeOrderChoose = (props) => {
     const [products, setProducts] = useState([]);
     const [typingTimeout, setIsTypingTimeout] = useState(0);
     const [isLoading, setIsLoding] = useState(false);
-    const TIMER = 800;
+    const TIMER = 500;
     const MIN_CHARACTERS = 3;
 
     // Launch product query 800ms after typing the search string

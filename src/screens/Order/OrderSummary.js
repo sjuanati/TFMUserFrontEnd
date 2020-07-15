@@ -41,12 +41,12 @@ const orderSummary = (props) => {
 
     const confirmOrder = /*async*/ () => {
         Alert.alert(
-            '¿Deseas confirmar el pedido?', '',
+            'Please confirm the order sending', '',
             [{
                 text: 'Cancelar',
                 style: 'cancel'
             }, {
-                text: 'Sí',
+                text: 'Confirm',
                 onPress: async () => {
                     setIsLoding(true);
                     await saveOrderToDB();
@@ -169,9 +169,9 @@ const orderSummary = (props) => {
                 onPress={() => props.navigation.navigate('PharmacySearch')}>
                 {(user.favPharmacyID)
                     ? <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
-                    : <Text style={styles.subText}> Ninguna farmacia seleccionada </Text>}
+                    : <Text style={styles.subText}> No pharmacy selected </Text>}
             </TouchableOpacity>
-            <Text style={styles.priceText}>Total price: <Text style={styles.bold}>{price} €</Text></Text> 
+            <Text style={styles.priceText}>Total price: <Text style={styles.bold}>{price} €</Text></Text>
         </View>
     );
 
@@ -191,16 +191,6 @@ const orderSummary = (props) => {
                 <ActivityIndicator isLoading={isLoading} />
             </View>
             <View style={styles.container_bottom}>
-                {(order.length > 0 && (user.favPharmacyID !== null)) ?
-                    <View style={styles.item}>
-                        <TouchableOpacity
-                            style={globalStyles.button}
-                            onPress={() => removeOrder()}>
-                            <Text style={globalStyles.buttonText}> Anular Pedido</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-                    null}
                 <View style={styles.item}>
                     <TouchableOpacity
                         style={(order.length > 0 && (user.favPharmacyID !== null))
@@ -210,9 +200,19 @@ const orderSummary = (props) => {
                         disabled={(order.length > 0 && (user.favPharmacyID !== null))
                             ? false
                             : true}>
-                        <Text style={globalStyles.buttonText}> Pedir Precio </Text>
+                        <Text style={[globalStyles.buttonText, styles.bold]}> Send Order </Text>
                     </TouchableOpacity>
                 </View>
+                {(order.length > 0 && (user.favPharmacyID !== null)) ?
+                    <View style={styles.item}>
+                        <TouchableOpacity
+                            style={globalStyles.button}
+                            onPress={() => removeOrder()}>
+                            <Text style={globalStyles.buttonText}> Cancel Order </Text>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    null}
             </View>
         </View>
     );
