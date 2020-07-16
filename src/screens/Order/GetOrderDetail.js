@@ -28,6 +28,7 @@ const getOrderDetail = (props) => {
 
     const [loading, setLoading] = useState(true);
     const [order, setOrder] = useState([]);
+    const [orderTraceStatus, setOrderTraceStatus] = useState('PENDING');
     const user = useSelector(state => state.user);
 
     useEffect(() => {
@@ -39,13 +40,25 @@ const getOrderDetail = (props) => {
 
     const startFunctions = async () => {
         try {
-            let order_id = props.navigation.getParam('order');
+            const order_id = props.navigation.getParam('order');
             await getOrder(user.id, order_id, user.token);
+            await fetchOrderTraceGlobal(order_id);
             setLoading(false);
         } catch (error) {
             throw error;
         }
     };
+
+    const fetchOrderTraceGlobal = async (order_id) => {
+        await axios.get(`${httpUrl}/trace/order/global`, {
+            params: { order_id: order_id },
+            headers: { authorization: user.token }
+        }).then(res => {
+            setOrderTraceStatus(res.data);
+        }).catch(err => {
+            console.log('Error in GetOrderDetail.js -> fetchOrderTraceGlobal() : ', err);
+        });
+    }
 
     const getOrder = async (user_id, order_id, token) => {
         axios.get(`${httpUrl}/order/get/item/user`, {
@@ -78,7 +91,7 @@ const getOrderDetail = (props) => {
 
     const cancelOrder = async () => {
         Alert.alert(
-            "Estas seguro que quieres cancelar el pedido?",
+            "Do you want to cancel the order?",
             null,
             [
                 {
@@ -99,6 +112,7 @@ const getOrderDetail = (props) => {
                             if (res.status === 200 && res.data.order) {
                                 let ordr = res.data.order;
                                 setOrder(ordr);
+                                setOrderTraceStatus('PENDING');
                             } else {
                                 { showToast("Ha ocurrido un error") }
                             }
@@ -158,7 +172,6 @@ const getOrderDetail = (props) => {
     };
 
     const renderItem = ({ item, index }) => {
-    console.log(' -- ', item);
         item.screen = 'GetOrderDetail'
         return (
             <ListItem
@@ -166,7 +179,7 @@ const getOrderDetail = (props) => {
                 onPress={() => props.navigation.navigate('ProductDetail', item)}
                 bottomDivider
                 chevron
-                >
+            >
                 <View>
                     <Text style={styles.subtitleText}>Item {index}: </Text>
                     <Text>{item.product_desc}</Text>
@@ -192,6 +205,46 @@ const getOrderDetail = (props) => {
         });
     }
 
+    const showOrderTraceStatus = () => {
+        switch (orderTraceStatus) {
+            case 'PENDING':
+                return (
+                    <Ionicons
+                        name='ios-ellipsis-horizontal-circle-outline'
+                        size={25}
+                        color='orange'
+                    />)
+            case 'OK':
+                return (
+                    <Ionicons
+                        name='ios-checkmark-circle-outline'
+                        size={25}
+                        color='green'
+                    />)
+            case 'NOK':
+                return (
+                    <Ionicons
+                        name='close-circle-outline'
+                        size={25}
+                        color='red'
+                    />)
+            default:
+                return (
+                    <Ionicons
+                        name='alert-circle-outline'
+                        size={25}
+                        color='red'
+                    />)
+        }
+        // return (
+        //     <Ionicons
+        //         name='ios-checkmark-circle-outline'
+        //         size={20}
+        //         color='green'
+        //     />
+        // )
+    }
+
     const RenderPage = () => (
         <View>
             <View style={styles.headerContainer}>
@@ -212,20 +265,14 @@ const getOrderDetail = (props) => {
                 </View>
                 <View style={styles.rowContainer}>
                     <Text style={styles.rowHeader}> Price: </Text>
-                    {/* {(order[0].total_price)
-                        ? <Text style={styles.rowValue}> {order[0].total_price} € </Text>
-                        : <Text style={styles.rowValue}> Pending </Text>} */}
                     <Text style={styles.rowValue}> {order[0].total_price} € </Text>
                 </View>
                 <View style={styles.rowContainer}>
                     <Text style={styles.rowHeader}> Trace: </Text>
-                    <Ionicons
-                        name='ios-checkmark-circle-outline'
-                        size={20}
-                        color='green'
-                    />
+                    {showOrderTraceStatus()}
+
                     <TouchableOpacity
-                        style={styles.button2}
+                        style={styles.buttonDetails}
                         onPress={() => openTrace(order[0].order_id)}
                     >
                         <Text style={[styles.rowValue, styles.buttonText]}> Details </Text>
@@ -294,12 +341,13 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white'
     },
-    button2: {
+    buttonDetails: {
         backgroundColor: '#00A591',
         marginLeft: 10,
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
         borderRadius: 15,
+        justifyContent: 'center'
     },
     button: {
         backgroundColor: '#F4B13E'

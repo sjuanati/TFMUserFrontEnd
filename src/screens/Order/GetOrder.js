@@ -278,8 +278,8 @@ const getOrder = (props) => {
             <Header noShadow style={styles.headerTitle}>
                 <Left style={styles.left}>
                     <Text style={styles.titlePage}>
-                        Pedidos
-          </Text>
+                        Orders
+                    </Text>
                 </Left>
                 <Right />
             </Header>

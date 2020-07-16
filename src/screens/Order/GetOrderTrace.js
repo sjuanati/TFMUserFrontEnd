@@ -10,6 +10,7 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
 import { ListItem } from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 const box_width = 50;
@@ -36,7 +37,20 @@ const getOrderTrace = (props) => {
     }
 
     const showTrimmedHash = (hash) => {
-        return hash.slice(0,25) + '...' + hash.slice(-5);
+        return hash.slice(0, 25) + '...' + hash.slice(-5);
+    }
+
+    const showChecksum = (checksum, error) => {
+        switch (checksum) {
+            case 'OK':
+                return <Text style={styles.textValidated}>Validated </Text>
+            case 'NOK':
+                return <Text style={styles.textNotValidated}>Not Validated  <Text style={styles.unbold}>({error})</Text></Text>
+            case 'PENDING':
+                return <Text style={styles.textPending}>Pending </Text>
+            default:
+                return <Text style={styles.textNotValidated}>Unknown </Text>
+        }
     }
 
     // Render list of Order items
@@ -51,16 +65,15 @@ const getOrderTrace = (props) => {
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.rowHeader}> Checksum: </Text>
-                        <Text style={styles.rowValue}>
-                            {(values.item.checksum) ?
-                                <Text style={styles.textValidated}> Validated </Text> :
-                                <Text style={styles.textNotValidated}> Not Validated  <Text style={styles.unbold}>({values.item.error})</Text></Text> 
-                            }
-                        </Text>
+                        <Text style={styles.rowValue}> {showChecksum(values.item.checksum, values.item.error)} </Text>
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.rowHeader}> Hash: </Text>
                         <Text style={styles.rowValue}> {showTrimmedHash(values.item.db_hash)} </Text>
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.rowHeader}> Signed by: </Text>
+                        <Text style={styles.rowValue}>TBD </Text>
                     </View>
                 </View>}
             bottomDivider
@@ -93,6 +106,7 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: 'row',
+        marginTop: 5,
     },
     rowHeader: {
         color: 'grey',
@@ -101,12 +115,12 @@ const styles = StyleSheet.create({
     rowValue: {
         width: 300
     },
-    box: {
-        width: box_width,
-        height: box_width,
-        borderRadius: box_width / 2,
-        backgroundColor: 'green',
-    },
+    // box: {
+    //     width: box_width,
+    //     height: box_width,
+    //     borderRadius: box_width / 2,
+    //     backgroundColor: 'green',
+    // },
     textHeader: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -114,9 +128,14 @@ const styles = StyleSheet.create({
     },
     textValidated: {
         color: 'green',
+        fontWeight: 'bold'
     },
     textNotValidated: {
         color: 'red',
+        fontWeight: 'bold'
+    },
+    textPending: {
+        color: 'orange',
         fontWeight: 'bold'
     },
     unbold: {
