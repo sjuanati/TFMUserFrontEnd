@@ -40,7 +40,7 @@ const home = (props) => {
     const checkCart = () => {
         if (ordered) {
             //showToast('Pedido enviado!', 'default');
-            Alert.alert('Pedido enviado');
+            Alert.alert('Order sent!');
             dispatch(setOrdered(false));
         }
     };

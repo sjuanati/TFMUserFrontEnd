@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-
-import { Root, Button, Text, Container, Content } from "native-base";
-
+import React from 'react';
+import { Root, Container } from "native-base";
 import AppNavigator from './src/navigation/AppNavigator';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
@@ -20,11 +17,10 @@ const rootReducer = combineReducers({
 });
 const store = createStore(rootReducer);
 
-const App = props => {
+const App = () => {
   return (
     <Provider store={store}>
       <Container>
-        {/*{Platform.OS === 'ios' && <StatusBar barStyle="default" />}*/}
         <Root>
           <AppNavigator />
         </Root>

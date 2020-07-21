@@ -1,13 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Content, Badge, Spinner, Header, Item, Text, Container, Toast, ListItem, Right, Body, Left, Icon, Input } from "native-base";
-import { View, StyleSheet, FlatList, PixelRatio, Platform, RefreshControl, TouchableOpacity } from 'react-native';
-//import { SearchBar } from 'react-native-elements';
-import AsyncStorage from '@react-native-community/async-storage';
-import { httpUrl } from '../../../urlServer';
+import {
+    Badge,
+    Spinner,
+    Header,
+    Item,
+    Text,
+    Container,
+    Toast,
+    ListItem,
+    Right,
+    Body,
+    Left,
+    Icon,
+    Input
+}
+    from "native-base";
+import {
+    View,
+    FlatList,
+    Platform,
+    StyleSheet,
+    PixelRatio,
+    RefreshControl,
+    TouchableOpacity
+} from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
+import { httpUrl } from '../../../urlServer';
 import fontSize from '../../shared/FontSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOrdersPage } from '../../store/actions/order'
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 // Font size management
 let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
@@ -133,25 +156,16 @@ const getOrder = (props) => {
             }).then(async res => {
                 if (res.status === 200 || res.status === 304) {
                     let ordrs = res.data;
-
                     let initialOrder = [{ order_id: 0, header: true }];
                     setOriginalOrders(() => [...initialOrder, ...ordrs]);
                     await findOrder(searchText, [...initialOrder, ...ordrs], filters);
                     setLoading(false);
                     resolve();
                 } else {
-                    { showToast("Ha ocurrido un error") }
+                    { showToast("Error found") }
                 }
             }).catch(async err => {
-                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                    showToast("Por favor, vuelve a entrar");
-                    await AsyncStorage.clear();
-                    props.navigation.navigate('StartScreen');
-                } else if (err.response && err.response.status === 400) {
-                    showToast("Ha ocurrido un error");
-                } else {
-                    showToast("Ups... parece que no hay conexión");
-                }
+                handleAxiosErrors(props, err);
                 setLoading(false);
             });
         });
@@ -164,7 +178,7 @@ const getOrder = (props) => {
                 order: item.order_id
             });
         } else {
-            console.log('error opening order')
+            console.log('Error opening order')
         }
     };
 
@@ -288,7 +302,7 @@ const getOrder = (props) => {
                 <Item>
                     <Item>
                         <Icon name="ios-search" />
-                        <Input placeholder="Farmacia ..."
+                        <Input placeholder="Search pharmacy"
                             value={searchText}
                             onChangeText={(text) => {
                                 setSearchText(text);
@@ -296,6 +310,21 @@ const getOrder = (props) => {
                             }} />
                     </Item>
                 </Item>
+                {/* <Item>
+                    <SearchBar
+                        placeholder="Search pharmacy"
+                        onChangeText={(text) => {
+                            setSearchText(text);
+                            findOrder(text, originalOrders, filters)
+                        }}
+                        value={searchText}
+                        autoCapitalize='none'
+                        maxLength={100}
+                        //selectionColor={Cons.COLORS.ORANGE}
+                        //inputStyle={styles.searchFieldInput}
+                        //containerStyle={styles.searchFieldContainer}
+                        platform={Platform.OS == 'ios' ? 'ios' : 'android'} />
+                </Item> */}
                 {
                     (filters.grey) ?
                         <TouchableOpacity onPress={async () => {
@@ -537,19 +566,19 @@ const styles = StyleSheet.create({
         opacity: 0.3
     },
     statusGrey: {
-        color: 'grey', 
+        color: 'grey',
         fontSize: 13,
     },
     statusYellow: {
-        color: '#f0ad4e', 
+        color: '#f0ad4e',
         fontSize: 13,
     },
     statusGreen: {
-        color: '#5cb85c', 
+        color: '#5cb85c',
         fontSize: 13,
     },
     statusRed: {
-        color: '#d9534f', 
+        color: '#d9534f',
         fontSize: 13,
     },
 });

@@ -20,9 +20,9 @@ import globalStyles from '../../UI/Style';
 import showToast from '../../shared/Toast';
 import fontSize from '../../shared/FontSize';
 import { httpUrl } from '../../../urlServer';
-import logger from '../../shared/logRecorder';
 import { clearCart } from '../../store/actions/order';
 import ActivityIndicator from '../../UI/ActivityIndicator';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 // Constants
@@ -38,22 +38,21 @@ const orderSummary = (props) => {
     const dispatch = useDispatch();
     const [isLoading, setIsLoding] = useState(false);
 
-
-    const confirmOrder = /*async*/ () => {
+    const confirmOrder = () => {
         Alert.alert(
             'Please confirm the order sending', '',
             [{
-                text: 'Cancelar',
-                style: 'cancel'
-            }, {
                 text: 'Confirm',
+                style: 'cancel',
                 onPress: async () => {
                     setIsLoding(true);
                     await saveOrderToDB();
                     await saveLastPharmacyToDB();
                     setIsLoding(false);
                 }
-            }],
+            }, {
+                text: 'Cancel',
+            }, ],
             { cancelable: false }
         );
 
@@ -61,7 +60,7 @@ const orderSummary = (props) => {
 
     const removeOrder = () => {
         Alert.alert(
-            '¿Seguro que quieres cancelar el pedido?', '',
+            '¿Do you want to cancel the Order?', '',
             [{
                 text: 'Cancel', onPress: () => { }, style: 'cancel'
             }, {
@@ -94,20 +93,11 @@ const orderSummary = (props) => {
                     props.navigation.navigate('Home');
                 })
                 .catch(async err => {
-                    if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                        showToast("Por favor, vuelve a entrar")
-                        props.navigation.navigate('StartScreen');
-                    } else if (err.response && err.response.status === 404) {
-                        showToast("Error al confirmar pedido");
-                    } else {
-                        showToast("Ups... parece que no hay conexión");
-                    }
+                    handleAxiosErrors(props, err);
                     Alert.alert('Error al procesar el pedido');
-                    logger('ERR', 'FRONT-USER', `OrderSummary.js -> saveOrderToDB(): ${err}`, user, '');
                     console.log('Error at OrderSummary.js -> saveOrderToDB() :', err);
                 })
         } else {
-            logger('WRN', 'FRONT-USER', `OrderSummary.js -> saveOrderToDB() `, user, 'No User, Product/s or Pharmacy to save Order');
             console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
         }
     };
@@ -125,20 +115,11 @@ const orderSummary = (props) => {
                     console.log(response.data);
                 })
                 .catch(async err => {
-                    if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                        showToast("Por favor, vuelve a entrar")
-                        props.navigation.navigate('StartScreen');
-                    } else if (err.response && err.response.status === 404) {
-                        showToast("Ha ocurrido un error al guardar la farmacia preferida");
-                    } else {
-                        showToast("Ups... parece que no hay conexión");
-                    }
+                    handleAxiosErrors(props, err);
                     console.log('Error on OrderSummary.js -> saveLastPharmacyToDB() :', err);
-                    logger('ERR', 'FRONT-USER', `OrderSummary.js -> saveLastPharmacyToDB(): ${err}`, user, `pharmacy: ${user.favPharmacyID}`);
                 })
         } else {
             console.log('Warning on OrderSummary.js -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
-            logger('WRN', 'FRONT-USER', `OrderSummary.js -> saveLastPharmacyToDB() `, user, 'No User or Pharmacy to save Order');
         }
     };
 
@@ -157,8 +138,8 @@ const orderSummary = (props) => {
 
     const renderAddItem = () => (
         <View style={styles.container_body}>
-            <Text style={styles.text}> Ningún producto en la cesta </Text>
-            <Button target='Order' desc='Añadir producto' nav={props.navigation} />
+            <Text style={styles.text}> No Order in Cart </Text>
+            <Button target='Order' desc='Add Product' nav={props.navigation} />
         </View>
     );
 
@@ -227,7 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: Cons.COLORS.WHITE,
-        paddingBottom: 10,
+        paddingBottom: 15,
     },
     container_bottom: {
         flex: 1,
@@ -241,7 +222,7 @@ const styles = StyleSheet.create({
         margin: 15,
     },
     text: {
-        margin: 20,
+        margin: 15,
         fontSize: FONT_SIZE,
     },
     subText: {

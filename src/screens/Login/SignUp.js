@@ -85,34 +85,6 @@ const signup = ( props ) => {
     })
   };
 
-/* TODO: Show conditions in Modal instead of opening browser, in order to reduce risk
-        of not finishing the process by jumping to another app */
-//
-//   const toggleIsModalOpen = () => {
-//     const prev = isModalOpen;
-//     setIsModalOpen(!prev);
-//   }
-//   const renderConsent = () => (
-//     <Modal 
-//         visible={isModalOpen}
-//         transparent={true}
-//         animationType='slide'
-//     >
-//         {/* <View style={styles.centeredView}> */}
-//             {/* <View style={styles.modalView}> */}
-//             <View style={styles.containerModal}>
-//                 <Text>
-//                     Hallo!
-//                 </Text>
-//                 <TouchableOpacity
-//                     onPress={() => toggleIsModalOpen()}
-//                 >
-//                     <Text> Close </Text>
-//                 </TouchableOpacity>
-//             </View>
-//         {/* </View> */}
-//     </Modal>
-//   )
 
   const register = () => {
     //console.log('credentials:', user.email, user.password, user.name, user.phone);

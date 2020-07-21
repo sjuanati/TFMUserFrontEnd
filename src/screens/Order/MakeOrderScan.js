@@ -52,7 +52,7 @@ const makeOrderScan = (props) => {
                 // Prescription barcode found in DB -> Go to Order Summary
                 if (response.data.length > 0) {
                     buildOrder(response.data);
-                    // No Prescription found in DB -> Go back to MakeOrder
+                // No Prescription found in DB -> Go back to MakeOrder
                 } else {
                     dispatch(setScanned(true));
                     props.navigation.navigate('Order');
@@ -142,8 +142,6 @@ const styles = StyleSheet.create({
     },
     preview: {
         flex: 1,
-        //justifyContent: 'flex-end',
-        //alignItems: 'center',
     },
     cameraIcon: {
         margin: 5,

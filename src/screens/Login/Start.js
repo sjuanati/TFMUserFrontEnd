@@ -37,7 +37,6 @@ const start = props => {
   };
 
   const login = () => {
-    //console.log('credentials:', user.email, user.password);
     if(user.email && user.password) {
       setLoading(true);
       axios.post(`${httpUrl}/users/login`, {
@@ -46,7 +45,6 @@ const start = props => {
       }).then(async res => {
         console.log(res.status);
         if(res.status === 200 && res.data.token) {
-          //await AsyncStorage.clear();
           await AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           await AsyncStorage.setItem('user', JSON.stringify(res.data));
           setLoading(false);

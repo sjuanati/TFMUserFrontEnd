@@ -20,9 +20,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-community/async-storage';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
-
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 const getOrderDetail = (props) => {
 
@@ -76,15 +75,7 @@ const getOrderDetail = (props) => {
                 showToast("Ha ocurrido un error")
             }
         }).catch(async err => {
-            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                showToast("Por favor, vuelve a entrar")
-                await AsyncStorage.clear();
-                props.navigation.navigate('StartScreen');
-            } else if (err.response && err.response.status === 400) {
-                showToast("Ha ocurrido un error")
-            } else {
-                showToast("Ups... parece que no hay conexión")
-            }
+            handleAxiosErrors(props, err);
             setLoading(false);
         });
     };
@@ -117,15 +108,7 @@ const getOrderDetail = (props) => {
                                 { showToast("Ha ocurrido un error") }
                             }
                         }).catch(async err => {
-                            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                                { showToast("Por favor, vuelve a entrar") }
-                                await AsyncStorage.clear();
-                                props.navigation.navigate('StartScreen');
-                            } else if (err.response && err.response.status === 400) {
-                                { showToast("Ha ocurrido un error") }
-                            } else {
-                                { showToast("Ups... parece que no hay conexión") }
-                            }
+                            handleAxiosErrors(props, err);
                         });
                     }
                 }
@@ -134,21 +117,12 @@ const getOrderDetail = (props) => {
         );
     };
 
-
     const showToast = (text) => {
         Toast.show({
             text: text,
             position: "bottom",
             buttonText: "Okay"
         });
-    };
-
-    const RenderDate = ({ date }) => {
-        return (
-            <Text note style={{ marginLeft: 5 }}>
-                {("0" + date.getHours()).slice(-2)}:{("0" + date.getMinutes()).slice(-2)} {("0" + date.getDate()).slice(-2)}/{("0" + (date.getMonth() + 1).toString()).slice(-2)}/{(date.getFullYear())}
-            </Text>
-        )
     };
 
     const StatusOrder = ({ status }) => {
@@ -236,13 +210,6 @@ const getOrderDetail = (props) => {
                         color='red'
                     />)
         }
-        // return (
-        //     <Ionicons
-        //         name='ios-checkmark-circle-outline'
-        //         size={20}
-        //         color='green'
-        //     />
-        // )
     }
 
     const RenderPage = () => (

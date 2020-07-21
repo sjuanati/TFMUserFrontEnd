@@ -9,21 +9,19 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
-import { Spinner } from "native-base";
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSelector, useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
 
 // Components
 import PharmacySchedule from './PharmacySchedule';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import { setFavPharmacy } from '../../store/actions/user';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 // Global settings
 import { httpUrl } from '../../../urlServer';
 import globalStyles from '../../UI/Style';
-import showToast from '../../shared/Toast';
 import Cons from '../../shared/Constants';
 import logger from '../../shared/logRecorder';
 
@@ -60,17 +58,9 @@ const pharmacyDetail = (props) => {
                 }
             })
             .catch(async err => {
-                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                    showToast('Por favor, vuelve a entrar', 'default');
-                    await AsyncStorage.clear();
-                    props.navigation.navigate('StartScreen');
-                } else if (err.response && err.response.status === 400) {
-                    showToast('Ha ocurrido un error', 'danger');
-                } else {
-                    showToast('Ups... parece que no hay conexión', 'warning');
-                }
-                logger('ERR', 'FRONT-USER', `Pharmacy.js -> fetchSchedule(): ${err}`, user, `pharmacy: ${item.pharmacy_id}`);
+                handleAxiosErrors(props, err);
             })
+            
     };
 
     useEffect(() => {
@@ -110,7 +100,6 @@ const pharmacyDetail = (props) => {
             })
             .catch(err => {
                 console.log('Error on Pharmacy.js -> handlePhoneCall(): ', err);
-                logger('ERR', 'FRONT-USER', `Pharmacy.js -> handlePhoneCall(): ${err}`, user, `phone number: ${phoneNumber}`);
             });
     };
 
@@ -130,8 +119,7 @@ const pharmacyDetail = (props) => {
                 }
             })
             .catch(err => {
-                console.warn('Error on Pharmacy.js -> handleFacebook(): ', err);
-                logger('ERR', 'FRONT-USER', `Pharmacy.js -> handleFacebook(): ${err}`, user, `facebook id: ${FACEBOOK_ID}`);
+                console.log('Error on Pharmacy.js -> handleFacebook(): ', err);
             });
     };
 

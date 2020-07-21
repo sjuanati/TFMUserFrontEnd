@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Header, Title, Item, Icon, Input, Text, Container, Content, Toast, List, ListItem, Right, Body, Left, Thumbnail } from "native-base";
-import { View, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { 
+    Card, 
+    Header, 
+    Text, 
+    Container, 
+    Content,
+    Right, 
+    Body, 
+    Left
+} from "native-base";
+import { 
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    ImageBackground
+} from 'react-native';
+import axios from 'axios';
+import { httpUrl } from '../../../urlServer';
+import { useDispatch } from 'react-redux';
+import { encode as btoa } from 'base-64';
+import { setAvatar } from '../../store/actions/avatar';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
+import AsyncStorage from '@react-native-community/async-storage';
+import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
+
+const drmax = require('../../assets/images/global/DrMax.png');
 const yellowIcon = require('../../assets/images/global/yellowIcon.png');
 const yellowHome = require('../../assets/images/bottomBar/yellow/home.png');
 const backgroundImage = require('../../assets/images/global/background.jpg');
-const profileYellow = require('../../assets/images/bottomBar/yellow/profile.png');
-const drmax = require('../../assets/images/global/DrMax.png');
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { decode as atob, encode as btoa } from 'base-64';
-
-import AsyncStorage from '@react-native-community/async-storage';
-import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
-import { setAvatar } from '../../store/actions/avatar';
-import { httpUrl } from '../../../urlServer';
-import logger from '../../shared/logRecorder';
 
 const insideSession = (props) => {
 
@@ -51,6 +64,7 @@ const insideSession = (props) => {
                             res[0].phone,
                             res[0].photo,
                             res[0].status,
+                            res[0].eth_address,
                         ));
                         // If User is disabled, go to AccountDisabled screen
                         if (res[0].status === 0) {
@@ -66,10 +80,8 @@ const insideSession = (props) => {
                         }
                     }
                 })
-                .catch(err => {
-                    if (err.response && err.response.status === 404) {
-                        logger('ERR', 'FRONT-USER', `setUser.js : ${err}`, user, '');
-                    }
+                .catch(async err => {
+                    handleAxiosErrors(props, err);
                     console.log('Error in insideSession.js -> setUser():' , err);
                 })
         } catch (err) {
@@ -91,8 +103,8 @@ const insideSession = (props) => {
                         res[0].pharmacy_desc));
                 }
             })
-            .catch(err => {
-                console.log('Error in insideSession.js -> fetchPharmacy():', err);
+            .catch(async err => {
+                handleAxiosErrors(props, err);
             })
     };
 
@@ -158,7 +170,6 @@ const insideSession = (props) => {
                     })
                     .catch(err => {
                         console.log('Error at InsideSession.js -> loadPhotoFromS3() :', err);
-                        logger('ERR', 'FRONT-USER', `InsideSession.js -> loadPhotoFromS3(): ${err}`, usr, `photo: ${photo}`);
                     })
             }
         };

@@ -9,9 +9,11 @@ import {
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
-import { ListItem, SearchBar } from 'react-native-elements';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import ActivityIndicator from '../../UI/ActivityIndicator';
+import { ListItem, SearchBar } from 'react-native-elements';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
+import CustomHeaderBack from '../../navigation/CustomHeaderBack';
+
 
 const makeOrderChoose = (props) => {
 
@@ -68,7 +70,8 @@ const makeOrderChoose = (props) => {
             .then(response => {
                 if (response.data !== '') setProducts(response.data);
             })
-            .catch(err => {
+            .catch(async err => {
+                handleAxiosErrors(props, err);
                 console.log('Error on MakeOrderChoose.js -> fetchProducts() : ', err);
             })
             .then(() => {

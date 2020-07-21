@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Spinner, 
-        Header,
-        Text,
-        Container,
-        Body } from "native-base";
-import { View,
-        Dimensions,
-        Image,
-        StyleSheet } from 'react-native';
+import {
+    Spinner, 
+    Header,
+    Text,
+    Container,
+    Body 
+} from "native-base";
+import { 
+    View,
+    Dimensions,
+    Image,
+    StyleSheet 
+} from 'react-native';
+import axios from 'axios';
+import {encode as btoa} from 'base-64'
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
-import axios from 'axios';
-import {decode as atob, encode as btoa} from 'base-64'
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 
@@ -99,10 +103,7 @@ const getOrderImage = ( props ) => {
 
 const styles = StyleSheet.create({
   headerTitle: {
-    //marginStart: 5,
-    //marginTop: 5,
     borderWidth: 0,
-    //height: 50,
     alignItems: 'flex-start',
     backgroundColor: 'transparent'
   },

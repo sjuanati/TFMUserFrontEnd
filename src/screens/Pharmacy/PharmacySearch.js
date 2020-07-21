@@ -19,13 +19,12 @@ import { getDistance } from 'geolib';
 import { check, request, PERMISSIONS } from 'react-native-permissions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 // Global settings
 import { httpUrl } from '../../../urlServer';
 import Cons from '../../shared/Constants';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
-import showToast from '../../shared/Toast';
 import fontSize from '../../shared/FontSize';
 import logger from '../../shared/logRecorder';
 
@@ -125,18 +124,9 @@ const pharmacySearch = (props) => {
                     setIsLoading(false);
                 }
             })
-            .catch(async error => {
-                if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                    showToast('Por favor, vuelve a entrar', 'default');
-                    await AsyncStorage.clear();
-                    props.navigation.navigate('StartScreen');
-                } else if (error.response && error.response.status === 400) {
-                    showToast('Ha ocurrido un error', 'danger')
-                } else {
-                    showToast('Ups... parece que no hay conexión', 'warning')
-                }
-                console.log('Error on PharmacySearch.js -> fetchPharmacies() : ', error);
-                logger('ERR', 'FRONT-USER', `PharmacySearch.js -> fetchPharmacies(): ${error}`, '');
+            .catch(async err => {
+                handleAxiosErrors(props, err);
+                console.log('Error on PharmacySearch.js -> fetchPharmacies() : ', err);
             })
     };
 
@@ -210,7 +200,6 @@ const pharmacySearch = (props) => {
                             platform={Platform.OS == 'ios' ? 'ios' : 'android'} />
 
                         <View style={styles.containerTabView}>
-                            {/* <Text style = {styles.text}> Encontrar cerca: </Text> */}
                             <View style={styles.tabViewItem}>
 
                                 {/* REFRESH BUTTON */}

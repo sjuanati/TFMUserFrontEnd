@@ -10,10 +10,9 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
 import { ListItem } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
-const box_width = 50;
+//const box_width = 50;
 
 const getOrderTrace = (props) => {
 

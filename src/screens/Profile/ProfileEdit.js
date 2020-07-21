@@ -10,24 +10,23 @@ import {
     StyleSheet,
     ScrollView,
     ActionSheetIOS,
-    ImageBackground,
+    //ImageBackground,
     TouchableOpacity,
     KeyboardAvoidingView
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+
 import axios from 'axios';
 import moment from 'moment';
-import ImagePicker from 'react-native-image-picker';
+import { useSelector, useDispatch } from 'react-redux';
 import DatePicker from '@react-native-community/datetimepicker';
-
 import { httpUrl } from '../../../urlServer';
-import logger from '../../shared/logRecorder';
 import Cons from '../../shared/Constants';
 import ActivityIndicator from '../../UI/ActivityIndicator';
 import { setData, setAddress } from '../../store/actions/user';
 import { setIsModalProfileOpen } from '../../store/actions/modal';
-import { setAvatar } from '../../store/actions/avatar';
-import DeletePhoto from '../../shared/DeletePhoto';
+//import ImagePicker from 'react-native-image-picker';
+//import { setAvatar } from '../../store/actions/avatar';
+//import DeletePhoto from '../../shared/DeletePhoto';
 
 const profileEdit = (props) => {
 
@@ -170,6 +169,7 @@ const profileEdit = (props) => {
                 gender,
                 name,
                 phone,
+                user.eth_address,
             ));
             dispatch(setAddress(
                 user.id,
@@ -226,12 +226,10 @@ const profileEdit = (props) => {
                     })
                     .catch(error => {
                         Alert.alert('Error al guardar perfil');
-                        logger('ERR', 'FRONT-USER', `ProfileEdit.js -> saveProfileToDB(): ${error}`, user, '');
                         console.log('Error at ProfileEdit.js -> saveProfileToDB() :', error);
                         resolve(false);
                     })
             } else {
-                logger('WRN', 'FRONT-USER', `ProfileEdit.js -> saveProfileToDB(): `, user, 'No User to save Profile');
                 console.log('Warning on ProfileEdit.js -> saveProfileToDB(): No User to save Profile');
                 resolve(false);
             }
@@ -267,12 +265,10 @@ const profileEdit = (props) => {
                     })
                     .catch(err => {
                         Alert.alert('Error al guardar dirección');
-                        logger('ERR', 'FRONT-USER', `ProfileEdit.js -> saveAddressToDB(): ${err}`, user, '');
                         console.log('Error at ProfileEdit.js -> saveAddressToDB() :', err);
                         resolve(false);
                     })
             } else {
-                logger('WRN', 'FRONT-USER', `ProfileEdit.js -> saveAddressToDB(): `, user, 'No User to save Address');
                 console.log('Warning on ProfileEdit.js -> saveAddressToDB(): No User to save Address');
                 resolve(false);
             }
