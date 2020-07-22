@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Text, 
-        View, 
-        Image, 
-        PixelRatio, 
-        StyleSheet, 
-        TouchableOpacity, 
-        Alert } from 'react-native';
-import { Spinner } from "native-base";
+import {
+    Text,
+    View,
+    Alert,
+    Image,
+    PixelRatio,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import AsyncStorage from '@react-native-community/async-storage';
-import { httpUrl } from '../../../urlServer';
 
 // Components
 import Cons from '../../shared/Constants';
@@ -21,7 +19,6 @@ import otcLogo from '../../assets/images/home/OTC-yellow.png';
 import pillLogo from '../../assets/images/home/Pill-Yellow.png';
 import showToast from '../../shared/Toast';
 import fontSize from '../../shared/FontSize';
-
 const FONT_SIZE = fontSize(24, PixelRatio.getFontScale());
 
 
@@ -36,7 +33,7 @@ const home = (props) => {
         checkCart();
     }, [ordered]);
 
-     //TODO: recover previous cart status, retrieving data from DB
+    //TODO: recover previous cart status, retrieving data from DB
     const checkCart = () => {
         if (ordered) {
             //showToast('Pedido enviado!', 'default');
@@ -54,17 +51,15 @@ const home = (props) => {
                 <Text style={styles.textItem}>  Farmacia </Text>
                 <Image source={choosePharmacyLogo} style={styles.icon} />
             </TouchableOpacity>
-
-            {(user.favPharmacyID) ?
-                <View style={[styles.favPharma, styles.containerRow]}>
+            {(user.favPharmacyID)
+                ? <View style={[styles.favPharma, styles.containerRow]}>
                     <Icon name="ios-checkmark-circle-outline" size={30} color='green' />
                     <View style={styles.container}>
                         <Text style={styles.favPharmaText}> Farmacia </Text>
                         <Text style={styles.favPharmaText}> {user.favPharmacyDesc} </Text>
                     </View>
                 </View>
-                :
-                null}
+                : null}
         </View>
     );
 
@@ -85,7 +80,7 @@ const home = (props) => {
 
     const openOrder = () => {
         if (!user.favPharmacyID) {
-            showToast('Selecciona Farmacia para hacer pedido', 'default');
+            showToast('Choose pharmacy to make an Order', 'default');
         } else {
             props.navigation.navigate('Order');
         }
@@ -93,11 +88,8 @@ const home = (props) => {
 
     return (
         <View style={styles.container}>
-
             {renderChoosePharmacy()}
-
             {renderOrderProduct()}
-
         </View>
     );
 };
@@ -108,7 +100,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     favPharmaText: {
-        fontSize: FONT_SIZE-4,
+        fontSize: FONT_SIZE - 4,
         paddingTop: 5,
     },
     container: {

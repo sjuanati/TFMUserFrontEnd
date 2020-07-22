@@ -190,10 +190,10 @@ const getOrder = (props) => {
                         style={{ marginLeft: 0 }}
                         id={item.item.order_id.toString()}>
                         <Left style={{ flex: 0.6 }}>
-                            <Text>Pedido</Text>
+                            <Text>Order</Text>
                         </Left>
                         <Body style={{ flex: 0.4 }}>
-                            <Text>Estado</Text>
+                            <Text>Status</Text>
                         </Body>
                     </ListItem>
                     :

@@ -27,6 +27,7 @@
     "countries-list": "^2.5.4",
     "geolib": "^3.3.1",
     "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31",
     "nan": "^2.14.1",
     "native-base": "^2.13.12",
     "react": "16.13.1",

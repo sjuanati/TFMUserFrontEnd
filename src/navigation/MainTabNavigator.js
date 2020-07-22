@@ -7,6 +7,8 @@ import Home from '../screens/Home/Home';
 import Orders from '../screens/Order/GetOrder';
 import OrderDetail from '../screens/Order/GetOrderDetail';
 import Tokens from '../screens/Tokens/Token';
+import EarnTokensDetail from '../screens/Tokens/earnTokensDetail';
+import SpendTokensDetail from '../screens/Tokens/spendTokensDetail';
 import Profile from '../screens/Profile/Profile';
 import CustomHeader from '../navigation/CustomHeader';
 import InsideSession from '../screens/Home/InsideSession';
@@ -148,6 +150,18 @@ OrdersStack.navigationOptions = {
 
 const TokensStack = createStackNavigator({
     Tokens: Tokens,
+    EarnTokensDetail: {
+        screen: EarnTokensDetail,
+        navigationOptions: {
+            headerShown: false
+        }
+    },
+    SpendTokensDetail: {
+        screen: SpendTokensDetail,
+        navigationOptions: {
+            headerShown: false
+        }
+    },
 },
     {
         defaultNavigationOptions: {

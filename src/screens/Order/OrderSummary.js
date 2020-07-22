@@ -17,7 +17,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../UI/Button';
 import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
-import showToast from '../../shared/Toast';
 import fontSize from '../../shared/FontSize';
 import { httpUrl } from '../../../urlServer';
 import { clearCart } from '../../store/actions/order';

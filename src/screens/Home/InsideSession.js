@@ -146,7 +146,7 @@ const insideSession = (props) => {
 
         // Load profile photo
         const loadPhotoFromS3 = async (photo, usr, tkn) => {
-            console.log('photo?', photo)
+            //console.log('photo?', photo)
             if (photo) {
                 //setIsLoding(true);
                 await axios.get(`${httpUrl}/order/getLinePhoto`, {
