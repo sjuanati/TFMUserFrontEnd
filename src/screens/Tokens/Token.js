@@ -97,24 +97,24 @@ const token = (props) => {
             <View style={styles.containerBalance}>
                 <Text style={styles.text}> Current Balance :
                     <Text style={styles.bold}>
-                        {(balance === -1) ? ' ...' : (balance === -2) ? ' ?' : balance}
+                        {(balance === -1) ? ' ...' : (balance === -2) ? ' ?' : ` ${balance}`}
                     </Text>
                     <Text style={styles.textGrey}> PCT</Text>
                 </Text>
             </View>
             <View style={styles.containerTabView}>
-                {/* <View style={(tabView) ? styles.selectedView : null}> */}
+                <View style={(tabView) ? styles.selectedView : null}>
                     <TouchableOpacity
                         onPress={() => toggleTabView(true)}>
                         <Text style={styles.selectedText}>{`Earn Tokens`}</Text>
                     </TouchableOpacity>
-                {/* </View> */}
-                {/* <View style={(!tabView) ? styles.selectedView : null}> */}
+                </View>
+                <View style={(!tabView) ? styles.selectedView : null}>
                     <TouchableOpacity
                         onPress={() => toggleTabView(false)}>
                         <Text style={styles.selectedText}>{`Spend Tokens`}</Text>
                     </TouchableOpacity>
-                {/* </View> */}
+                </View>
             </View>
             {(tabView)
                 ? <View style={styles.sectionList}>

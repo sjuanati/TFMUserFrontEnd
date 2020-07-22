@@ -22,12 +22,14 @@ import ProductDetail from '../screens/Order/ProductDetail';
 import FullScreenImage from '../screens/Order/GetOrderImage';
 import OrderTrace from '../screens/Order/GetOrderTrace';
 
-const homeYellow = require('../assets/images/bottomBar/yellow/home.png');
-const homeGrey = require('../assets/images/bottomBar/grey/home.png');
-const historialYellow = require('../assets/images/bottomBar/yellow/historial.png');
-const historialGrey = require('../assets/images/bottomBar/grey/historial.png');
-const profileYellow = require('../assets/images/bottomBar/yellow/profile.png');
-const profileGrey = require('../assets/images/bottomBar/grey/profile.png');
+const homeOrange = require('../assets/images/bottomBar/yellow/home-orange.png');
+const homeGrey = require('../assets/images/bottomBar/grey/home-grey.png');
+const ordersOrange = require('../assets/images/bottomBar/yellow/list-orange.png');
+const ordersGrey = require('../assets/images/bottomBar/grey/list-grey.png');
+const ethereumOrange = require('../assets/images/bottomBar/yellow/ethereum-orange.png');
+const ethereumGrey = require('../assets/images/bottomBar/grey/ethereum-grey.png');
+const profileOrange = require('../assets/images/bottomBar/yellow/user-orange.png');
+const profileGrey = require('../assets/images/bottomBar/grey/user-grey.png');
 
 
 const HomeStack = createStackNavigator({
@@ -85,11 +87,11 @@ const HomeStack = createStackNavigator({
 HomeStack.navigationOptions = {
     tabBarLabel: 'Home',
     tabBarIcon: ({ focused }) => {
-        return focused ?
-            <Image
+        return focused 
+            ? <Image
                 style={styles.iconHome}
-                source={homeYellow} /> :
-            <Image
+                source={homeOrange} /> 
+            : <Image
                 style={styles.iconHome}
                 source={homeGrey} />
     }
@@ -138,13 +140,13 @@ const OrdersStack = createStackNavigator({
 OrdersStack.navigationOptions = {
     tabBarLabel: 'Orders',
     tabBarIcon: ({ focused }) => {
-        return focused ?
-            <Image
+        return focused
+            ? <Image
                 style={styles.iconHome}
-                source={historialYellow} /> :
-            <Image
+                source={ordersOrange} />
+            : <Image
                 style={styles.iconHome}
-                source={historialGrey} />
+                source={ordersGrey} />
     }
 };
 
@@ -173,13 +175,13 @@ const TokensStack = createStackNavigator({
 TokensStack.navigationOptions = {
     tabBarLabel: 'Tokens',
     tabBarIcon: ({ focused }) => {
-        return focused ?
-            <Image
+        return focused
+            ? <Image
                 style={styles.iconHome}
-                source={historialYellow} /> :
-            <Image
+                source={ethereumOrange} />
+            : <Image
                 style={styles.iconHome}
-                source={historialGrey} />
+                source={ethereumGrey} />
     }
 };
 
@@ -202,11 +204,11 @@ const ProfileStack = createStackNavigator({
 ProfileStack.navigationOptions = {
     tabBarLabel: 'Profile',
     tabBarIcon: ({ focused }) => {
-        return focused ?
-            <Image
+        return focused
+            ? <Image
                 style={styles.iconHome}
-                source={profileYellow} /> :
-            <Image
+                source={profileOrange} />
+            : <Image
                 style={styles.iconHome}
                 source={profileGrey} />
     }
@@ -227,8 +229,9 @@ const MainTabNavigator = createBottomTabNavigator({
             activeBackgroundColor: '#f0f0f0',
             inactiveTintColor: 'black',
             inactiveBackgroundColor: '#F0F0F0',
+            showLabel: false,
             style: {
-                height: 60,
+                height: 50,
                 backgroundColor: '#F0F0F0',
                 paddingBottom: 5
             }
@@ -238,8 +241,8 @@ const MainTabNavigator = createBottomTabNavigator({
 
 const styles = StyleSheet.create({
     iconHome: {
-        width: 25,
-        height: 25
+        width: 30,
+        height: 30
     }
 });
 

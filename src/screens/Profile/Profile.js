@@ -9,12 +9,14 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
+import QRCode from 'react-native-qrcode-svg';
 import ProfileEdit from './ProfileEdit';
 import Cons from '../../shared/Constants';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
 import { setIsModalProfileOpen } from '../../store/actions/modal';
+
 
 const profile = (props) => {
 
@@ -83,13 +85,6 @@ const profile = (props) => {
                 <Text style={styles.buttonText}> Editar </Text>
             </TouchableOpacity>
             <View style={styles.containerHeader}>
-                {/* <View style={styles.profileImage}>
-                    <ImageBackground
-                        source={avatar.photo ? { uri: avatar.photo } : null}
-                        style={styles.image}
-                        resizeMode='cover'>
-                    </ImageBackground>
-                </View> */}
                 <Text style={[styles.text, styles.textHeader]}> {user.name} </Text>
                 {(user.birthday)
                     ? <View style={styles.containerSubHeader}>
@@ -106,34 +101,48 @@ const profile = (props) => {
                     : null
                 }
             </View>
-            <View style={styles.containerItems}>
-                <Ionicons name="ios-phone-portrait" size={30} style={styles.icon} />
-                <Text style={styles.text}>{user.phone}</Text>
+            <View style={styles.containerHeader}>
+                <QRCode
+                    value={user.eth_address}
+                    color={"black"}
+                    backgroundColor={"white"}
+                    size={125}
+                    logoMargin={2}
+                    logoSize={30}
+                    logoBorderRadius={10}
+                    logoBackgroundColor={"transparent"}
+                />
+            </View>
+            <View style={styles.containerBody}>
+                <View style={styles.containerItems}>
+                    <Ionicons name="ios-phone-portrait" size={30} style={styles.icon} />
+                    <Text style={styles.text}>{user.phone}</Text>
+                </View>
+                <View style={styles.containerItems}>
+                    <Ionicons name="ios-at" size={30} style={styles.icon} />
+                    <Text style={styles.text}>{user.email}</Text>
+                </View>
+                <View style={styles.containerItems}>
+                    <Ionicons name="md-home" size={30} style={styles.icon} />
+                    {(user.street) ?
+                        <View style={styles.container}>
+                            <Text style={styles.text}>{user.street}, {user.locality} </Text>
+                            <Text style={styles.text}>{user.zip_code} {user.country}  </Text>
+                        </View>
+                        :
+                        <Text style={styles.text}> Incomplete Address </Text>
+                    }
+                </View>
+                <View>
+                    <TouchableOpacity onPress={handleURL}>
+                        <Text style={[styles.buttonText, styles.containerContact]}> Privacy Policy </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={logOut}>
+                        <Text style={[styles.buttonText, styles.containerContact, styles.ender]}> Logout </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            <View style={styles.containerItems}>
-                <Ionicons name="ios-at" size={30} style={styles.icon} />
-                <Text style={styles.text}>{user.email}</Text>
-            </View>
-            <View style={styles.containerItems}>
-                <Ionicons name="md-home" size={30} style={styles.icon} />
-                {(user.street) ?
-                    <View style={styles.container}>
-                        <Text style={styles.text}>{user.street}, {user.locality} </Text>
-                        <Text style={styles.text}>{user.zip_code} {user.country}  </Text>
-                    </View>
-                    :
-                    <Text style={styles.text}> Incomplete Address </Text>
-                }
-            </View>
-            <View>
-                <TouchableOpacity onPress={handleURL}>
-                    <Text style={[styles.buttonText, styles.containerContact]}> Privacy Policy </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={logOut}>
-                    <Text style={[styles.buttonText, styles.containerContact, styles.ender]}> Logout </Text>
-                </TouchableOpacity>
-            </View>
         </View>
     )
 
@@ -161,6 +170,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+    },
+    containerBody: {
+        marginTop: 20,
     },
     containerItems: {
         flex: 1,
