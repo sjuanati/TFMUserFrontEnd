@@ -40,7 +40,7 @@ const token = (props) => {
             setBalance(res.data);
         }).catch(err => {
             console.log('Error in Token.js -> fetchTokenBalance(): ', err);
-            Alert.alert(`Balance can't be checked right now`);
+            //Alert.alert(`Balance can't be checked right now`);
             setBalance(-2);
         });
     }
@@ -51,7 +51,7 @@ const token = (props) => {
             headers: { authorization: user.token }
         }).then(res => {
             setEarnTokens(res.data);
-            console.log('Earn tokens :', res.data);
+            //console.log('Earn tokens :', res.data);
         }).catch(err => {
             console.log('Error in Token.js -> fetchEarnTokens(): ', err);
         });
@@ -69,7 +69,7 @@ const token = (props) => {
         else if (remainingDays <= 1) 
             return <Text>Status:      <Text style={styles.closeSoonText}>Open (expires soon)</Text></Text>;
         else 
-            return <Text>Status:      <Text style={styles.openText}>Open ({remainingDays} days)</Text></Text>;
+            return <Text>Status:      <Text style={styles.openText}>Open ({remainingDays} days remaining)</Text></Text>;
 
     }
 
@@ -86,7 +86,7 @@ const token = (props) => {
                 source: (val.item.photo === 'bayer') ? bayer_test : pfizer_test,
                 size: 'medium'
             }}
-            onPress={() => props.navigation.navigate('EarnTokensDetail', { item: val.item })}
+            onPress={() => props.navigation.navigate('EarnTokensDetail', { item: val.item, balance: balance })}
             bottomDivider
             chevron
         />
@@ -99,7 +99,7 @@ const token = (props) => {
                     <Text style={styles.bold}>
                         {(balance === -1) ? ' ...' : (balance === -2) ? ' ?' : ` ${balance}`}
                     </Text>
-                    <Text style={styles.textGrey}> PCT</Text>
+                    <Text style={styles.textGrey}> PCTs</Text>
                 </Text>
             </View>
             <View style={styles.containerTabView}>

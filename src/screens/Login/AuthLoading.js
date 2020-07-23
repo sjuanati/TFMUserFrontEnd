@@ -11,7 +11,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 const home = ( props ) => {
   const [token, setToken] = useState(async () => {
     const userToken = await AsyncStorage.getItem('token');
-    console.log(userToken);
     props.navigation.navigate(userToken ? 'InsideSession' : 'SignUpScreen');
     return userToken;
   });

@@ -18,6 +18,7 @@ import MakeOrder from '../screens/Order/MakeOrder';
 import MakeOrderScan from '../screens/Order/MakeOrderScan';
 import MakeOrderChoose from '../screens/Order/MakeOrderChoose';
 import OrderSummary from '../screens/Order/OrderSummary';
+import PurchaseOrder from '../screens/Order/PurchaseOrder';
 import ProductDetail from '../screens/Order/ProductDetail';
 import FullScreenImage from '../screens/Order/GetOrderImage';
 import OrderTrace from '../screens/Order/GetOrderTrace';
@@ -66,6 +67,12 @@ const HomeStack = createStackNavigator({
     },
     OrderSummary: {
         screen: OrderSummary,
+        navigationOptions: {
+            headerShown: false
+        }
+    },
+    PurchaseOrder: {
+        screen: PurchaseOrder,
         navigationOptions: {
             headerShown: false
         }

@@ -47,8 +47,8 @@ const home = (props) => {
             <TouchableOpacity
                 style={styles.circle}
                 onPress={() => props.navigation.navigate('PharmacySearch')}>
-                <Text style={styles.textItem}> Elige </Text>
-                <Text style={styles.textItem}>  Farmacia </Text>
+                <Text style={styles.textItem}> Choose </Text>
+                <Text style={styles.textItem}>  Pharmacy </Text>
                 <Image source={choosePharmacyLogo} style={styles.icon} />
             </TouchableOpacity>
             {(user.favPharmacyID)
@@ -68,8 +68,8 @@ const home = (props) => {
             <TouchableOpacity
                 style={styles.circle}
                 onPress={openOrder}>
-                <Text style={styles.textItem}> ¿Qué </Text>
-                <Text style={styles.textItem}> necesitas? </Text>
+                <Text style={styles.textItem}> What do </Text>
+                <Text style={styles.textItem}> you need? </Text>
                 <View style={styles.containerRow}>
                     <Image source={pillLogo} style={styles.icon} />
                     <Image source={otcLogo} style={styles.icon} />

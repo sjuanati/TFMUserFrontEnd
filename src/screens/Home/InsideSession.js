@@ -206,10 +206,10 @@ const insideSession = (props) => {
                                 source={yellowHome}
                             />
                             <Text style={styles.text}>
-                                Pide en tu
+                                Ask your
                             </Text>
                             <Text style={styles.text}>
-                                FARMACIA
+                                Pharmacy
                             </Text>
                         </Card>
                     </TouchableOpacity>

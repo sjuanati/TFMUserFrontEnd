@@ -5,9 +5,11 @@ import {
     FlatList,
     Platform,
     StyleSheet,
+    TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
 import ActivityIndicator from '../../UI/ActivityIndicator';
 import { ListItem, SearchBar } from 'react-native-elements';
@@ -18,6 +20,7 @@ import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 const makeOrderChoose = (props) => {
 
     const user = useSelector(state => state.user);
+    const order = useSelector(state => state.order.items);
     const [search, setSearch] = useState('');
     const [products, setProducts] = useState([]);
     const [typingTimeout, setIsTypingTimeout] = useState(0);
@@ -100,6 +103,16 @@ const makeOrderChoose = (props) => {
             <View>
                 <ActivityIndicator isLoading={isLoading} />
             </View>
+            {(order.length > 0)
+                ? <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={[globalStyles.button, styles.button]}
+                        onPress={() => props.navigation.navigate('OrderSummary')}>
+                        <Text style={globalStyles.buttonText}> Go to Cart </Text>
+                    </TouchableOpacity>
+                </View>
+                : null
+            }
         </View>
     )
 }
@@ -115,12 +128,20 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 10,
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
     },
     subtitleText: {
         color: 'grey',
         fontSize: 16,
-    }
+    },
+    buttonContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: 'space-between',
+        marginBottom: 5,
+    },
 })
 
 export default makeOrderChoose;

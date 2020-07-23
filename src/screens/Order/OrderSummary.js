@@ -9,19 +9,13 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import axios from 'axios';
 import { ListItem } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-
-// Components
 import Button from '../../UI/Button';
 import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
 import fontSize from '../../shared/FontSize';
-import { httpUrl } from '../../../urlServer';
 import { clearCart } from '../../store/actions/order';
-import ActivityIndicator from '../../UI/ActivityIndicator';
-import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 // Constants
@@ -35,31 +29,12 @@ const orderSummary = (props) => {
     const price = useSelector(state => state.order.price);
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
-    const [isLoading, setIsLoding] = useState(false);
 
-    const confirmOrder = () => {
-        Alert.alert(
-            'Please confirm the order sending', '',
-            [{
-                text: 'Confirm',
-                style: 'cancel',
-                onPress: async () => {
-                    setIsLoding(true);
-                    await saveOrderToDB();
-                    await saveLastPharmacyToDB();
-                    setIsLoding(false);
-                }
-            }, {
-                text: 'Cancel',
-            }, ],
-            { cancelable: false }
-        );
 
-    };
-
+    // Remove all items from Cart
     const removeOrder = () => {
         Alert.alert(
-            '¿Do you want to cancel the Order?', '',
+            '¿Confirm cancellation?', 'All items will be removed from the Cart',
             [{
                 text: 'Cancel', onPress: () => { }, style: 'cancel'
             }, {
@@ -71,56 +46,6 @@ const orderSummary = (props) => {
             { cancelable: false }
         )
     }
-
-    // Save Order into PostgreSQL
-    const saveOrderToDB = async () => {
-
-        if ((user.id) && (user.favPharmacyID) && (order)) {
-            await axios.post(`${httpUrl}/order/add`, {
-                order,
-                user,
-                total_price: price,
-            }, {
-                headers: {
-                    authorization: user.token,
-                    user_id: user.id
-                }
-            })
-                .then((response) => {
-                    dispatch(clearCart(true));
-                    console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`)
-                    props.navigation.navigate('Home');
-                })
-                .catch(async err => {
-                    handleAxiosErrors(props, err);
-                    Alert.alert('Error al procesar el pedido');
-                    console.log('Error at OrderSummary.js -> saveOrderToDB() :', err);
-                })
-        } else {
-            console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
-        }
-    };
-
-    const saveLastPharmacyToDB = async () => {
-
-        if ((user.id) && (user.favPharmacyID)) {
-            await axios.post(`${httpUrl}/users/pharmacy/set`, {
-                user_id: user.id,
-                pharmacy_id: user.favPharmacyID
-            }, {
-                headers: { authorization: user.token }
-            })
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch(async err => {
-                    handleAxiosErrors(props, err);
-                    console.log('Error on OrderSummary.js -> saveLastPharmacyToDB() :', err);
-                })
-        } else {
-            console.log('Warning on OrderSummary.js -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
-        }
-    };
 
     // Show medicine item in List
     const renderItem = ({ item }) => {
@@ -167,28 +92,28 @@ const orderSummary = (props) => {
                         renderItem={renderItem} />
                     : null}
             </View>
-            <View>
+            {/* <View>
                 <ActivityIndicator isLoading={isLoading} />
-            </View>
+            </View> */}
             <View style={styles.container_bottom}>
                 <View style={styles.item}>
                     <TouchableOpacity
                         style={(order.length > 0 && (user.favPharmacyID !== null))
-                            ? globalStyles.button
-                            : globalStyles.buttonDisabled}
-                        onPress={() => confirmOrder()}
+                            ? [globalStyles.button, styles.button]
+                            : [globalStyles.buttonDisabled, styles.button]}
+                        onPress={() => props.navigation.navigate('PurchaseOrder')}
                         disabled={(order.length > 0 && (user.favPharmacyID !== null))
                             ? false
                             : true}>
-                        <Text style={[globalStyles.buttonText, styles.bold]}> Send Order </Text>
+                        <Text style={[globalStyles.buttonText, styles.bold]}> Purchase </Text>
                     </TouchableOpacity>
                 </View>
                 {(order.length > 0 && (user.favPharmacyID !== null)) ?
                     <View style={styles.item}>
                         <TouchableOpacity
-                            style={globalStyles.button}
+                            style={[globalStyles.button, styles.button]}
                             onPress={() => removeOrder()}>
-                            <Text style={globalStyles.buttonText}> Cancel Order </Text>
+                            <Text style={globalStyles.buttonText}> Cancel </Text>
                         </TouchableOpacity>
                     </View>
                     :
@@ -251,6 +176,10 @@ const styles = StyleSheet.create({
     subtitleText: {
         color: 'grey',
         fontSize: 16,
+    },
+    button: {
+        width: 120,
+        alignItems: 'center'
     }
 });
 
