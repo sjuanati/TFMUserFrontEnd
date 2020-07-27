@@ -63,10 +63,14 @@ const productDetail = (props) => {
     // 'OrderSummary': the item can be removed
     // 'MakeOrderChoose' or 'GetOrderItem': the item can be added
     const showButtons = () => (
-        <View style={styles.container_bottom}>
-            
+        <View style={styles.containerButton}>
             <TouchableOpacity
-                style={globalStyles.button}
+                style={[globalStyles.button, styles.button]}
+                onPress={() => props.navigation.goBack()}>
+                <Text style={globalStyles.buttonText}> Cancel </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[globalStyles.button, styles.button]}
                 onPress={() => {
                     (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem()
                 }}>
@@ -74,11 +78,7 @@ const productDetail = (props) => {
                     {(screen === 'OrderSummary') ? 'Delete' : 'Add Product'}
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-                style={globalStyles.button}
-                onPress={() => props.navigation.goBack()}>
-                <Text style={globalStyles.buttonText}> Back </Text>
-            </TouchableOpacity>
+
         </View>
     );
 
@@ -114,8 +114,6 @@ const productDetail = (props) => {
                         </TouchableOpacity>
                         : <Text style={styles.rowValue}> Not available </Text>
                     }
-
-
                 </View>
             </View>
             {showButtons()}
@@ -130,12 +128,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: Cons.COLORS.WHITE,
     },
-    container_bottom: {
-        flex: 1,
+    containerButton: {
+        position: 'absolute',
+        alignSelf: 'center',
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'flex-end',
-        marginBottom: 25,
+        bottom: 15,
+    },
+    button: {
+        width: 150,
+        alignItems: 'center',
+        margin: 15,
     },
     headerContainer: {
         margin: 15,

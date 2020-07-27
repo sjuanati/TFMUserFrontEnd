@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    marginTop: -20,
   },
   right: {
     flex: 1
@@ -67,7 +66,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: 'contain',
-    width: 150
+    width: 150,
+    height: 50,
   },
   back: {
     paddingLeft: 10,

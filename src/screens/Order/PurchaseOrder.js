@@ -16,7 +16,6 @@ import { clearCart } from '../../store/actions/order';
 import { useSelector, useDispatch } from 'react-redux';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import ActivityIndicator from '../../UI/ActivityIndicator';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import visaLogo from '../../assets/images/global/visa.png'
 import bitacorasLogo from '../../assets/images/global/bitacoras.png';
 
@@ -110,7 +109,6 @@ const saveLastPharmacyToDB = async () => {
 
 return (
     <View style={styles.container}>
-        {/* <CustomHeaderBack {...props} /> */}
         <ScrollView>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Please choose your payment method</Text>
@@ -146,7 +144,7 @@ return (
                 <TouchableOpacity
                     style={[globalStyles.button, styles.button]}
                     onPress={() => confirmOrder()}>
-                    <Text style={globalStyles.buttonText}> Pay </Text>
+                    <Text style={styles.buttonText}> Pay </Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -208,6 +206,10 @@ const styles = StyleSheet.create({
         marginTop: 40,
         width: 150,
         alignItems: 'center',
+    },
+    buttonText: {
+        fontSize: 17,
+        fontWeight: 'bold',
     },
 });
 

@@ -8,13 +8,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import moment from 'moment';
 import { useSelector } from 'react-redux';
 import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
 import ActivityIndicator from '../../UI/ActivityIndicator';
 import { ListItem, SearchBar } from 'react-native-elements';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 
 const makeOrderChoose = (props) => {
@@ -23,16 +23,26 @@ const makeOrderChoose = (props) => {
     const order = useSelector(state => state.order.items);
     const [search, setSearch] = useState('');
     const [products, setProducts] = useState([]);
+    const [productsLast5, setProductsLast5] = useState([]);
     const [typingTimeout, setIsTypingTimeout] = useState(0);
     const [isLoading, setIsLoding] = useState(false);
     const TIMER = 500;
     const MIN_CHARACTERS = 3;
 
-    // Launch product query 800ms after typing the search string
+    // Launch product query to show the last 5 ordered products
+    useEffect(() => {
+        fetchProductsLast5();
+    }, []);
+
+    // Launch product query 500ms after typing the search string
     useEffect(() => {
         if (typingTimeout) clearTimeout(typingTimeout);
         setIsTypingTimeout(setTimeout(() => {
-            if (search && search.length >= MIN_CHARACTERS) fetchProducts();
+            //if (search && search.length >= MIN_CHARACTERS) fetchProducts();
+            if (search) {
+                if (search.length >= MIN_CHARACTERS) fetchProducts();
+                else setProducts([]);
+            }
         }, TIMER))
     }, [search]);
 
@@ -54,7 +64,10 @@ const makeOrderChoose = (props) => {
                 title={values.item.product_desc}
                 subtitle={
                     <View>
-                        <Text style={styles.subtitleText}>{values.item.price} € </Text>
+                        <Text style={styles.subtitleText}>
+                            {values.item.price} €  
+                            {/* {(search) ? null : `on ${moment(values.item.max_date).format('Do MMMM YY')}`} */}
+                        </Text>
                     </View>
                 }
                 onPress={() => props.navigation.navigate('ProductDetail', values.item)}
@@ -82,9 +95,29 @@ const makeOrderChoose = (props) => {
             })
     };
 
+    const fetchProductsLast5 = async () => {
+        setIsLoding(true);
+        await axios.get(`${httpUrl}/product/get/last5`, {
+            params: { user_id: user.id },
+            headers: { authorization: user.token }
+        })
+            .then(response => {
+                if (response.data !== '') {
+                    setProducts(response.data);
+                    setProductsLast5(response.data);
+                }
+            })
+            .catch(async err => {
+                handleAxiosErrors(props, err);
+                console.log('Error on MakeOrderChoose.js -> fetchProductsLast5() : ', err);
+            })
+            .then(() => {
+                setIsLoding(false);
+            })
+    };
+
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
             <SearchBar
                 placeholder="Product name, national code"
                 onChangeText={updateSearch}
@@ -94,19 +127,19 @@ const makeOrderChoose = (props) => {
                 autoCapitalize='none'
                 autoCorrect={false}
                 maxLength={100}
-                containerStyle={styles.button}
+                //containerStyle={styles.button}
                 platform={Platform.OS == 'ios' ? 'ios' : 'android'} />
+            <View>
+                <ActivityIndicator isLoading={isLoading} />
+            </View>
             <FlatList
                 data={products}
                 keyExtractor={(item) => item.product_id.toString()}
                 renderItem={renderProduct} />
-            <View>
-                <ActivityIndicator isLoading={isLoading} />
-            </View>
             {(order.length > 0)
                 ? <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        style={[globalStyles.button, styles.button]}
+                        style={globalStyles.button}
                         onPress={() => props.navigation.navigate('OrderSummary')}>
                         <Text style={globalStyles.buttonText}> Go to Cart </Text>
                     </TouchableOpacity>
@@ -126,21 +159,14 @@ const styles = StyleSheet.create({
         marginTop: 60,
         alignItems: 'center',
     },
-    button: {
-        marginTop: 10,
-        //backgroundColor: 'white',
-    },
     subtitleText: {
         color: 'grey',
         fontSize: 16,
     },
     buttonContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignContent: 'space-between',
-        marginBottom: 5,
+        position: 'absolute',
+        alignSelf: 'center',
+        bottom: 30,
     },
 })
 

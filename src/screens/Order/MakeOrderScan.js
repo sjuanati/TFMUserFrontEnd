@@ -13,7 +13,6 @@ import { httpUrl } from '../../../urlServer';
 import { RNCamera } from 'react-native-camera';
 import { addItem, setScanned } from '../../store/actions/order';
 import { useSelector, useDispatch } from 'react-redux';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import IconFlash from 'react-native-vector-icons/Ionicons';
 import IconTarget from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -52,7 +51,7 @@ const makeOrderScan = (props) => {
                 // Prescription barcode found in DB -> Go to Order Summary
                 if (response.data.length > 0) {
                     buildOrder(response.data);
-                // No Prescription found in DB -> Go back to MakeOrder
+                    // No Prescription found in DB -> Go back to MakeOrder
                 } else {
                     dispatch(setScanned(true));
                     props.navigation.navigate('Order');
@@ -81,10 +80,8 @@ const makeOrderScan = (props) => {
         props.navigation.navigate('OrderSummary');
     }
 
-
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
             <RNCamera
                 style={styles.preview}
                 barCodeTypes={[RNCamera.Constants.BarCodeType.ean13]}
@@ -92,8 +89,7 @@ const makeOrderScan = (props) => {
                 flashMode={(isFlashOn)
                     ? RNCamera.Constants.FlashMode.torch
                     : RNCamera.Constants.FlashMode.off}
-                captureAudio={false}
-            >
+                captureAudio={false}>
                 <View style={styles.targetOverlay}>
                     <IconTarget name="target" size={30} color='grey' />
                 </View>
@@ -104,25 +100,23 @@ const makeOrderScan = (props) => {
                         <Text> Back </Text>
                     </TouchableOpacity>
                 </View>
-
             </RNCamera>
-            {(isFlashOn) ?
-                <View style={styles.flashOverlay}>
+            {(isFlashOn)
+                ? <View style={styles.flashOverlay}>
                     <TouchableOpacity
                         onPress={() => toggleFlash()}>
                         <IconFlash name="md-flash" size={30} color='grey' />
                     </TouchableOpacity>
                 </View>
-                :
-                <View style={styles.flashOverlay}>
+                : <View style={styles.flashOverlay}>
                     <TouchableOpacity
                         onPress={() => toggleFlash()}>
                         <IconFlash name="md-flash-off" size={30} color='grey' />
                     </TouchableOpacity>
                 </View>
             }
-            {(barcode) ?
-                <View style={styles.scanningOverlay}>
+            {(barcode)
+                ? <View style={styles.scanningOverlay}>
                     <View style={styles.label}>
                         <Text style={styles.scanText}> Scanning... </Text>
                     </View>

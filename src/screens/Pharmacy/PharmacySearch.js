@@ -1,15 +1,17 @@
 // Libs
 import React, { useState, useEffect } from 'react';
 import { Spinner } from 'native-base';
-import { Alert, 
-        View, 
-        Text, 
-        Dimensions, 
-        FlatList, 
-        Platform, 
-        StyleSheet,
-        PixelRatio, 
-        TouchableOpacity } from 'react-native';
+import {
+    Alert,
+    View,
+    Text,
+    Dimensions,
+    FlatList,
+    Platform,
+    StyleSheet,
+    PixelRatio,
+    TouchableOpacity
+} from 'react-native';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
@@ -24,9 +26,7 @@ import handleAxiosErrors from '../../shared/handleAxiosErrors';
 // Global settings
 import { httpUrl } from '../../../urlServer';
 import Cons from '../../shared/Constants';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import fontSize from '../../shared/FontSize';
-import logger from '../../shared/logRecorder';
 
 // Font size management
 let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
@@ -99,7 +99,6 @@ const pharmacySearch = (props) => {
             error => {
                 Alert.alert(error.message);
                 console.log('Error on PharmacySearch.js -> locateCurrentPosition(): ', error);
-                logger('ERR', 'FRONT-USER', `PharmacySearch.js -> locateCurrentPosition(): ${error}`, '');
                 setIsGPS(false);
             },
             { enableHighAccuracy: true, timeout: 10000/*, maximumAge: 1000*/ }
@@ -133,12 +132,11 @@ const pharmacySearch = (props) => {
     // Calculate distance from current location to a given location and store in pharmacies' array
     const calculateDistance = (pharmacies, currentPos) => {
         for (let i = 0; i < pharmacies.length; i++) {
-            (pharmacies[i].gps_latitude && pharmacies[i].gps_longitude) ?
-                pharmacies[i].distance = getDistance(
+            (pharmacies[i].gps_latitude && pharmacies[i].gps_longitude)
+                ? pharmacies[i].distance = getDistance(
                     { latitude: currentPos.latitude, longitude: currentPos.longitude },
                     { latitude: pharmacies[i].gps_latitude, longitude: pharmacies[i].gps_longitude })
-                :
-                pharmacies[i].distance = 99999998; //TODO: exclude pharmacies without distance?
+                : pharmacies[i].distance = -1;
         }
     };
 
@@ -146,9 +144,9 @@ const pharmacySearch = (props) => {
     const formatDistance = (distance) => {
         if (distance >= 1000) {
             return `${(distance / 1000).toFixed(1)} km`;
-        } else {
+        } else if (distance > 0) {
             return `${distance.toFixed(1)} m`;
-        }
+        } else return 'N/A';
     };
 
     // Show list of pharmacies around
@@ -182,14 +180,12 @@ const pharmacySearch = (props) => {
 
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
-            {(isLoading) ?
-                <Spinner color='#F4B13E' /> :
-                <View>
+            {(isLoading) 
+                ? <Spinner color='#F4B13E' /> 
+                : <View>
                     <View style={[((height < 685) ? styles.containerNoMapSmallScreen : styles.containerNoMapLargeScreen)]}>
-
                         <SearchBar
-                            placeholder="Busca tu farmacia..."
+                            placeholder="Search your pharmacy"
                             onChangeText={updateSearch}
                             value={search}
                             autoCapitalize='none'
@@ -198,11 +194,8 @@ const pharmacySearch = (props) => {
                             inputStyle={styles.searchFieldInput}
                             containerStyle={styles.searchFieldContainer}
                             platform={Platform.OS == 'ios' ? 'ios' : 'android'} />
-
                         <View style={styles.containerTabView}>
                             <View style={styles.tabViewItem}>
-
-                                {/* REFRESH BUTTON */}
                                 <TouchableOpacity
                                     onPress={() => {
                                         setIsLoading(true);
@@ -210,8 +203,6 @@ const pharmacySearch = (props) => {
                                     }}>
                                     <Icon name="ios-refresh" size={25} color='grey' />
                                 </TouchableOpacity>
-
-                                {/* MAP BUTTON */}
                                 <TouchableOpacity
                                     onPress={() => {
                                         if (isGPS) {
@@ -219,10 +210,8 @@ const pharmacySearch = (props) => {
                                             setShowList(prev);
                                         }
                                     }}>
-                                    <Text style={(showList) ? styles.unselectedButton : styles.selectedButton}> Mapa </Text>
+                                    <Text style={(showList) ? styles.unselectedButton : styles.selectedButton}> Map </Text>
                                 </TouchableOpacity>
-
-                                {/* LIST BUTTON */}
                                 <TouchableOpacity
                                     onPress={() => {
                                         if (isGPS) {
@@ -230,34 +219,31 @@ const pharmacySearch = (props) => {
                                             setShowList(prev);
                                         }
                                     }}>
-                                    <Text style={(showList) ? styles.selectedButton : styles.unselectedButton}> Lista </Text>
+                                    <Text style={(showList) ? styles.selectedButton : styles.unselectedButton}> List </Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                     </View>
                     <View style={[((height < 685) ? styles.containerMapSmallScreen : styles.containerMapLargeScreen)]}>
-                        {showList ?
-                            <View>
+                        {showList 
+                            ? <View>
                                 <FlatList
                                     // Sort results by distance
                                     data={filteredPharmacies.sort((a, b) => {
                                         return a.distance - b.distance
                                     })}
                                     keyExtractor={(item) => item.pharmacy_id.toString()}
-                                    renderItem={renderItemPharmaciesAround}
-                                >
+                                    renderItem={renderItemPharmaciesAround}>
                                 </FlatList>
                             </View>
-                            :
-                            <MapView
+                            : <MapView
                                 style={styles.map}
                                 showsUserLocation={true}
                                 provider={PROVIDER_GOOGLE}
                                 showsMyLocationButton={true}
                                 initialRegion={currentPosition}>
                                 {filteredPharmacies.map((pharma) => {
-                                    console.log(pharma.pharmacy_id)
+                                    //console.log(pharma.pharmacy_id)
                                     if (pharma.gps_latitude && pharma.gps_longitude) {
                                         return (<Marker
                                             key={pharma.pharmacy_id.toString()}
@@ -330,7 +316,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     containerTabView: {
-        //flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 15,

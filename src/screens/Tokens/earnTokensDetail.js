@@ -13,7 +13,6 @@ import tz from 'moment-timezone';
 import Cons from '../../shared/Constants';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import CheckBox from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const earnTokensDetail = (props) => {

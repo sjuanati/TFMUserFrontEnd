@@ -1,5 +1,5 @@
 // Libs
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Text,
     View,
@@ -16,7 +16,6 @@ import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
 import fontSize from '../../shared/FontSize';
 import { clearCart } from '../../store/actions/order';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 // Constants
 const FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
@@ -30,11 +29,10 @@ const orderSummary = (props) => {
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
-
     // Remove all items from Cart
     const removeOrder = () => {
         Alert.alert(
-            '¿Confirm cancellation?', 'All items will be removed from the Cart',
+            'Clear Order?', 'All items will be removed from the Cart',
             [{
                 text: 'Cancel', onPress: () => { }, style: 'cancel'
             }, {
@@ -62,7 +60,7 @@ const orderSummary = (props) => {
 
     const renderAddItem = () => (
         <View style={styles.container_body}>
-            <Text style={styles.text}> No Order in Cart </Text>
+            <Text style={styles.text}> No items in Cart </Text>
             <Button target='Order' desc='Add Product' nav={props.navigation} />
         </View>
     );
@@ -82,7 +80,6 @@ const orderSummary = (props) => {
 
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
             {(order.length === 0) ? renderAddItem() : renderOrderOverview()}
             <View style={styles.list}>
                 {(order.length > 0)
@@ -92,32 +89,24 @@ const orderSummary = (props) => {
                         renderItem={renderItem} />
                     : null}
             </View>
-            {/* <View>
-                <ActivityIndicator isLoading={isLoading} />
-            </View> */}
             <View style={styles.container_bottom}>
-                <View style={styles.item}>
-                    <TouchableOpacity
-                        style={(order.length > 0 && (user.favPharmacyID !== null))
-                            ? [globalStyles.button, styles.button]
-                            : [globalStyles.buttonDisabled, styles.button]}
-                        onPress={() => props.navigation.navigate('PurchaseOrder')}
-                        disabled={(order.length > 0 && (user.favPharmacyID !== null))
-                            ? false
-                            : true}>
-                        <Text style={[globalStyles.buttonText, styles.bold]}> Purchase </Text>
+                {(order.length > 0 && (user.favPharmacyID !== null))
+                    ? <TouchableOpacity
+                        style={[globalStyles.button, styles.button]}
+                        onPress={() => removeOrder()}>
+                        <Text style={globalStyles.buttonText}> Clear </Text>
                     </TouchableOpacity>
-                </View>
-                {(order.length > 0 && (user.favPharmacyID !== null)) ?
-                    <View style={styles.item}>
-                        <TouchableOpacity
-                            style={[globalStyles.button, styles.button]}
-                            onPress={() => removeOrder()}>
-                            <Text style={globalStyles.buttonText}> Cancel </Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-                    null}
+                    : null}
+                <TouchableOpacity
+                    style={(order.length > 0 && (user.favPharmacyID !== null))
+                        ? [globalStyles.button, styles.button]
+                        : [globalStyles.buttonDisabled, styles.button]}
+                    onPress={() => props.navigation.navigate('PurchaseOrder')}
+                    disabled={(order.length > 0 && (user.favPharmacyID !== null))
+                        ? false
+                        : true}>
+                    <Text style={[globalStyles.buttonText, styles.bold]}> Purchase </Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -135,14 +124,14 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
     },
     container_bottom: {
-        flex: 1,
+        position: 'absolute',
+        alignSelf: 'center',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignContent: 'space-between',
-        marginBottom: 5,
+        bottom: 15,
     },
-    item: {
+    button: {
+        width: 130,
+        alignItems: 'center',
         margin: 15,
     },
     text: {
@@ -177,10 +166,6 @@ const styles = StyleSheet.create({
         color: 'grey',
         fontSize: 16,
     },
-    button: {
-        width: 120,
-        alignItems: 'center'
-    }
 });
 
 export default orderSummary;
