@@ -57,9 +57,9 @@ const profileEdit = (props) => {
     const MALE = 'ios-male';
     const FEMALE = 'ios-female';
     const OTHERS = 'ios-transgender';
-    if (user.gender === 'Femenino') {
+    if (user.gender === 'Female') {
         gndProfile = FEMALE;
-    } else if (user.gender === 'Otros') {
+    } else if (user.gender === 'Others') {
         gndProfile = OTHERS;
     } else {
         gndProfile = MALE;
@@ -84,7 +84,7 @@ const profileEdit = (props) => {
 
                     // Check if email structure is correct
                     if (!emailPattern.test(emailChecked)) {
-                        Alert.alert('Por favor, introduzca un correo electrónico válido');
+                        Alert.alert('Please insert a valid email');
                         resolve(false);
                     }
 
@@ -95,7 +95,7 @@ const profileEdit = (props) => {
                     })
                         .then(response => {
                             if ((response.data.length > 0) && (response.data[0].count > 0)) {
-                                Alert.alert('Ya existe una cuenta con ese correo electrónico');
+                                Alert.alert('An account with this email already exists');
                                 resolve(false);
                             } else {
                                 resolve(true);
@@ -113,10 +113,10 @@ const profileEdit = (props) => {
     // Check if age is fulfilled and > 18 years old
     const checkAge = () => {
         if (!user.birthday) {
-            Alert.alert('Por favor, introduce tu fecha de nacimiento');
+            Alert.alert('Please insert your birthday');
             return false;
         } else if (moment().diff(birthday, 'years') < 18) {
-            Alert.alert('Debes ser mayor de edad');
+            Alert.alert('You must be over 18 years old');
             return false;
         }
         return true;
@@ -182,7 +182,7 @@ const profileEdit = (props) => {
             ))
 
             // Update User's profile, address and photo. In case of error, show message and do not close Modal
-            if ((await saveProfileToDB()) && (await saveAddressToDB()) && (await savePhotoToS3([{ photo_url: photo }]))) {
+            if ((await saveProfileToDB()) && (await saveAddressToDB()) /*&& (await savePhotoToS3([{ photo_url: photo }])) */) {
                 toggleIsModalOpen();
                 //TODO: Remove files if App closes, but not during the execution. Otherwise, the photo can't be loaded
                 // Alt: Load photo in binary into avatar.photo, and delete the file right afterwards.
@@ -217,7 +217,7 @@ const profileEdit = (props) => {
                 })
                     .then((response) => {
                         if (response.status === 202) {
-                            Alert.alert('Error al guardar perfil');
+                            Alert.alert('Error when saving profile');
                             resolve(false);
                         } else {
                             resolve(true);
@@ -225,7 +225,7 @@ const profileEdit = (props) => {
 
                     })
                     .catch(error => {
-                        Alert.alert('Error al guardar perfil');
+                        Alert.alert('Error when saving profile');
                         console.log('Error at ProfileEdit.js -> saveProfileToDB() :', error);
                         resolve(false);
                     })
@@ -257,14 +257,14 @@ const profileEdit = (props) => {
                 })
                     .then((response) => {
                         if (response.status === 202) {
-                            Alert.alert('Error al guardar domicilio');
+                            Alert.alert('Error when saving address');
                             resolve(false);
                         } else {
                             resolve(true);
                         }
                     })
                     .catch(err => {
-                        Alert.alert('Error al guardar dirección');
+                        Alert.alert('Error when saving address');
                         console.log('Error at ProfileEdit.js -> saveAddressToDB() :', err);
                         resolve(false);
                     })
@@ -332,18 +332,18 @@ const profileEdit = (props) => {
     const handleGenderIOS = () =>
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ["Cancel", "Masculino", "Femenino", "Otros"],
+                options: ["Cancel", "Male", "Female", "Others"],
                 cancelButtonIndex: 0
             },
             buttonIndex => {
                 if (buttonIndex === 1) {
-                    setGender('Masculino');
+                    setGender('Male');
                     setgenderIcon(MALE);
                 } else if (buttonIndex === 2) {
-                    setGender('Femenino');
+                    setGender('Female');
                     setgenderIcon(FEMALE);
                 } else if (buttonIndex === 3) {
-                    setGender('Otros');
+                    setGender('Others');
                     setgenderIcon(OTHERS);
                 }
             }
@@ -351,11 +351,11 @@ const profileEdit = (props) => {
 
     const handleGenderAndroid = (value) => {
         setGender(value);
-        if (value === 'Masculino') {
+        if (value === 'Male') {
             setgenderIcon(MALE);
-        } else if (value === 'Femenino') {
+        } else if (value === 'Female') {
             setgenderIcon(FEMALE);
-        } else if (value === 'Otros') {
+        } else if (value === 'Others') {
             setgenderIcon(OTHERS);
         }
     }
@@ -424,12 +424,12 @@ const profileEdit = (props) => {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={closeProfile}>
-                                <Text style={styles.buttonText}> Cerrar </Text>
+                                <Text style={styles.buttonText}> Close </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={saveProfile}>
-                                <Text style={[styles.buttonText, styles.textBold]}> Guardar </Text>
+                                <Text style={[styles.buttonText, styles.textBold]}> Save </Text>
                             </TouchableOpacity>
                         </View>
                         <View>
@@ -468,14 +468,14 @@ const profileEdit = (props) => {
                                         selectedValue={gender}
                                         onValueChange={value => handleGenderAndroid(value)}
                                     >
-                                        <Picker.Item label="Masculino" value="Masculino" />
-                                        <Picker.Item label="Femenino" value="Femenino" />
-                                        <Picker.Item label="Otros" value="Otros" />
+                                        <Picker.Item label="Male" value="Male" />
+                                        <Picker.Item label="Female" value="Female" />
+                                        <Picker.Item label="Others" value="Others" />
                                     </Picker>
                                     :
                                     <TextInput
                                         style={styles.inputTextIOS}
-                                        placeholder={'Selecciona'}
+                                        placeholder={'Choose'}
                                         onTouchStart={() => { handleGenderIOS() }}
                                         value={gender}
                                     />

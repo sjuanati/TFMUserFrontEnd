@@ -84,7 +84,7 @@ const productDetail = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             <View style={styles.headerContainer}>
                 <Text style={styles.titleText}>{product_desc}</Text>
             </View>

@@ -184,7 +184,7 @@ const pharmacyDetail = (props) => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <CustomHeaderBack {...props} />
+                {/* <CustomHeaderBack {...props} /> */}
 
                 {/* PHARMACY NAME */}
                 <View style={[styles.header, styles.vMargin]}>

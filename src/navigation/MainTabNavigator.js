@@ -11,7 +11,7 @@ import EarnTokensDetail from '../screens/Tokens/earnTokensDetail';
 import SpendTokensDetail from '../screens/Tokens/spendTokensDetail';
 import Profile from '../screens/Profile/Profile';
 import CustomHeader from '../navigation/CustomHeader';
-import InsideSession from '../screens/Home/InsideSession';
+import CustomHeaderBack from '../navigation/CustomHeaderBack';
 import PharmacySearch from '../screens/Pharmacy/PharmacySearch';
 import PharmacyDetails from '../screens/Pharmacy/PharmacyDetail';
 import MakeOrder from '../screens/Order/MakeOrder';
@@ -34,70 +34,55 @@ const profileGrey = require('../assets/images/bottomBar/grey/user-grey.png');
 
 
 const HomeStack = createStackNavigator({
-    Home: Home,
+    Home: {
+        screen: Home,
+        navigationOptions: { header: props => <CustomHeader {...props} /> }
+    },
     PharmacySearch: {
         screen: PharmacySearch,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     PharmacyDetails: {
         screen: PharmacyDetails,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     Order: {
         screen: MakeOrder,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     MakeOrderScan: {
         screen: MakeOrderScan,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     MakeOrderChoose: {
         screen: MakeOrderChoose,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     OrderSummary: {
         screen: OrderSummary,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     PurchaseOrder: {
         screen: PurchaseOrder,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     ProductDetail: {
         screen: ProductDetail,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
 },
     {
-        defaultNavigationOptions: {
-            header: props => <CustomHeader {...props} />
-        }
+        defaultNavigationOptions: { header: props => <CustomHeaderBack {...props} /> }
     }
 );
 
 HomeStack.navigationOptions = {
     tabBarLabel: 'Home',
     tabBarIcon: ({ focused }) => {
-        return focused 
+        return focused
             ? <Image
                 style={styles.iconHome}
-                source={homeOrange} /> 
+                source={homeOrange} />
             : <Image
                 style={styles.iconHome}
                 source={homeGrey} />
@@ -105,42 +90,33 @@ HomeStack.navigationOptions = {
 };
 
 const OrdersStack = createStackNavigator({
-    Orders: Orders,
+    Orders: {
+        screen: Orders,
+        navigationOptions: { header: props => <CustomHeader {...props} /> }
+    },
     OrderDetail: {
         screen: OrderDetail,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     OrderSummary: {
         screen: OrderSummary,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     FullScreenImage: {
         screen: FullScreenImage,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     OrderTrace: {
         screen: OrderTrace,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     ProductDetail: {
         screen: ProductDetail,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
 },
     {
-        defaultNavigationOptions: {
-            header: props => <CustomHeader {...props} />
-        }
+        defaultNavigationOptions: { header: props => <CustomHeaderBack {...props} /> }
     }
 );
 
@@ -158,24 +134,21 @@ OrdersStack.navigationOptions = {
 };
 
 const TokensStack = createStackNavigator({
-    Tokens: Tokens,
+    Tokens: {
+        screen: Tokens,
+        navigationOptions: { header: props => <CustomHeader {...props} /> }
+    },
     EarnTokensDetail: {
         screen: EarnTokensDetail,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
     SpendTokensDetail: {
         screen: SpendTokensDetail,
-        navigationOptions: {
-            headerShown: false
-        }
+        navigationOptions: { headerShown: true }
     },
 },
     {
-        defaultNavigationOptions: {
-            header: props => <CustomHeader {...props} />
-        }
+        defaultNavigationOptions: { header: props => <CustomHeaderBack {...props} /> }
     }
 );
 
@@ -229,7 +202,6 @@ const MainTabNavigator = createBottomTabNavigator({
 },
     {
         defaultNavigationOptions: {
-            // header: props => <CustomHeader {...props} />
         },
         tabBarOptions: {
             activeTintColor: '#F4B13E',
@@ -246,6 +218,18 @@ const MainTabNavigator = createBottomTabNavigator({
     }
 );
 
+const DrawerNavigator = createStackNavigator({
+    Home: {
+        screen: MainTabNavigator
+    },
+}, {
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+        headerShown: false
+    }
+}
+);
+
 const styles = StyleSheet.create({
     iconHome: {
         width: 30,
@@ -253,28 +237,4 @@ const styles = StyleSheet.create({
     }
 });
 
-const DrawerNavigator = createStackNavigator({
-    Home: {
-        screen: MainTabNavigator
-    },
-    // Cart: Cart,
-    InsideSession: InsideSession
-}, {
-    initialRouteName: 'InsideSession',
-    defaultNavigationOptions: {
-        headerShown: false
-    }    // contentComponent: props => <SideBar {...props} />,
-}
-);
-
-export default StackNavigator = createStackNavigator({
-    DrawerNavigator: {
-        screen: DrawerNavigator
-    }
-},
-    {
-        defaultNavigationOptions: {
-            headerShown: false
-        }
-    }
-);
+export default DrawerNavigator;

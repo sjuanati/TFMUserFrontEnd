@@ -7,13 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setOrdersPage } from '../store/actions/order';
 const drmaxLogo = require('../assets/images/global/DrMax.png');
 
-const customHeaderBack = ( props ) => {
+const customHeaderBack = (props) => {
   const dispatch = useDispatch();
   const modified = useSelector(state => state.modified);
   const ordersPage = useSelector(state => state.order.ordersPage);
 
   const goBack = async () => {
-    if(props.navigation.state.routeName === 'OrderDetail') {
+    if (props.navigation.state.routeName === 'OrderDetail') {
       dispatch(setOrdersPage(true));
     }
     await props.navigation.goBack(null);
@@ -23,26 +23,26 @@ const customHeaderBack = ( props ) => {
     <Header style={styles.mainHeader}>
       <Left style={styles.left}>
         <View style={styles.backContainer}>
-            <TouchableOpacity
-                onPress={goBack}>
-                <Ionicons
-                    name="ios-arrow-back"
-                    size={25}
-                    color="#F4B13E"
-                    style={styles.back}
-                />
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={goBack}>
+            <Ionicons
+              name="ios-arrow-back"
+              size={25}
+              color="#F4B13E"
+              style={styles.back}
+            />
+          </TouchableOpacity>
         </View>
       </Left>
       <Body style={styles.body}>
         <Image
-            style={styles.logo}
-            source={drmaxLogo}
+          style={styles.logo}
+          source={drmaxLogo}
         />
       </Body>
       <Right style={styles.right}>
         <TouchableOpacity onPress={() => props.navigation.navigate('OrderSummary')}>
-          <ShoppingCartIcon/>
+          <ShoppingCartIcon />
         </TouchableOpacity>
       </Right>
     </Header>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: 'contain',
-    width: 170
+    width: 150
   },
   back: {
     paddingLeft: 10,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   backContainer: {
-      width: 80
+    width: 80
   }
 });
 

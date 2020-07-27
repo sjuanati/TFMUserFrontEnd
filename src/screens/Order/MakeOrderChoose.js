@@ -84,7 +84,7 @@ const makeOrderChoose = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             <SearchBar
                 placeholder="Product name, national code"
                 onChangeText={updateSearch}

@@ -28,7 +28,7 @@ const makeOrder = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             <View style={styles.itemContainer}>
                 <TouchableOpacity
                     onPress={() => scanPrescription()}

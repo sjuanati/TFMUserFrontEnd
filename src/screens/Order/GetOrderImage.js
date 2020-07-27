@@ -71,7 +71,6 @@ const getOrderImage = ( props ) => {
 
   return (
     <Container>
-      <CustomHeaderBack {...props} />
       {(loading) ?
         <Spinner color='#F4B13E' /> :
         <Container>

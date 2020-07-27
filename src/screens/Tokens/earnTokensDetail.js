@@ -96,7 +96,6 @@ const earnTokensDetail = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
             <ScrollView>
                 {renderDescription()}
                 {renderLegalTerms()}

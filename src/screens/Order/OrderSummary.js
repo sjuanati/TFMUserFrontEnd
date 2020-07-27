@@ -82,7 +82,7 @@ const orderSummary = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             {(order.length === 0) ? renderAddItem() : renderOrderOverview()}
             <View style={styles.list}>
                 {(order.length > 0)

@@ -28,7 +28,6 @@ const spendTokensDetail = (props) => {
 
     return (
         <View>
-            <CustomHeaderBack {...props} />
             <Text>Hallo spend</Text>
         </View>
     )

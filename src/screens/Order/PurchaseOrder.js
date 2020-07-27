@@ -46,123 +46,112 @@ const purchaseOrder = (props) => {
         });
     }
 
-    const confirmOrder = () => {
-        if (isSelected === 0) {
-            Alert.alert('Please choose one payment method', 'VISA card or Tokens');
-        } else {
-            Alert.alert(
-                'Do you confirm the purchase?', '',
-                [{
-                    text: 'Confirm',
-                    style: 'cancel',
-                    onPress: async () => {
-                        setIsLoding(true);
-                        await saveOrderToDB();
-                        await saveLastPharmacyToDB();
-                        setIsLoding(false);
+    const confirmOrder = async () => {
+    if (isSelected === 0) {
+        Alert.alert('Please choose one payment method', 'VISA card or Tokens');
+    } else {
+        setIsLoding(true);
+        await saveOrderToDB();
+        await saveLastPharmacyToDB();
+        setIsLoding(false);
+
+    }
+};
+
+// Save Order into PostgreSQL
+const saveOrderToDB = async () => {
+
+    if ((user.id) && (user.favPharmacyID) && (order)) {
+        await axios.post(`${httpUrl}/order/add`, {
+            order,
+            user,
+            total_price: price,
+        }, {
+            headers: {
+                authorization: user.token,
+                user_id: user.id
+            }
+        })
+            .then((response) => {
+                dispatch(clearCart(true));
+                console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`)
+                props.navigation.navigate('Home');
+            })
+            .catch(async err => {
+                handleAxiosErrors(props, err);
+                Alert.alert('Error al procesar el pedido');
+                console.log('Error at OrderSummary.js -> saveOrderToDB() :', err);
+            })
+    } else {
+        console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
+    }
+};
+
+const saveLastPharmacyToDB = async () => {
+
+    if ((user.id) && (user.favPharmacyID)) {
+        await axios.post(`${httpUrl}/users/pharmacy/set`, {
+            user_id: user.id,
+            pharmacy_id: user.favPharmacyID
+        }, {
+            headers: { authorization: user.token }
+        })
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch(async err => {
+                handleAxiosErrors(props, err);
+                console.log('Error on OrderSummary.js -> saveLastPharmacyToDB() :', err);
+            })
+    } else {
+        console.log('Warning on OrderSummary.js -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
+    }
+};
+
+return (
+    <View style={styles.container}>
+        {/* <CustomHeaderBack {...props} /> */}
+        <ScrollView>
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>Please choose your payment method</Text>
+            </View>
+            <TouchableOpacity
+                onPress={() => setIsSelected(1)}>
+                <View style={[styles.itemContainer, (isSelected == 1) ? styles.itemSelected : null]}>
+                    <Image
+                        style={styles.logoVISA}
+                        source={visaLogo} />
+                    <Text style={styles.itemText}> 4548 **** **** 3005 </Text>
+                    <Text style={styles.itemSmallText}> 08/24</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+                disabled={(balance < 0) ? true : false}
+                onPress={() => setIsSelected(2)}>
+                <View style={[styles.itemContainer, (isSelected == 2) ? styles.itemSelected : null]}>
+                    <Image
+                        style={styles.logoVISA}
+                        source={bitacorasLogo} />
+                    <Text style={styles.itemText}> PharmaChain Tokens </Text>
+                    {(balance < 0)
+                        ? <Text style={styles.itemSmallText}>Not available</Text>
+                        : <Text style={styles.itemSmallText}>{balance} PCT</Text>
                     }
-                }, {
-                    text: 'Cancel',
-                },],
-                { cancelable: false }
-            );
-        }
-    };
-
-    // Save Order into PostgreSQL
-    const saveOrderToDB = async () => {
-
-        if ((user.id) && (user.favPharmacyID) && (order)) {
-            await axios.post(`${httpUrl}/order/add`, {
-                order,
-                user,
-                total_price: price,
-            }, {
-                headers: {
-                    authorization: user.token,
-                    user_id: user.id
-                }
-            })
-                .then((response) => {
-                    dispatch(clearCart(true));
-                    console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`)
-                    props.navigation.navigate('Home');
-                })
-                .catch(async err => {
-                    handleAxiosErrors(props, err);
-                    Alert.alert('Error al procesar el pedido');
-                    console.log('Error at OrderSummary.js -> saveOrderToDB() :', err);
-                })
-        } else {
-            console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
-        }
-    };
-
-    const saveLastPharmacyToDB = async () => {
-
-        if ((user.id) && (user.favPharmacyID)) {
-            await axios.post(`${httpUrl}/users/pharmacy/set`, {
-                user_id: user.id,
-                pharmacy_id: user.favPharmacyID
-            }, {
-                headers: { authorization: user.token }
-            })
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch(async err => {
-                    handleAxiosErrors(props, err);
-                    console.log('Error on OrderSummary.js -> saveLastPharmacyToDB() :', err);
-                })
-        } else {
-            console.log('Warning on OrderSummary.js -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
-        }
-    };
-
-    return (
-        <View style={styles.container}>
-            <CustomHeaderBack {...props} />
-            <ScrollView>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>Please choose your payment method</Text>
                 </View>
+            </TouchableOpacity>
+            <View>
+                <ActivityIndicator isLoading={isLoading} />
+            </View>
+            <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    onPress={() => setIsSelected(1)}>
-                    <View style={[styles.itemContainer, (isSelected == 1) ? styles.itemSelected : null]}>
-                        <Image
-                            style={styles.logoVISA}
-                            source={visaLogo} />
-                        <Text style={styles.itemText}> 4548 **** **** 3005 </Text>
-                        <Text style={styles.itemSmallText}> 08/24</Text>
-                    </View>
+                    style={[globalStyles.button, styles.button]}
+                    onPress={() => confirmOrder()}>
+                    <Text style={globalStyles.buttonText}> Pay </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    disabled={(balance < 0) ? true : false}
-                    onPress={() => setIsSelected(2)}>
-                    <View style={[styles.itemContainer, (isSelected == 2) ? styles.itemSelected : null]}>
-                        <Image
-                            style={styles.logoVISA}
-                            source={bitacorasLogo} />
-                        <Text style={styles.itemText}> PharmaChain Tokens </Text>
-                        {(balance < 0)
-                            ? <Text style={styles.itemSmallText}>Not available</Text>
-                            : <Text style={styles.itemSmallText}>{balance} PCT</Text>
-                        }
-                    </View>
-                </TouchableOpacity>
-                <View>
-                    <ActivityIndicator isLoading={isLoading} />
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={[globalStyles.button, styles.button]}
-                        onPress={() => confirmOrder()}>
-                        <Text style={globalStyles.buttonText}> Pay </Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </View>
-    )
+            </View>
+        </ScrollView>
+    </View>
+)
 }
 
 const styles = StyleSheet.create({

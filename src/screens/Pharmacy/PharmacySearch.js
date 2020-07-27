@@ -182,7 +182,7 @@ const pharmacySearch = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             {(isLoading) ?
                 <Spinner color='#F4B13E' /> :
                 <View>

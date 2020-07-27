@@ -270,7 +270,6 @@ const getOrderDetail = (props) => {
 
     return (
         <Container>
-            <CustomHeaderBack {...props} />
             {(loading || !order[0]) ?
                 <Spinner color='#F4B13E' /> :
                 <RenderPage />

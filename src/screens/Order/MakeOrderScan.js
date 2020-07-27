@@ -84,7 +84,7 @@ const makeOrderScan = (props) => {
 
     return (
         <View style={styles.container}>
-            <CustomHeaderBack {...props} />
+            {/* <CustomHeaderBack {...props} /> */}
             <RNCamera
                 style={styles.preview}
                 barCodeTypes={[RNCamera.Constants.BarCodeType.ean13]}

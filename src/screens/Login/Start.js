@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-
+import { 
+  Spinner, 
+  Button, 
+  Text, 
+  Container, 
+  Content, 
+  Form, 
+  Item, 
+  Input, 
+  Toast 
+} from "native-base";
+import axios from 'axios';
+import { httpUrl } from '../../../urlServer';
 import { StyleSheet, Image, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-
-import { Spinner, Button, Text, Container, Content, Form, Item, Input, Toast } from "native-base";
-
-import axios from 'axios';
-
-import { httpUrl } from '../../../urlServer';
+import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 const lockGrey = require('../../assets/images/login/lock.png');
 //const passwordGrey = require('../images/darkgrey/password.png');
@@ -43,7 +50,7 @@ const start = props => {
         email: user.email,
         password: user.password
       }).then(async res => {
-        console.log(res.status);
+        //console.log(res.status);
         if(res.status === 200 && res.data.token) {
           await AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           await AsyncStorage.setItem('user', JSON.stringify(res.data));
@@ -54,13 +61,7 @@ const start = props => {
           setLoading(false);
         }
       }).catch((err) => {
-        if(err.response && (err.response.status === 401 || err.response.status === 403)) {
-          {showToast("Error en email o contraseña")}
-        } else if(err.response && err.response.status === 404) {
-          {showToast("No hay ningún usuario con este email")}
-        } else {
-          {showToast("Ups... parece que no hay conexión")}
-        }
+        handleAxiosErrors(props, err);
         setLoading(false);
       });
     } else {

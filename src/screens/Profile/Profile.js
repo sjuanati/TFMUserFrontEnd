@@ -29,9 +29,9 @@ const profile = (props) => {
     const MALE = 'ios-male';
     const FEMALE = 'ios-female';
     const OTHERS = 'ios-transgender';
-    if (user.gender === 'Femenino') {
+    if (user.gender === 'Female') {
         genderIcon = FEMALE;
-    } else if (user.gender === 'Otros') {
+    } else if (user.gender === 'Others') {
         genderIcon = OTHERS;
     } else {
         genderIcon = MALE;
@@ -93,9 +93,7 @@ const profile = (props) => {
                         <Ionicons
                             name={genderIcon}
                             size={20}
-                            style={(genderIcon === 'ios-female')
-                                ? styles.iconGenderRotate
-                                : styles.iconGender}
+                            style={styles.iconGender}
                         />
                     </View>
                     : null
@@ -228,11 +226,6 @@ const styles = StyleSheet.create({
     iconGender: {
         marginLeft: 5,
         color: 'grey',
-    },
-    iconGenderRotate: {
-        marginLeft: 5,
-        color: 'grey',
-        transform: [{ rotate: '-45deg' }]
     },
     ender: {
         paddingBottom: 10,
