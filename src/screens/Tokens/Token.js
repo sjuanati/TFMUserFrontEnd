@@ -19,6 +19,8 @@ import bayer_test from '../../assets/images/global/bayer.png';
 import pfizer_test from '../../assets/images/global/pfizer.png';
 
 
+
+
 const token = (props) => {
 
     const user = useSelector(state => state.user);
@@ -26,7 +28,6 @@ const token = (props) => {
     const [tabView, setTabView] = useState(true);
     const [earnTokens, setEarnTokens] = useState([]);
     
-
     useEffect(() => {
         fetchTokenBalance();
         fetchEarnTokens();
@@ -37,7 +38,9 @@ const token = (props) => {
             params: { recipient: user.eth_address },
             headers: { authorization: user.token }
         }).then(res => {
-            setBalance(res.data);
+            // Convert string into Float of 2 decimals
+            const amount = Math.round(parseFloat(res.data)*100)/100;
+            setBalance(amount);
         }).catch(err => {
             console.log('Error in Token.js -> fetchTokenBalance(): ', err);
             //Alert.alert(`Balance can't be checked right now`);
@@ -51,7 +54,6 @@ const token = (props) => {
             headers: { authorization: user.token }
         }).then(res => {
             setEarnTokens(res.data);
-            //console.log('Earn tokens :', res.data);
         }).catch(err => {
             console.log('Error in Token.js -> fetchEarnTokens(): ', err);
         });

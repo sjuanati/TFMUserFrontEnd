@@ -8,22 +8,22 @@ import AuthLoading from '../screens/Login/AuthLoading';
 
 
 const AuthStack = createStackNavigator(
-  {
-    SignUpScreen: SignUp,
-    StartScreen: Start
-  }, {
+    {
+        SignUpScreen: SignUp,
+        StartScreen: Start
+    }, {
     defaultNavigationOptions: {
-      headerShown: false
+        headerShown: false
     }
-  }
+}
 );
 
 export default createAppContainer(createSwitchNavigator({
     AuthLoading: AuthLoading,
     Main: MainTabNavigator,
     Auth: AuthStack
-  },
-  {
-    initialRouteName: 'AuthLoading'
-  }
+},
+    {
+        initialRouteName: 'AuthLoading'
+    }
 ));
