@@ -194,15 +194,14 @@ ProfileStack.navigationOptions = {
     }
 };
 
-const MainTabNavigator = createBottomTabNavigator({
-    HomeStack,
-    OrdersStack,
-    TokensStack,
-    ProfileStack
-},
+const MainTabNavigator = createBottomTabNavigator(
     {
-        defaultNavigationOptions: {
-        },
+        HomeStack,
+        OrdersStack,
+        TokensStack,
+        ProfileStack
+    },
+    {
         tabBarOptions: {
             activeTintColor: '#F4B13E',
             activeBackgroundColor: '#f0f0f0',

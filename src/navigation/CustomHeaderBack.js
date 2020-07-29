@@ -4,18 +4,18 @@ import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ShoppingCartIcon from '../UI/ShoppingCartIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOrdersPage } from '../store/actions/order';
+// import { setOrdersPage } from '../store/actions/order';
 const drmaxLogo = require('../assets/images/global/DrMax.png');
 
 const customHeaderBack = (props) => {
   const dispatch = useDispatch();
   const modified = useSelector(state => state.modified);
-  const ordersPage = useSelector(state => state.order.ordersPage);
+  //const ordersPage = useSelector(state => state.order.ordersPage);
 
   const goBack = async () => {
-    if (props.navigation.state.routeName === 'OrderDetail') {
-      dispatch(setOrdersPage(true));
-    }
+    // if (props.navigation.state.routeName === 'OrderDetail') {
+    //   dispatch(setOrdersPage(true));
+    // }
     await props.navigation.goBack(null);
   };
 

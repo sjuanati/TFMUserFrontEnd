@@ -97,6 +97,7 @@ const getOrderDetail = (props) => {
                             order_id: order[0].order_id,
                             user_id: order[0].user_id,
                             pharmacy_id: order[0].pharmacy_id,
+                            eth_address: user.eth_address,
                         }, {
                             headers: { authorization: user.token }
                         }).then(async res => {

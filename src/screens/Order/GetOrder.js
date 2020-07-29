@@ -18,7 +18,6 @@ import {
 import {
     View,
     FlatList,
-    Platform,
     StyleSheet,
     PixelRatio,
     RefreshControl,
@@ -29,7 +28,7 @@ import axios from 'axios';
 import { httpUrl } from '../../../urlServer';
 import fontSize from '../../shared/FontSize';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOrdersPage } from '../../store/actions/order'
+//import { setOrdersPage } from '../../store/actions/order'
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 // Font size management
@@ -38,12 +37,12 @@ let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
 const getOrder = (props) => {
 
     const dispatch = useDispatch();
-    const ordersPage = useSelector(state => state.order.ordersPage);
+    //const ordersPage = useSelector(state => state.order.ordersPage);
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [originalOrders, setOriginalOrders] = useState([]);
     const user = useSelector(state => state.user);
-    const [isActive, setIsActive] = useState(true);
+    //const [isActive, setIsActive] = useState(true);
     const [filters, setFilters] = useState({
         grey: true,
         red: true,
@@ -52,38 +51,49 @@ const getOrder = (props) => {
     });
     const [searchText, setSearchText] = useState('');
 
+    // useEffect(() => {
+    //     console.log(user);
+    //     dispatch(setOrdersPage(true));
+    // }, []);
+
+    // useEffect(() => {
+    //     if (ordersPage) {
+    //         startFunctions()
+    //             .catch(error => {
+    //                 console.warn(JSON.stringify(error));
+    //             });
+    //         setIsActive(true);
+    //     } else {
+    //         setIsActive(false);
+    //     }
+    // }, [ordersPage]);
+
+    // useEffect(() => {
+    //     let interval = null;
+    //     if (!isActive) {
+    //         clearInterval(interval);
+    //     } else {
+    //         interval = setInterval(() => {
+    //             startFunctions()
+    //                 .catch(error => {
+    //                     console.warn(JSON.stringify(error));
+    //                 });
+    //         }, 60000);
+    //     }
+    //     return () => clearInterval(interval);
+    // }, [isActive]);
+
     useEffect(() => {
-        console.log(user);
-        dispatch(setOrdersPage(true));
+        startFunctions();
     }, []);
 
+    // Load orders every time the screen is loaded (in focus)
     useEffect(() => {
-        if (ordersPage) {
-            startFunctions()
-                .catch(error => {
-                    console.warn(JSON.stringify(error));
-                });
-            setIsActive(true);
-        } else {
-            setIsActive(false);
-        }
-    }, [ordersPage]);
-
-    useEffect(() => {
-        let interval = null;
-        if (!isActive) {
-            clearInterval(interval);
-        } else {
-            interval = setInterval(() => {
-                startFunctions()
-                    .catch(error => {
-                        console.warn(JSON.stringify(error));
-                    });
-            }, 60000);
-        }
-        return () => clearInterval(interval);
-    }, [isActive]);
-
+        const focusListener = props.navigation.addListener("didFocus", () => {
+            startFunctions();
+        });
+        return () => focusListener.remove();
+    }, []);
 
     const startFunctions = async () => {
         try {
@@ -173,7 +183,7 @@ const getOrder = (props) => {
 
     const openOrder = async ({ item }) => {
         if (item) {
-            dispatch(setOrdersPage(false));
+            //dispatch(setOrdersPage(false));
             props.navigation.navigate('OrderDetail', {
                 order: item.order_id
             });
@@ -254,24 +264,23 @@ const getOrder = (props) => {
     };
 
     const onRefresh = () => {
-        setIsActive(false);
+        //setIsActive(false);
         setTimeout(async () => {
             // setOrders([]);
-            setIsActive(true);
+            //setIsActive(true);
             await getOrders();
         }, 400);
     };
 
     const RenderOrders = () => (
         <Container>
-            {(orders.length === 0 || orders.length === 1) ?
-                <View style={styles.viewContent}>
+            {(orders.length === 0 || orders.length === 1)
+                ? <View style={styles.viewContent}>
                     <Text style={styles.noItems}>
                         No Orders found
-          </Text>
+                    </Text>
                 </View>
-                :
-                <View style={styles.viewContent}>
+                : <View style={styles.viewContent}>
                     <FlatList data={orders}
                         renderItem={renderItem}
                         keyExtractor={item => item.order_id.toString()}

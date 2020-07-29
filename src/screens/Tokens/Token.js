@@ -19,18 +19,24 @@ import bayer_test from '../../assets/images/global/bayer.png';
 import pfizer_test from '../../assets/images/global/pfizer.png';
 
 
-
-
 const token = (props) => {
 
     const user = useSelector(state => state.user);
     const [balance, setBalance] = useState(-1);
     const [tabView, setTabView] = useState(true);
     const [earnTokens, setEarnTokens] = useState([]);
-    
+
     useEffect(() => {
         fetchTokenBalance();
         fetchEarnTokens();
+    }, []);
+
+    // Load <balance> every time the screen is shown (in focus)
+    useEffect(() => {
+        const focusListener = props.navigation.addListener("didFocus", () => {
+            fetchTokenBalance();
+        });
+        return () => focusListener.remove();
     }, []);
 
     const fetchTokenBalance = async () => {
@@ -39,7 +45,7 @@ const token = (props) => {
             headers: { authorization: user.token }
         }).then(res => {
             // Convert string into Float of 2 decimals
-            const amount = Math.round(parseFloat(res.data)*100)/100;
+            const amount = Math.round(parseFloat(res.data) * 100) / 100;
             setBalance(amount);
         }).catch(err => {
             console.log('Error in Token.js -> fetchTokenBalance(): ', err);
@@ -59,18 +65,18 @@ const token = (props) => {
         });
     }
 
-    const toggleTabView = (val) => (val !== tabView) ? setTabView(!tabView) : null;
+    const toggleTabView = val => (val !== tabView) ? setTabView(!tabView) : null;
 
     const getRemainingDays = (date) => {
         const today = moment().tz('Europe/Madrid');
         const end_date = moment(date).tz('Europe/Madrid');
         const remainingDays = end_date.diff(today, 'days');
-        
-        if (remainingDays < 0) 
+
+        if (remainingDays < 0)
             return <Text>Status:      <Text style={styles.closeText}>Closed</Text></Text>;
-        else if (remainingDays <= 1) 
+        else if (remainingDays <= 1)
             return <Text>Status:      <Text style={styles.closeSoonText}>Open (expires soon)</Text></Text>;
-        else 
+        else
             return <Text>Status:      <Text style={styles.openText}>Open ({remainingDays} days remaining)</Text></Text>;
 
     }
