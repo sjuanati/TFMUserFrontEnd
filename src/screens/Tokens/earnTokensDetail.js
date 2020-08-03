@@ -67,7 +67,7 @@ const earnTokensDetail = (props) => {
                 </TouchableOpacity>
                 <Text style={styles.text}> I accept the </Text>
                 <TouchableOpacity
-                //onPress={}  TDC
+                //onPress={}  TBD
                 >
                     <Text style={styles.legalText}>terms and legal conditions </Text>
                 </TouchableOpacity>

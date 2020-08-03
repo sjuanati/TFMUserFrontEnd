@@ -12,13 +12,9 @@ import {
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSelector, useDispatch } from 'react-redux';
-
-// Components
 import PharmacySchedule from './PharmacySchedule';
 import { setFavPharmacy } from '../../store/actions/user';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
-
-// Global settings
 import { httpUrl } from '../../../urlServer';
 import globalStyles from '../../UI/Style';
 import Cons from '../../shared/Constants';
@@ -39,9 +35,7 @@ const pharmacyDetail = (props) => {
     // Retrieve schedule from given pharmacy
     const fetchSchedule = async (item) => {
         await axios.get(`${httpUrl}/pharmacy/schedule/get`, {
-            params: {
-                pharmacy_id: item.pharmacy_id,
-            },
+            params: { pharmacy_id: item.pharmacy_id },
             headers: { authorization: user.token }
         })
             .then(response => {

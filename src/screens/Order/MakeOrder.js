@@ -10,7 +10,6 @@ import { setScanned } from '../../store/actions/order';
 import { useDispatch, useSelector } from 'react-redux';
 import scanLogo from '../../assets/images/global/scanner.png';
 import searchLogo from '../../assets/images/global/search.png';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 const makeOrder = (props) => {
 
@@ -28,7 +27,6 @@ const makeOrder = (props) => {
 
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
             <View style={styles.itemContainer}>
                 <TouchableOpacity
                     onPress={() => scanPrescription()}

@@ -6,9 +6,10 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Home from '../screens/Home/Home';
 import Orders from '../screens/Order/GetOrder';
 import OrderDetail from '../screens/Order/GetOrderDetail';
+import OrderTrace from '../screens/Order/GetOrderTrace';
 import Tokens from '../screens/Tokens/Token';
 import EarnTokensDetail from '../screens/Tokens/earnTokensDetail';
-import SpendTokensDetail from '../screens/Tokens/spendTokensDetail';
+import BuyTokensDetail from '../screens/Tokens/buyTokensDetail';
 import Profile from '../screens/Profile/Profile';
 import CustomHeader from '../navigation/CustomHeader';
 import CustomHeaderBack from '../navigation/CustomHeaderBack';
@@ -20,8 +21,8 @@ import MakeOrderChoose from '../screens/Order/MakeOrderChoose';
 import OrderSummary from '../screens/Order/OrderSummary';
 import PurchaseOrder from '../screens/Order/PurchaseOrder';
 import ProductDetail from '../screens/Order/ProductDetail';
-import FullScreenImage from '../screens/Order/GetOrderImage';
-import OrderTrace from '../screens/Order/GetOrderTrace';
+//import FullScreenImage from '../screens/Order/GetOrderImage';
+
 
 const homeOrange = require('../assets/images/bottomBar/yellow/home-orange.png');
 const homeGrey = require('../assets/images/bottomBar/grey/home-grey.png');
@@ -102,10 +103,10 @@ const OrdersStack = createStackNavigator({
         screen: OrderSummary,
         navigationOptions: { headerShown: true }
     },
-    FullScreenImage: {
-        screen: FullScreenImage,
-        navigationOptions: { headerShown: true }
-    },
+    // FullScreenImage: {
+    //     screen: FullScreenImage,
+    //     navigationOptions: { headerShown: true }
+    // },
     OrderTrace: {
         screen: OrderTrace,
         navigationOptions: { headerShown: true }
@@ -143,7 +144,7 @@ const TokensStack = createStackNavigator({
         navigationOptions: { headerShown: true }
     },
     SpendTokensDetail: {
-        screen: SpendTokensDetail,
+        screen: BuyTokensDetail,
         navigationOptions: { headerShown: true }
     },
 },

@@ -1,4 +1,3 @@
-// Libs
 import React, { useState, useEffect } from 'react';
 import { Spinner } from 'native-base';
 import {
@@ -22,8 +21,6 @@ import { check, request, PERMISSIONS } from 'react-native-permissions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
-
-// Global settings
 import { httpUrl } from '../../../urlServer';
 import Cons from '../../shared/Constants';
 import fontSize from '../../shared/FontSize';
@@ -243,7 +240,6 @@ const pharmacySearch = (props) => {
                                 showsMyLocationButton={true}
                                 initialRegion={currentPosition}>
                                 {filteredPharmacies.map((pharma) => {
-                                    //console.log(pharma.pharmacy_id)
                                     if (pharma.gps_latitude && pharma.gps_longitude) {
                                         return (<Marker
                                             key={pharma.pharmacy_id.toString()}

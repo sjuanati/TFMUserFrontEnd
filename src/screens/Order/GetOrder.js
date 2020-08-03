@@ -13,8 +13,7 @@ import {
     Left,
     Icon,
     Input
-}
-    from "native-base";
+} from "native-base";
 import {
     View,
     FlatList,

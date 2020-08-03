@@ -5,7 +5,6 @@ import {
     Alert,
     Image,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
@@ -110,7 +109,6 @@ const purchaseOrder = (props) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>Please choose your payment method</Text>
                 </View>
@@ -141,14 +139,13 @@ const purchaseOrder = (props) => {
                 <View>
                     <ActivityIndicator isLoading={isLoading} />
                 </View>
-                <View style={styles.buttonContainer}>
+                <View style={styles.container_bottom}>
                     <TouchableOpacity
                         style={[globalStyles.button, styles.button]}
                         onPress={() => confirmOrder()}>
-                        <Text style={styles.buttonText}> Pay </Text>
+                        <Text style={styles.buttonText}> Buy Now </Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
         </View>
     )
 }
@@ -195,13 +192,11 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         width: 50
     },
-    buttonContainer: {
-        flex: 1,
+    container_bottom: {
+        position: 'absolute',
+        alignSelf: 'center',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignContent: 'space-between',
-        marginBottom: 5,
+        bottom: 30,
     },
     button: {
         marginTop: 40,

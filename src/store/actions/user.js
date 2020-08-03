@@ -6,7 +6,18 @@ export const setFavPharmacy = (favPharmacyID, favPharmacyDesc) => ({
     favPharmacyDesc: favPharmacyDesc
 });
 
-export const setData = (id, token, birthday, email, gender, name, phone, photo, user_status, eth_address) => ({
+export const setData = (
+    id, 
+    token, 
+    birthday, 
+    email, 
+    gender, 
+    name, 
+    phone, 
+    photo, 
+    user_status, 
+    eth_address) => 
+    ({
     type: actionTypes.SET_DATA,
     id: id,
     token: token,
@@ -20,7 +31,15 @@ export const setData = (id, token, birthday, email, gender, name, phone, photo, 
     eth_address: eth_address,
 })
 
-export const setAddress = (address_id, address_status, street, locality, province, zip_code, country) => ({
+export const setAddress = (
+    address_id, 
+    address_status, 
+    street, 
+    locality, 
+    province, 
+    zip_code, 
+    country) => 
+    ({
     type: actionTypes.SET_ADDRESS,
     address_id: address_id,
     address_status: address_status,

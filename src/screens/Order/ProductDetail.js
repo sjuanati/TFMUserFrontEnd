@@ -11,7 +11,6 @@ import globalStyles from '../../UI/Style';
 import Cons from '../../shared/Constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeItem } from '../../store/actions/order';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 
 const productDetail = (props) => {
@@ -84,7 +83,6 @@ const productDetail = (props) => {
 
     return (
         <View style={styles.container}>
-            {/* <CustomHeaderBack {...props} /> */}
             <View style={styles.headerContainer}>
                 <Text style={styles.titleText}>{product_desc}</Text>
             </View>

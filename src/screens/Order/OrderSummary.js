@@ -1,4 +1,3 @@
-// Libs
 import React from 'react';
 import {
     Text,
@@ -17,7 +16,6 @@ import globalStyles from '../../UI/Style';
 import fontSize from '../../shared/FontSize';
 import { clearCart } from '../../store/actions/order';
 
-// Constants
 const FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
 
 
@@ -105,7 +103,7 @@ const orderSummary = (props) => {
                     disabled={(order.length > 0 && (user.favPharmacyID !== null))
                         ? false
                         : true}>
-                    <Text style={[globalStyles.buttonText, styles.bold]}> Purchase </Text>
+                    <Text style={[globalStyles.buttonText, styles.bold]}> Preview Buy </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -130,7 +128,7 @@ const styles = StyleSheet.create({
         bottom: 15,
     },
     button: {
-        width: 130,
+        width: 150,
         alignItems: 'center',
         margin: 15,
     },

@@ -20,7 +20,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
 const getOrderDetail = (props) => {
@@ -156,7 +155,7 @@ const getOrderDetail = (props) => {
                 chevron
             >
                 <View>
-                    <Text style={styles.subtitleText}>Item {index}: </Text>
+                    <Text style={styles.subtitleText}>Item {index+1}: </Text>
                     <Text>{item.product_desc}</Text>
                     <Text style={styles.subtitleText}>{item.price} € </Text>
                 </View>
@@ -271,9 +270,9 @@ const getOrderDetail = (props) => {
 
     return (
         <Container>
-            {(loading || !order[0]) ?
-                <Spinner color='#F4B13E' /> :
-                <RenderPage />
+            {(loading || !order[0]) 
+                ? <Spinner color='#F4B13E' /> 
+                : <RenderPage />
             }
         </Container>
     )
@@ -322,21 +321,9 @@ const styles = StyleSheet.create({
     startCols: {
         justifyContent: 'center'
     },
-    infoCols: {
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
     status: {
         alignItems: 'center',
         fontSize: 20
-    },
-    content: {
-        flex: 0.2,
-        flexDirection: 'column'
-    },
-    smallFont: {
-        fontSize: 12,
-        textAlign: 'center'
     },
     colButton: {
         paddingHorizontal: '2%',

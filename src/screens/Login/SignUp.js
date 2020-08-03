@@ -34,7 +34,6 @@ const userGrey = require('../../assets/images/login/user.png');
 const emailGrey = require('../../assets/images/login/email.png');
 
 const signup = ( props ) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLegalAccepted, setIsLegalAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({

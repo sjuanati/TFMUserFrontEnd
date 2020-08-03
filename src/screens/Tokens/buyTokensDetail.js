@@ -10,10 +10,9 @@ import axios from 'axios';
 import Cons from '../../shared/Constants';
 import { useSelector } from 'react-redux';
 import { httpUrl } from '../../../urlServer';
-import CustomHeaderBack from '../../navigation/CustomHeaderBack';
 
 
-const spendTokensDetail = (props) => {
+const buyTokensDetail = (props) => {
 
     const item = props.navigation.getParam('item');
     const balance = props.navigation.getParam('balance');
@@ -33,4 +32,4 @@ const spendTokensDetail = (props) => {
     )
 }
 
-export default spendTokensDetail;
+export default buyTokensDetail;
