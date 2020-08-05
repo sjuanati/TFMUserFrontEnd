@@ -59,7 +59,10 @@ const pharmacyDetail = (props) => {
     }, []);
 
     const goBack = () => {
-        dispatch(setFavPharmacy(pharmacy.pharmacy_id, pharmacy.pharmacy_desc));
+        dispatch(setFavPharmacy(
+            pharmacy.pharmacy_id, 
+            pharmacy.pharmacy_desc,
+            pharmacy.eth_address));
         props.navigation.goBack(null);
         props.navigation.goBack(null);
     }

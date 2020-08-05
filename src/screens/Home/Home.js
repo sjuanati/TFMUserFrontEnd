@@ -115,7 +115,8 @@ const home = (props) => {
                 if (res.length) {
                     dispatch(setFavPharmacy(
                         res[0].pharmacy_id,
-                        res[0].pharmacy_desc));
+                        res[0].pharmacy_desc,
+                        res[0].eth_address));
                 }
             })
             .catch(async err => {

@@ -1,9 +1,10 @@
 import * as actionTypes from './actionTypes';
 
-export const setFavPharmacy = (favPharmacyID, favPharmacyDesc) => ({
+export const setFavPharmacy = (favPharmacyID, favPharmacyDesc, favPharmacyEthAddress) => ({
     type: actionTypes.SET_FAV_PHARMACY,
     favPharmacyID: favPharmacyID,
-    favPharmacyDesc: favPharmacyDesc
+    favPharmacyDesc: favPharmacyDesc,
+    favPharmacyEthAddress: favPharmacyEthAddress,
 });
 
 export const setData = (

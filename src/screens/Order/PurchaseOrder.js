@@ -26,7 +26,7 @@ const purchaseOrder = (props) => {
     const price = useSelector(state => state.order.price);
     const [balance, setBalance] = useState(-1);
     const [isSelected, setIsSelected] = useState(0);
-    const [isLoading, setIsLoding] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchTokenBalance();
@@ -46,14 +46,44 @@ const purchaseOrder = (props) => {
         });
     }
 
+    const fetchSpendTokens = async () => {
+        if (user.favPharmacyEthAddress) {
+            setIsLoading(true);
+            await axios.get(`${httpUrl}/token/spendTokens`, {
+                params: {
+                    recipient: user.favPharmacyEthAddress,
+                    sender: user.eth_address,
+                    amount: price,
+                },
+                headers: { authorization: user.token }
+            }).then(() => {
+                console.log('purchase with tokens OK!')
+            }).catch(err => {
+                console.log('Error in Token.js -> fetchSpendTokens(): ', err);
+            }).then(() => {
+                setIsLoading(false)
+            });
+        } else {
+            console.log('Pharmacy does not have a valid Ethereum address');
+        }
+
+    }
+
     const confirmOrder = async () => {
         if (isSelected === 0) {
             Alert.alert('Please choose one payment method', 'VISA card or Tokens');
         } else {
-            setIsLoding(true);
+            setIsLoading(true);
+            //PAY WITH TOKENS
+            if (isSelected === 1) {
+                // VISA payment through TPV
+            } else if (isSelected === 2) {
+                // Token payment
+                fetchSpendTokens();
+            }
             await saveOrderToDB();
             await saveLastPharmacyToDB();
-            setIsLoding(false);
+            setIsLoading(false);
         }
     };
 

@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     favPharmacyID: null,
     favPharmacyDesc: null,
+    favPharmacyEthAddress: null,
     id: null,
     token: null,
     birthday: null,
@@ -27,6 +28,7 @@ const setFavPharmacy = (state, action) => {
         ...state, 
         ...{favPharmacyID: action.favPharmacyID,
             favPharmacyDesc: action.favPharmacyDesc,
+            favPharmacyEthAddress: action.favPharmacyEthAddress,
         }
     }
 };

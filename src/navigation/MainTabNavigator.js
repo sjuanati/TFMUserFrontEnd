@@ -9,7 +9,6 @@ import OrderDetail from '../screens/Order/GetOrderDetail';
 import OrderTrace from '../screens/Order/GetOrderTrace';
 import Tokens from '../screens/Tokens/Token';
 import EarnTokensDetail from '../screens/Tokens/earnTokensDetail';
-import BuyTokensDetail from '../screens/Tokens/buyTokensDetail';
 import Profile from '../screens/Profile/Profile';
 import CustomHeader from '../navigation/CustomHeader';
 import CustomHeaderBack from '../navigation/CustomHeaderBack';
@@ -141,10 +140,6 @@ const TokensStack = createStackNavigator({
     },
     EarnTokensDetail: {
         screen: EarnTokensDetail,
-        navigationOptions: { headerShown: true }
-    },
-    SpendTokensDetail: {
-        screen: BuyTokensDetail,
         navigationOptions: { headerShown: true }
     },
 },
