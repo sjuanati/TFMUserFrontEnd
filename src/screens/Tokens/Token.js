@@ -10,13 +10,14 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import tz from 'moment-timezone';
+import Keypad from '../../UI/Keypad';
 import PaymentVISA from '../../UI/PaymentVISA';
 import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
 import { useSelector } from 'react-redux';
-import Keypad from '../../UI/Keypad';
 import { httpUrl } from '../../../urlServer';
 import { ListItem } from 'react-native-elements';
+import ActivityIndicator from '../../UI/ActivityIndicator';
 import bayer_test from '../../assets/images/global/bayer.png';
 import pfizer_test from '../../assets/images/global/pfizer.png';
 
@@ -226,7 +227,9 @@ const token = (props) => {
                     <Keypad
                         onAddNumber={addNumberHandler}
                         onRemoveNumber={removeNumberHandler} />
-                    <PaymentVISA/>
+                    <PaymentVISA />
+                    <ActivityIndicator
+                        isLoading={isLoading} />
                 </View>
             }
             {(tabView) ? null : renderPurchaseButton()}

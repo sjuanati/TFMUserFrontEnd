@@ -1,15 +1,21 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet} from 'react-native';
+import { 
+    View,
+    StyleSheet,
+    ActivityIndicator,
+} from 'react-native';
 
-const activityIndicator = ({isLoading}) => {
 
+const activityIndicator = ({ isLoading }) => {
     return (
-        <ActivityIndicator 
-        size = "large" 
-        color = "#6B5B95"
-        style = {styles.loading}
-        animating = { (isLoading) ? true : false } 
-        />
+        <View>
+            <ActivityIndicator
+                size="large"
+                color="#6B5B95"
+                style={styles.loading}
+                animating={(isLoading) ? true : false}
+            />
+        </View>
     )
 }
 

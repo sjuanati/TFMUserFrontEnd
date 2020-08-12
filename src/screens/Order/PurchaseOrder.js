@@ -166,9 +166,7 @@ const purchaseOrder = (props) => {
                         }
                     </View>
                 </TouchableOpacity>
-                <View>
-                    <ActivityIndicator isLoading={isLoading} />
-                </View>
+                <ActivityIndicator isLoading={isLoading} />
                 <View style={styles.container_bottom}>
                     <TouchableOpacity
                         style={[globalStyles.button, styles.button]}
