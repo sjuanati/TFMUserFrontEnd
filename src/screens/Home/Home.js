@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import {
     Text,
     View,
     Alert,
     Image,
+    Button,
     PixelRatio,
     StyleSheet,
     TouchableOpacity,
@@ -15,7 +16,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 // Components
 import Cons from '../../shared/Constants';
-import { setOrdered } from '../../store/actions/order';
 import choosePharmacyLogo from '../../assets/images/home/Placeholder-yellow.png';
 import otcLogo from '../../assets/images/home/OTC-yellow.png';
 import pillLogo from '../../assets/images/home/Pill-Yellow.png';
@@ -23,6 +23,7 @@ import showToast from '../../shared/Toast';
 import fontSize from '../../shared/FontSize';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import AsyncStorage from '@react-native-community/async-storage';
+import { setOrdered } from '../../store/actions/order';
 import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
 
 const FONT_SIZE = fontSize(24, PixelRatio.getFontScale());
@@ -43,6 +44,17 @@ const home = (props) => {
     useEffect(() => {
         setUser();
     }, []);
+
+    // useLayoutEffect(() => {
+    //     props.navigation.setOptions({
+    //       headerRight: () => (
+    //         <Button 
+    //             onPress={() => props.navigation.navigate('OrderSummary')} 
+    //             title="Gooooo"
+    //         />
+    //       ),
+    //     });
+    //   }, [props.avigation]);
 
     //TODO: recover previous cart status, retrieving data from DB
     const checkCart = () => {
@@ -200,7 +212,7 @@ const home = (props) => {
         if (!user.favPharmacyID) {
             showToast('Choose pharmacy to make an Order', 'default');
         } else {
-            props.navigation.navigate('Order');
+            props.navigation.navigate('MakeOrder');
         }
     }
 

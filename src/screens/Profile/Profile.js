@@ -16,6 +16,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
 import { setIsModalProfileOpen } from '../../store/actions/modal';
+import { setToken } from '../../store/actions/user';
+import { StackActions } from '@react-navigation/native';
 
 
 const profile = (props) => {
@@ -46,7 +48,10 @@ const profile = (props) => {
                 {
                     text: 'OK', onPress: async () => {
                         await AsyncStorage.clear();
-                        props.navigation.navigate('Auth');
+                        //props.navigation.navigate('Auth');
+                        //props.navigation.dispatch(StackActions.replace('Home'));
+                        dispatch(setToken(null));
+                        
                     }
                 },
             ],

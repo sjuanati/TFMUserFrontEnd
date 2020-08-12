@@ -59,7 +59,7 @@ const orderSummary = (props) => {
     const renderAddItem = () => (
         <View style={styles.container_body}>
             <Text style={styles.text}> No items in Cart </Text>
-            <Button target='Order' desc='Add Product' nav={props.navigation} />
+            <Button target='MakeOrder' desc='Add Product' nav={props.navigation} />
         </View>
     );
 

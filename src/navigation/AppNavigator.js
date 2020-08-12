@@ -1,29 +1,29 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack'
+import React, { useEffect } from 'react';
+import { setToken } from '../store/actions/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { LoginStackScreen } from './StackNavigator';
+import { AppTabScreens } from './BottomTabNavigator';
 
-import MainTabNavigator from './MainTabNavigator';
-import Start from '../screens/Login/Start';
-import SignUp from '../screens/Login/SignUp'
-import AuthLoading from '../screens/Login/AuthLoading';
+const appNavigator = () => {
 
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
 
-const AuthStack = createStackNavigator(
-    {
-        SignUpScreen: SignUp,
-        StartScreen: Start
-    }, {
-    defaultNavigationOptions: {
-        headerShown: false
-    }
-}
-);
+    useEffect(() => {
+        const getToken = async () => dispatch(setToken(await AsyncStorage.getItem('token')));
+        getToken();
+    }, [])
 
-export default createAppContainer(createSwitchNavigator({
-    AuthLoading: AuthLoading,
-    Main: MainTabNavigator,
-    Auth: AuthStack
-},
-    {
-        initialRouteName: 'AuthLoading'
-    }
-));
+    return (
+        <NavigationContainer>
+            {(user.token == null)
+                ? <LoginStackScreen />
+                : <AppTabScreens />
+            }
+        </NavigationContainer>
+    )
+};
+
+export default appNavigator;

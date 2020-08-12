@@ -15,7 +15,8 @@ import { ListItem } from 'react-native-elements';
 
 const getOrderTrace = (props) => {
 
-    const order_id = props.navigation.getParam('order_id');
+    //const order_id = props.navigation.getParam('order_id');
+    const { order_id } = props.route.params;
     const user = useSelector(state => state.user);
     const [order, setOrder] = useState([]);
 

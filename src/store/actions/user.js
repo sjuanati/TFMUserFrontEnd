@@ -7,6 +7,11 @@ export const setFavPharmacy = (favPharmacyID, favPharmacyDesc, favPharmacyEthAdd
     favPharmacyEthAddress: favPharmacyEthAddress,
 });
 
+export const setToken = (token) => ({
+    type: actionTypes.SET_TOKEN,
+    token: token,
+})
+
 export const setData = (
     id, 
     token, 

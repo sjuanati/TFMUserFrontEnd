@@ -33,6 +33,13 @@ const setFavPharmacy = (state, action) => {
     }
 };
 
+const setToken = (state, action) => {
+    return {
+        ...state,
+        ...{token: action.token}
+    }
+}
+
 const setData = (state, action) => {
     return {
         ...state,
@@ -67,6 +74,7 @@ const setAddress = (state, action) => {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_FAV_PHARMACY: return setFavPharmacy(state, action);
+        case actionTypes.SET_TOKEN: return setToken(state, action);
         case actionTypes.SET_DATA: return setData(state, action);
         case actionTypes.SET_ADDRESS: return setAddress(state, action);
         default: return state;

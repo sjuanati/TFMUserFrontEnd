@@ -15,15 +15,9 @@ import { addItem, removeItem } from '../../store/actions/order';
 
 const productDetail = (props) => {
 
-    const item_id = props.navigation.getParam('item_id');
-    const product_id = props.navigation.getParam('product_id');
-    const product_desc = props.navigation.getParam('product_desc');
-    const dose_qty = props.navigation.getParam('dose_qty');
-    const dose_form = props.navigation.getParam('dose_form');
-    const prescription = props.navigation.getParam('prescription');
-    const price = props.navigation.getParam('price');
-    const leaflet_url = props.navigation.getParam('leaflet_url');
-    const screen = props.navigation.getParam('screen');
+    const { item_id, product_id, product_desc, dose_qty, dose_form, prescription,
+        price, leaflet_url, screen } = props.route.params;
+        
     const dispatch = useDispatch();
     const order = useSelector(state => state.order.items);
 

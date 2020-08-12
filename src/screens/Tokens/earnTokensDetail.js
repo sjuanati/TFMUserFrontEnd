@@ -17,8 +17,9 @@ import CheckBox from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const earnTokensDetail = (props) => {
 
-    const item = props.navigation.getParam('item');
-    const balance = props.navigation.getParam('balance');
+    //const item = props.navigation.getParam('item');
+    //const balance = props.navigation.getParam('balance');
+    const {item, balance} = props.route.params;
     const user = useSelector(state => state.user);
     const [isLegalAccepted, setIsLegalAccepted] = useState(false);
 

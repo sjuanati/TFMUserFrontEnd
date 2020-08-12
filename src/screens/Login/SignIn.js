@@ -8,21 +8,23 @@ import {
   Form, 
   Item, 
   Input, 
-  Toast 
 } from "native-base";
 import axios from 'axios';
 import { httpUrl } from '../../../urlServer';
-import { StyleSheet, Image, ImageBackground } from 'react-native';
+import { StyleSheet, Image, ImageBackground, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../store/actions/user';
+import showToast from '../../shared/Toast';
 
 const lockGrey = require('../../assets/images/login/lock.png');
-//const passwordGrey = require('../images/darkgrey/password.png');
 const emailGrey = require('../../assets/images/login/email.png');
 const image = require('../../assets/images/global/DrMax.png');
 const backgroundImage = require('../../assets/images/global/background.jpg');
 
-const start = props => {
+const signIn = props => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
@@ -35,14 +37,6 @@ const start = props => {
     });
   };
 
-  const showToast = (text) => {
-    Toast.show({
-      text: text,
-      position: "bottom",
-      duration: 3000,
-    });
-  };
-
   const login = () => {
     if(user.email && user.password) {
       setLoading(true);
@@ -50,14 +44,15 @@ const start = props => {
         email: user.email,
         password: user.password
       }).then(async res => {
-        //console.log(res.status);
         if(res.status === 200 && res.data.token) {
-          await AsyncStorage.setItem('token', JSON.stringify(res.data.token));
+          const newToken = JSON.stringify(res.data.token);
+          await AsyncStorage.setItem('token', newToken);
           await AsyncStorage.setItem('user', JSON.stringify(res.data));
           setLoading(false);
-          props.navigation.navigate('Main');
+          //props.navigation.navigate('Main');
+          dispatch(setToken(newToken));
         } else {
-          {showToast("Ha ocurrido un error")}
+          showToast('There was an error', 'default');
           setLoading(false);
         }
       }).catch((err) => {
@@ -65,7 +60,7 @@ const start = props => {
         setLoading(false);
       });
     } else {
-      {showToast("Complete all parameters")}
+      showToast('Fill in all parameters', 'default');
     }
   };
 
@@ -118,7 +113,7 @@ const start = props => {
             <Text style={styles.text}>
               <Text>¿No tienes cuenta? </Text>
               <Text style={styles.bold}
-                    onPress={() => props.navigation.navigate('SignUpScreen')}>
+                    onPress={() => props.navigation.navigate('SignUp')}>
                 Crea una
               </Text>
             </Text>
@@ -186,4 +181,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
-export default start;
+export default signIn;

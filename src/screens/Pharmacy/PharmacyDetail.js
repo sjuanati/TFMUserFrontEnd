@@ -53,14 +53,15 @@ const pharmacyDetail = (props) => {
     };
 
     useEffect(() => {
-        let item = props.navigation.getParam('item');
+        //let item = props.navigation.getParam('item');
+        const { item } = props.route.params;
         setPharmacy(item);
         fetchSchedule(item);
     }, []);
 
     const goBack = () => {
         dispatch(setFavPharmacy(
-            pharmacy.pharmacy_id, 
+            pharmacy.pharmacy_id,
             pharmacy.pharmacy_desc,
             pharmacy.eth_address));
         props.navigation.goBack(null);

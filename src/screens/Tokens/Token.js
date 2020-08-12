@@ -37,12 +37,18 @@ const token = (props) => {
     }, []);
 
     // Load <balance> every time the screen is shown (in focus)
+    // useEffect(() => {
+    //     const focusListener = props.navigation.addListener("didFocus", () => {
+    //         fetchTokenBalance();
+    //     });
+    //     return () => focusListener.remove();
+    // }, []);
     useEffect(() => {
-        const focusListener = props.navigation.addListener("didFocus", () => {
+        const focusListener = props.navigation.addListener('focus', () => {
             fetchTokenBalance();
         });
-        return () => focusListener.remove();
-    }, []);
+        return focusListener;
+    }, [props.navigation]);
 
     const fetchTokenBalance = async () => {
         await axios.get(`${httpUrl}/token/get/balance`, {

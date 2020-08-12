@@ -38,7 +38,8 @@ const getOrderDetail = (props) => {
 
     const startFunctions = async () => {
         try {
-            const order_id = props.navigation.getParam('order');
+            //const order_id = props.navigation.getParam('order');
+            const { order_id } = props.route.params;
             await getOrder(user.id, order_id, user.token);
             await fetchOrderTraceGlobal(order_id);
             setLoading(false);
@@ -155,7 +156,7 @@ const getOrderDetail = (props) => {
                 chevron
             >
                 <View>
-                    <Text style={styles.subtitleText}>Item {index+1}: </Text>
+                    <Text style={styles.subtitleText}>Item {index + 1}: </Text>
                     <Text>{item.product_desc}</Text>
                     <Text style={styles.subtitleText}>{item.price} € </Text>
                 </View>
@@ -270,8 +271,8 @@ const getOrderDetail = (props) => {
 
     return (
         <Container>
-            {(loading || !order[0]) 
-                ? <Spinner color='#F4B13E' /> 
+            {(loading || !order[0])
+                ? <Spinner color='#F4B13E' />
                 : <RenderPage />
             }
         </Container>

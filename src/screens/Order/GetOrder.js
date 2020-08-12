@@ -50,49 +50,23 @@ const getOrder = (props) => {
     });
     const [searchText, setSearchText] = useState('');
 
-    // useEffect(() => {
-    //     console.log(user);
-    //     dispatch(setOrdersPage(true));
-    // }, []);
-
-    // useEffect(() => {
-    //     if (ordersPage) {
-    //         startFunctions()
-    //             .catch(error => {
-    //                 console.warn(JSON.stringify(error));
-    //             });
-    //         setIsActive(true);
-    //     } else {
-    //         setIsActive(false);
-    //     }
-    // }, [ordersPage]);
-
-    // useEffect(() => {
-    //     let interval = null;
-    //     if (!isActive) {
-    //         clearInterval(interval);
-    //     } else {
-    //         interval = setInterval(() => {
-    //             startFunctions()
-    //                 .catch(error => {
-    //                     console.warn(JSON.stringify(error));
-    //                 });
-    //         }, 60000);
-    //     }
-    //     return () => clearInterval(interval);
-    // }, [isActive]);
-
     useEffect(() => {
         startFunctions();
     }, []);
 
     // Load orders every time the screen is loaded (in focus)
+    // useEffect(() => {
+    //     const focusListener = props.navigation.addListener("didFocus", () => {
+    //         startFunctions();
+    //     });
+    //     return () => focusListener.remove();
+    // }, []);
     useEffect(() => {
-        const focusListener = props.navigation.addListener("didFocus", () => {
+        const focusListener = props.navigation.addListener('focus', () => {
             startFunctions();
         });
-        return () => focusListener.remove();
-    }, []);
+        return focusListener;
+    }, [props.navigation]);
 
     const startFunctions = async () => {
         try {
@@ -184,7 +158,7 @@ const getOrder = (props) => {
         if (item) {
             //dispatch(setOrdersPage(false));
             props.navigation.navigate('OrderDetail', {
-                order: item.order_id
+                order_id: item.order_id
             });
         } else {
             console.log('Error opening order')
