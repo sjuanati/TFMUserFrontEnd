@@ -270,7 +270,14 @@ const ProfileStackScreen = () => (
     </ProfileStack.Navigator>
 );
 
-const LoginStack = createStackNavigator();
+
+export type LoginStackParamList = {
+    SignIn: undefined;
+    SignUp: undefined;
+};
+
+//const LoginStack = createStackNavigator();
+const LoginStack = createStackNavigator<LoginStackParamList>();
 
 const LoginStackScreen = () => (
     <LoginStack.Navigator>

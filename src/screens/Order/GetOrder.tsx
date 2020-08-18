@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Badge,
@@ -50,7 +49,8 @@ interface FilterType {
 const GetOrder = (props: Props) => {
 
     const [loading, setLoading] = useState(true);
-    const [orders, setOrders] = useState([]);
+    //const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState<OrderType[]>();
     const [originalOrders, setOriginalOrders] = useState([]);
     const user = useTypedSelector(state => state.user);
     const [filters, setFilters] = useState({
@@ -292,21 +292,6 @@ const GetOrder = (props: Props) => {
                             }} />
                     </Item>
                 </Item>
-                {/* <Item>
-                    <SearchBar
-                        placeholder="Search pharmacy"
-                        onChangeText={(text) => {
-                            setSearchText(text);
-                            findOrder(text, originalOrders, filters)
-                        }}
-                        value={searchText}
-                        autoCapitalize='none'
-                        maxLength={100}
-                        //selectionColor={Cons.COLORS.ORANGE}
-                        //inputStyle={styles.searchFieldInput}
-                        //containerStyle={styles.searchFieldContainer}
-                        platform={Platform.OS == 'ios' ? 'ios' : 'android'} />
-                </Item> */}
                 {
                     (filters.grey) ?
                         <TouchableOpacity onPress={async () => {

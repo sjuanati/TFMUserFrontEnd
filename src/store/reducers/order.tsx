@@ -25,6 +25,9 @@ const addItem = (state: RootState['order'], action: RootState['order'] & RootSta
         dose_qty: action.dose_qty,
         dose_form: action.dose_form,
         leaflet_url: action.leaflet_url,
+        screen: '',
+        max_date: new Date(),
+        prescription: false,
     }];
     state.items = [...state.items, ...newItem];
 

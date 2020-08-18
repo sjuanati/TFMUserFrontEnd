@@ -17,13 +17,21 @@ import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/actions/user';
 import showToast from '../../shared/Toast';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { LoginStackParamList } from '../../navigation/StackNavigator';
 
 const lockGrey = require('../../assets/images/login/lock.png');
 const emailGrey = require('../../assets/images/login/email.png');
 const image = require('../../assets/images/global/DrMax.png');
 const backgroundImage = require('../../assets/images/global/background.jpg');
 
-const SignIn = (props) => {
+type Props = {
+  route: RouteProp<LoginStackParamList, 'SignIn'>,
+  navigation: StackNavigationProp<LoginStackParamList, 'SignIn'>
+};
+
+const SignIn = (props: Props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({

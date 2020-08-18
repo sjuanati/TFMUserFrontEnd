@@ -174,7 +174,6 @@ const PharmacySearch = (props: Props) => {
 
     // Show list of pharmacies around
     const renderItemPharmaciesAround = ({ item }: { item: Pharma }) => {
-        console.log('values:', item);
         return (
             <ListItem
                 title={item.pharmacy_desc}

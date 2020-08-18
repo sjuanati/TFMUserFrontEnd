@@ -13,7 +13,7 @@ import { httpUrl } from '../../../urlServer';
 import { RNCamera } from 'react-native-camera';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList } from '../../navigation/StackNavigator';
+import { HomeStackParamList, Product } from '../../navigation/StackNavigator';
 import { addItem, setScanned } from '../../store/actions/order';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../store/reducers/reducer';
@@ -71,12 +71,12 @@ const MakeOrderScan = (props: Props) => {
             });
     };
 
-    const buildOrder = (data) => {
+    const buildOrder = (data: any) => {
 
         // Add every prescription item in the Order (redux)
-        data.forEach(elem => {
+        data.forEach((elem: Product) => {
             dispatch(addItem(
-                elem.prescription_item,
+                elem.item_id,
                 elem.product_id,
                 elem.product_desc,
                 elem.price,

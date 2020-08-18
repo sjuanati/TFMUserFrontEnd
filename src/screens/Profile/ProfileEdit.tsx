@@ -29,7 +29,6 @@ const ProfileEdit = () => {
 
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
-    //const avatar = useTypedSelector(state => state.avatar);
     const modal = useTypedSelector(state => state.modal);
     const [name, setName] = useState(user.name);
     const [gender, setGender] = useState(user.gender);
@@ -47,13 +46,8 @@ const ProfileEdit = () => {
     const [locality, setLocality] = useState(user.locality);
     const [zipcode, setZipcode] = useState(user.zip_code);
     const [country, setCountry] = useState(user.country);
-    //const [photo, setPhoto] = useState('');
     const [isPickerOpen, setIsPickerOpen] = useState(false);
     const [isLoading, setIsLoding] = useState(false);
-
-    // useEffect(() => {
-    //     setPhoto(avatar.photo);
-    // }, [avatar.photo]);
 
     const checkTextInput = async () => {
         return new Promise((resolve) => {
@@ -136,7 +130,6 @@ const ProfileEdit = () => {
         setLocality(user.locality);
         setZipcode(user.zip_code);
         setCountry(user.country);
-        //setPhoto(avatar.photo);
 
         //TODO: Remove files if App closes, but not during the execution. Otherwise, the photo can't be loaded
         // Alt: Load photo in binary into avatar.photo, and delete the file right afterwards.
@@ -169,12 +162,9 @@ const ProfileEdit = () => {
                 country
             ));
 
-            // Update User's profile, address and photo. In case of error, show message and do not close Modal
-            if ((await saveProfileToDB()) && (await saveAddressToDB()) /*&& (await savePhotoToS3([{ photo_url: photo }])) */) {
+            // Update User's profile and address. In case of error, show message and do not close Modal
+            if ((await saveProfileToDB()) && (await saveAddressToDB())) {
                 toggleIsModalOpen();
-                //TODO: Remove files if App closes, but not during the execution. Otherwise, the photo can't be loaded
-                // Alt: Load photo in binary into avatar.photo, and delete the file right afterwards.
-                //removePhotoFromFile();
             } else {
                 Alert.alert('Error al guardar el perfil');
             }
@@ -195,7 +185,7 @@ const ProfileEdit = () => {
                         email: email.toLowerCase().trim(),
                         birthday: birthday,
                         phone: phone,
-                        photo: null/*(photo) ? `${user.id}.jpg` : null*/,
+                        photo: null,
                     },
                 }, {
                     headers: {
@@ -272,13 +262,10 @@ const ProfileEdit = () => {
             buttonIndex => {
                 if (buttonIndex === 1) {
                     setGender('Male');
-                    //setgenderIcon(MALE);
                 } else if (buttonIndex === 2) {
                     setGender('Female');
-                    //setgenderIcon(FEMALE);
                 } else if (buttonIndex === 3) {
                     setGender('Others');
-                    //setgenderIcon(OTHERS);
                 }
             }
         );
@@ -309,19 +296,6 @@ const ProfileEdit = () => {
                         <View>
                             <ActivityIndicator isLoading={isLoading} />
                         </View>
-                        {/* <View style={styles.containerHeader}>
-                            <View style={styles.profileImage}>
-                                <ImageBackground
-                                    source={photo ? { uri: photo } : null}
-                                    style={styles.image}>
-                                </ImageBackground>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={changePhoto}>
-                                <Text style={styles.buttonText}> Cambiar foto </Text>
-                            </TouchableOpacity>
-                        </View> */}
                         <View style={styles.container}>
                             <View style={styles.inputContainer}>
                                 <Text style={styles.text}>Nombre y apellidos </Text>

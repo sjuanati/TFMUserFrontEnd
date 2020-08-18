@@ -12,9 +12,8 @@ import { useDispatch } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList } from '../../navigation/StackNavigator';
+import { HomeStackParamList, OrderType } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
-import Button from '../../UI/Button';
 import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';
 import fontSize from '../../shared/FontSize';
@@ -53,7 +52,7 @@ const OrderSummary = (props: Props) => {
     };
 
     // Show medicine item in List
-    const renderItem = ({ item }: {item: number}) => {
+    const renderItem = ({ item }: { item: number }) => {
         order[item].screen = 'OrderSummary';
         return (
             <ListItem
@@ -68,7 +67,11 @@ const OrderSummary = (props: Props) => {
     const renderAddItem = () => (
         <View style={styles.container_body}>
             <Text style={styles.text}> No items in Cart </Text>
-            <Button target="MakeOrder" desc="Add Product" nav={props.navigation} />
+            <TouchableOpacity
+                style={globalStyles.button}
+                onPress={() => props.navigation.navigate('MakeOrder')}>
+                <Text>Add Product </Text>
+            </TouchableOpacity>
         </View>
     );
 

@@ -38,11 +38,11 @@ interface Pharmacy {
     web: string
 }
 
-interface Schedule {
-    result: string[],
-    isOpen: boolean,
-    day: number
-}
+// interface Schedule {
+//     result: string[],
+//     isOpen: boolean,
+//     day: number
+// }
 
 type Props = {
     route: RouteProp<HomeStackParamList, 'PharmacyDetails'>,
@@ -85,7 +85,7 @@ const PharmacyDetail = (props: Props) => {
                     const res = response.data;
                     console.log('res:', res);
                     //const [resultSchedule, resultOpenNow, resDay] = PharmacySchedule(res);
-                    const { result, isOpen, day }: Schedule = PharmacySchedule(res);
+                    const { result, isOpen, day }: any = PharmacySchedule(res);
                     setSchedule(result);
                     setOpenNow(isOpen);
                     setWeekday(day);
@@ -97,7 +97,7 @@ const PharmacyDetail = (props: Props) => {
     };
 
     useEffect(() => {
-        const { item } = props.route.params;
+        const { item }: any = props.route.params;
         //const { item }: Pharma = props.route.params;
         console.log('item:', item);
         setPharmacy(item);
@@ -234,7 +234,7 @@ const PharmacyDetail = (props: Props) => {
                                 : null}
                         </View>
                         {(isShowingSchedule)
-                            ? schedule.map((item, index) => {
+                            ? schedule?.map((item, index) => {
                                 if (weekday === index) {
                                     return (<Text style={styles.valuesSelected} key={index}> {item} </Text>);
                                 } else {

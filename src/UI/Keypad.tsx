@@ -7,8 +7,12 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+interface Props {
+    onAddNumber(value: string): void,
+    onRemoveNumber(): void
+}
 
-const keypad = (props) => {
+const keypad = (props: Props) => {
 
     return (
     <View style={styles.keyboardContainer}>

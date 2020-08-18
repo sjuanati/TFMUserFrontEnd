@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 
-const activityIndicator = ({ isLoading }) => {
+const activityIndicator = ({ isLoading }: {isLoading: boolean}) => {
     return (
         <View>
             <ActivityIndicator

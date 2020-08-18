@@ -2,7 +2,7 @@ import moment from 'moment';
 
 // Given a Pharmacy schedule, it returns a structured schedule, if it is open now
 // and the day of the week
-const ParseSchedule = (res) => {
+const ParseSchedule = (res: any) => {
 
     try {
         const s = res[0];

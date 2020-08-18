@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import {
    View,
    Alert,
@@ -28,6 +28,9 @@ import { httpUrl } from '../../../urlServer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/actions/user';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { LoginStackParamList } from '../../navigation/StackNavigator';
 
 const image = require('../../assets/images/global/DrMax.png');
 const backgroundImage = require('../../assets/images/global/background.jpg');
@@ -37,7 +40,12 @@ const phoneGrey = require('../../assets/images/login/phone.png');
 const userGrey = require('../../assets/images/login/user.png');
 const emailGrey = require('../../assets/images/login/email.png');
 
-const SignUp: FC = (props) => {
+type Props = {
+   route: RouteProp<LoginStackParamList, 'SignIn'>,
+   navigation: StackNavigationProp<LoginStackParamList, 'SignIn'>
+ };
+
+const SignUp = (props: Props) => {
 
    const dispatch = useDispatch();
    const [isLegalAccepted, setIsLegalAccepted] = useState(false);
