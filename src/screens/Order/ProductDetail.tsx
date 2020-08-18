@@ -5,16 +5,23 @@ import {
     Alert,
     Linking,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import globalStyles from '../../UI/Style';
 import Cons from '../../shared/Constants';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
-import { useDispatch } from 'react-redux';
 import { addItem, removeItem } from '../../store/actions/order';
 
+type Props = {
+    route: RouteProp<HomeStackParamList, 'ProductDetail'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'ProductDetail'>
+};
 
-const ProductDetail = (props) => {
+const ProductDetail = (props: Props) => {
 
     const { item_id, product_id, product_desc, dose_qty, dose_form, prescription,
         price, leaflet_url, screen } = props.route.params;
@@ -24,7 +31,7 @@ const ProductDetail = (props) => {
 
     const handleRemoveItem = () => {
         dispatch(removeItem(item_id));
-        props.navigation.goBack()
+        props.navigation.goBack();
     };
 
     const handleAddItem = () => {
@@ -40,14 +47,14 @@ const ProductDetail = (props) => {
         props.navigation.goBack();
     };
 
-    const handleURL = url => {
+    const handleURL = (url: string) => {
 
         Linking.canOpenURL(url)
             .then((supported) => {
                 if (supported) {
                     Linking.openURL(url);
                 } else {
-                    Alert.alert(`Can't open browser`);
+                    Alert.alert('Can\'t open browser');
                 }
             })
             .catch(err => console.warn('Error on MakeOrderDetail.js -> handleURL(): ', err));
@@ -66,7 +73,7 @@ const ProductDetail = (props) => {
             <TouchableOpacity
                 style={[globalStyles.button, styles.button]}
                 onPress={() => {
-                    (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem()
+                    (screen === 'OrderSummary') ? handleRemoveItem() : handleAddItem();
                 }}>
                 <Text style={[globalStyles.buttonText, styles.bold]}>
                     {(screen === 'OrderSummary') ? 'Delete' : 'Add Product'}

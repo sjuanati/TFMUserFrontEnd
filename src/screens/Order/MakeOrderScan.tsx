@@ -1,4 +1,4 @@
-// Libs
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Text,
@@ -11,6 +11,9 @@ import axios from 'axios';
 import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
 import { RNCamera } from 'react-native-camera';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { addItem, setScanned } from '../../store/actions/order';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../store/reducers/reducer';
@@ -19,7 +22,12 @@ import IconTarget from 'react-native-vector-icons/SimpleLineIcons';
 
 const window = Dimensions.get('screen');
 
-const MakeOrderScan = (props) => {
+type Props = {
+    route: RouteProp<HomeStackParamList, 'MakeOrderScan'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'MakeOrderScan'>
+};
+
+const MakeOrderScan = (props: Props) => {
 
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
@@ -28,7 +36,7 @@ const MakeOrderScan = (props) => {
     const [isFlashOn, setIsFlashOn] = useState(false);
 
     useEffect(() => {
-        if (barcode && !isAlreadyScanned) fetchPrescription(barcode);
+        if (barcode && !isAlreadyScanned) { fetchPrescription(barcode); }
     }, [barcode]);
 
     const onBarCodeRead = (elem) => {
@@ -55,11 +63,11 @@ const MakeOrderScan = (props) => {
                     // No Prescription found in DB -> Go back to MakeOrder
                 } else {
                     dispatch(setScanned(true));
-                    props.navigation.navigate('Order');
+                    props.navigation.navigate('MakeOrder');
                 }
             })
             .catch(err => {
-                console.log('Error in MakeOrderScan.js -> fetchPrescription(): ', err)
+                console.log('Error in MakeOrderScan.js -> fetchPrescription(): ', err);
             });
     };
 
@@ -67,12 +75,14 @@ const MakeOrderScan = (props) => {
 
         // Add every prescription item in the Order (redux)
         data.forEach(elem => {
-            console.log('price1: ', elem.price);
             dispatch(addItem(
                 elem.prescription_item,
                 elem.product_id,
                 elem.product_desc,
                 elem.price,
+                elem.dose_qty,
+                elem.dose_form,
+                elem.leaflet_url,
             ));
         });
 
@@ -97,7 +107,7 @@ const MakeOrderScan = (props) => {
                 <View style={styles.buttonOverlay}>
                     <TouchableOpacity
                         style={[globalStyles.button, styles.button]}
-                        onPress={() => props.navigation.goBack(null)}>
+                        onPress={() => props.navigation.goBack()}>
                         <Text> Back </Text>
                     </TouchableOpacity>
                 </View>
@@ -126,7 +136,6 @@ const MakeOrderScan = (props) => {
             }
         </View>
     );
-
 };
 
 const styles = StyleSheet.create({

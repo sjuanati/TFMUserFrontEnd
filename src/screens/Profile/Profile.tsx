@@ -19,14 +19,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { setIsModalProfileOpen } from '../../store/actions/modal';
 import { setToken } from '../../store/actions/user';
 
-
-const Profile = (props) => {
+const Profile = () => {
 
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
     const modal = useTypedSelector(state => state.modal);
 
-    let genderIcon: any;
+    let genderIcon: string;
     const MALE = 'ios-male';
     const FEMALE = 'ios-female';
     const OTHERS = 'ios-transgender';
@@ -63,7 +62,7 @@ const Profile = (props) => {
 
     // Opens a URL in the browser
     const handleURL = () => {
-        const url = 'https://www.doctormax.es/privacidad-y-condiciones-de-uso/'
+        const url = 'https://www.doctormax.es/privacidad-y-condiciones-de-uso/';
         Linking.canOpenURL(url)
             .then((supported) => {
                 if (supported) {
@@ -77,7 +76,6 @@ const Profile = (props) => {
                 console.log('Error on Profile.js -> handleURL(): ', err);
             });
     };
-
 
     const renderShowProfile = () => (
         <View>

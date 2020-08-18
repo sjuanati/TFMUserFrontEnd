@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const headerBackIcon = (props) => (
+const headerBackIcon = () => (
     <View style={styles.back}>
         <Ionicons
             name="ios-arrow-back"

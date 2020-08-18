@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 
 export const addItem = (
-    item_id: string,
+    item_id: number,
     product_id: number,
     product_desc: string,
     price: number,
@@ -19,7 +19,7 @@ export const addItem = (
         leaflet_url: leaflet_url,
     });
 
-export const removeItem = (item_id: string) => ({
+export const removeItem = (item_id: number) => ({
     type: actionTypes.REMOVE_FROM_CART,
     item_id: item_id,
 });
@@ -34,7 +34,7 @@ export const clearCart = (ordered: boolean) => ({
     ordered: ordered,
 });
 
-export const setOrdersPage = (ordersPage) => ({
+export const setOrdersPage = (ordersPage: boolean) => ({
     type: actionTypes.SET_ORDERS_PAGE,
     ordersPage: ordersPage,
 });

@@ -8,8 +8,11 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
+import { ListItem } from 'react-native-elements';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import Button from '../../UI/Button';
 import Cons from '../../shared/Constants';
@@ -19,8 +22,12 @@ import { clearCart } from '../../store/actions/order';
 
 const FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
 
+type Props = {
+    route: RouteProp<HomeStackParamList, 'OrderSummary'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'OrderSummary'>
+};
 
-const OrderSummary = (props) => {
+const OrderSummary = (props: Props) => {
 
     // Get orders from state
     const order = useTypedSelector(state => state.order.items);
@@ -33,7 +40,8 @@ const OrderSummary = (props) => {
         Alert.alert(
             'Clear Order?', 'All items will be removed from the Cart',
             [{
-                text: 'Cancel', onPress: () => { }, style: 'cancel'
+                text: 'Cancel', onPress: () => { },
+                style: 'cancel',
             }, {
                 text: 'OK', onPress: async () => {
                     dispatch(clearCart(false));
@@ -45,7 +53,7 @@ const OrderSummary = (props) => {
     };
 
     // Show medicine item in List
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item }: {item: number}) => {
         order[item].screen = 'OrderSummary';
         return (
             <ListItem
@@ -70,7 +78,7 @@ const OrderSummary = (props) => {
             <TouchableOpacity
                 onPress={() => props.navigation.navigate('PharmacySearch')}>
                 {(user.favPharmacyID)
-                    ? <Text style={styles.subText}> Farmacia {user.favPharmacyDesc} </Text>
+                    ? <Text style={styles.subText}> Pharmacy {user.favPharmacyDesc} </Text>
                     : <Text style={styles.subText}> No pharmacy selected </Text>}
             </TouchableOpacity>
             <Text style={styles.priceText}>Total price: <Text style={styles.bold}>{price} €</Text></Text>
@@ -84,7 +92,7 @@ const OrderSummary = (props) => {
                 {(order.length > 0)
                     ? <FlatList
                         data={Object.keys(order)}
-                        keyExtractor={item => item}
+                        keyExtractor={(item) => item}
                         renderItem={renderItem} />
                     : null}
             </View>

@@ -1,6 +1,6 @@
 import { Toast } from 'native-base';
 
-const showToast = (text, type) => {
+const showToast = (text: string, type) => {
     Toast.show({
         text: text,
         type: type,

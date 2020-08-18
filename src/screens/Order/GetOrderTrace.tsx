@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Text,
@@ -10,36 +11,42 @@ import moment from 'moment';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import { httpUrl } from '../../../urlServer';
 import { ListItem } from 'react-native-elements';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { OrderStackParamList } from '../../navigation/StackNavigator';
 
 //const box_width = 50;
 
-const GetOrderTrace = (props) => {
+type Props = {
+    route: RouteProp<OrderStackParamList, 'OrderTrace'>,
+    navigation: StackNavigationProp<OrderStackParamList, 'OrderTrace'>
+};
 
-    //const order_id = props.navigation.getParam('order_id');
+const GetOrderTrace = (props: Props) => {
+
     const { order_id } = props.route.params;
     const user = useTypedSelector(state => state.user);
     const [order, setOrder] = useState([]);
 
     useEffect(() => {
+        const fetchOrderTrace = async () => {
+            await axios.get(`${httpUrl}/trace/order`, {
+                params: { order_id: order_id },
+                headers: { authorization: user.token },
+            }).then(res => {
+                setOrder(res.data);
+            }).catch(err => {
+                console.log('Error in GetOrderTrace.js -> getOrderTrace() -> fetchOrderTrace(): ', err);
+            });
+        };
         fetchOrderTrace();
     }, []);
-
-    const fetchOrderTrace = async () => {
-        await axios.get(`${httpUrl}/trace/order`, {
-            params: { order_id: order_id },
-            headers: { authorization: user.token },
-        }).then(res => {
-            setOrder(res.data);
-        }).catch(err => {
-            console.log('Error in GetOrderTrace.js -> getOrderTrace() -> fetchOrderTrace(): ', err);
-        });
-    }
 
     const showTrimmedHash = (hash: string) => {
         return hash.slice(0, 25) + '...' + hash.slice(-5);
     };
 
-    const showChecksum = (checksum: string, error) => {
+    const showChecksum = (checksum: string, error: string) => {
         switch (checksum) {
             case 'OK':
                 return <Text style={styles.textValidated}>Validated </Text>;
@@ -53,7 +60,7 @@ const GetOrderTrace = (props) => {
     };
 
     // Render list of Order items
-    const renderOrderItems = (values) => (
+    const renderOrderItems = (values: any) => (
         <ListItem
             title={<Text style={styles.textHeader}>{values.item.status_desc}</Text>}
             subtitle={

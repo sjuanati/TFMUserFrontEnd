@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Badge,
@@ -27,11 +28,26 @@ import { httpUrl } from '../../../urlServer';
 import fontSize from '../../shared/FontSize';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { OrderStackParamList, OrderType } from '../../navigation/StackNavigator';
 
 // Font size management
 let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
 
-const GetOrder = (props) => {
+type Props = {
+    route: RouteProp<OrderStackParamList, 'Orders'>,
+    navigation: StackNavigationProp<OrderStackParamList, 'Orders'>
+};
+
+interface FilterType {
+    grey: boolean,
+    red: boolean,
+    yellow: boolean,
+    green: boolean
+}
+
+const GetOrder = (props: Props) => {
 
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState([]);
@@ -72,11 +88,11 @@ const GetOrder = (props) => {
         });
     };
 
-    const findOrder = (text: string, arrayOrders, modFilters) => {
+    const findOrder = (text: string, arrayOrders: OrderType, modFilters: FilterType) => {
         return new Promise(async (resolve) => {
             if (text !== '') {
                 const ordersToFilter = await applyFilter(modFilters, arrayOrders);
-                let res = ordersToFilter.filter((ordr) => {
+                const res = ordersToFilter.filter((ordr: OrderType) => {
                     let condition = new RegExp(text);
                     return condition.test(ordr.pharmacy_desc);
                 });
@@ -92,25 +108,25 @@ const GetOrder = (props) => {
         });
     };
 
-    const applyFilter = async (filters, arrayOrders) => {
+    const applyFilter = async (filters: FilterType, arrayOrders: any) => {
         return new Promise((resolve) => {
 
             let finalArray = [];
             if (filters.grey && filters.red && filters.yellow && filters.green) {
                 finalArray = arrayOrders;
             } else if (!filters.grey && !filters.red && filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter(ordr => ordr.status === 2 || ordr.status === 4);
+                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 2 || ordr.status === 4);
             } else if (!filters.grey && !filters.red && !filters.yellow && filters.green) {
-                finalArray = arrayOrders.filter(ordr => ordr.status === 5);
+                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 5);
             } else if (!filters.grey && filters.red && !filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter(ordr => ordr.status === 6);
+                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 6);
             } else if (filters.grey && !filters.red && !filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter(ordr => ordr.status === 1 || ordr.status === 3);
+                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 1 || ordr.status === 3);
             } else if (!filters.grey && !filters.red && !filters.yellow && !filters.green) {
                 finalArray = [];
             }
 
-            let initialItem = finalArray.find((item) => item.order_id === 0);
+            let initialItem = finalArray.find((item: OrderType) => item.order_id === 0);
             if (!initialItem) { finalArray.unshift({ order_id: 0, header: true }); }
             resolve(finalArray);
         });
@@ -118,14 +134,13 @@ const GetOrder = (props) => {
 
     const getOrders = async () => {
         return new Promise((resolve) => {
-            console.log('tot:', user);
             axios.get(`${httpUrl}/order/get/user`, {
                 params: { user_id: user.id },
                 headers: { authorization: user.token },
             }).then(async res => {
                 if (res.status === 200 || res.status === 304) {
-                    let ordrs = res.data;
-                    let initialOrder = [{ order_id: 0, header: true }];
+                    const ordrs = res.data;
+                    const initialOrder = [{ order_id: 0, header: true }];
                     setOriginalOrders(() => [...initialOrder, ...ordrs]);
                     await findOrder(searchText, [...initialOrder, ...ordrs], filters);
                     setLoading(false);
@@ -140,7 +155,7 @@ const GetOrder = (props) => {
         });
     };
 
-    const openOrder = async ({ item }) => {
+    const openOrder = async ({ item }: { item: any }) => {
         if (item) {
             //dispatch(setOrdersPage(false));
             props.navigation.navigate('OrderDetail', {
@@ -151,7 +166,7 @@ const GetOrder = (props) => {
         }
     };
 
-    const renderItem = (item) => {
+    const renderItem = (item: any) => {
         return (
             <View>
                 {(item.item.header) ?
@@ -194,7 +209,7 @@ const GetOrder = (props) => {
         );
     };
 
-    const RenderDate = ({ date }) => {
+    const RenderDate = ({ date }: { date: Date }) => {
         return (
             <Text note>
                 {('0' + date.getHours()).slice(-2)}:
@@ -203,10 +218,10 @@ const GetOrder = (props) => {
                 {('0' + (date.getMonth() + 1).toString()).slice(-2)}/
                 {(date.getFullYear())}
             </Text>
-        )
+        );
     };
 
-    const StatusOrder = ({ status }) => {
+    const StatusOrder = ({ status }: { status: number }) => {
         if (status === 0) {
             return (<Text style={styles.statusGrey}>DRAFT</Text>);
         } else if (status === 1) {
@@ -243,7 +258,7 @@ const GetOrder = (props) => {
                 : <View style={styles.viewContent}>
                     <FlatList data={orders}
                         renderItem={renderItem}
-                        keyExtractor={item => item.order_id.toString()}
+                        keyExtractor={(item: OrderType) => item.order_id.toString()}
                         refreshControl={
                             <RefreshControl
                                 refreshing={loading}
@@ -302,8 +317,8 @@ const GetOrder = (props) => {
                                 modFilters.red = false;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             } else {
                                 let modFilters = { ...filters };
                                 modFilters.yellow = true;
@@ -312,12 +327,12 @@ const GetOrder = (props) => {
                                 modFilters.grey = true;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             }
                         }}>
                             <Badge style={{ backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', width: 25, height: 25, marginHorizontal: 7, marginTop: 15 }}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -325,11 +340,11 @@ const GetOrder = (props) => {
                             modFilters.grey = true;
 
                             setFilters(modFilters);
-                            let orders = await findOrder(searchText, originalOrders, modFilters);
-                            setOrders(orders);
+                            const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                            setOrders(ordrs);
                         }}>
                             <Badge style={{ backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', width: 25, height: 25, marginHorizontal: 7, marginTop: 15, opacity: 0.5 }}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -343,8 +358,8 @@ const GetOrder = (props) => {
                                 modFilters.red = false;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             } else {
                                 let modFilters = { ...filters };
                                 modFilters.yellow = true;
@@ -353,12 +368,12 @@ const GetOrder = (props) => {
                                 modFilters.grey = true;
 
                                 setFilters(modFilters);
-                                const orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             }
                         }}>
                             <Badge warning style={styles.filterBadge}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -369,11 +384,11 @@ const GetOrder = (props) => {
                             modFilters.grey = false;
 
                             setFilters(modFilters);
-                            let orders = await findOrder(searchText, originalOrders, modFilters);
-                            setOrders(orders);
+                            const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                            setOrders(ordrs);
                         }}>
                             <Badge warning style={styles.filterBadgeNonSelected}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -387,8 +402,8 @@ const GetOrder = (props) => {
                                 modFilters.red = false;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             } else {
                                 let modFilters = { ...filters };
                                 modFilters.yellow = true;
@@ -397,12 +412,12 @@ const GetOrder = (props) => {
                                 modFilters.grey = true;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             }
                         }}>
                             <Badge success style={styles.filterBadge}>
-                                <Icon name="checkmark" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="checkmark" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -413,11 +428,11 @@ const GetOrder = (props) => {
                             modFilters.grey = false;
 
                             setFilters(modFilters);
-                            let orders = await findOrder(searchText, originalOrders, modFilters);
-                            setOrders(orders);
+                            const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                            setOrders(ordrs);
                         }}>
                             <Badge success style={styles.filterBadgeNonSelected}>
-                                <Icon name="checkmark" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="checkmark" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -431,8 +446,8 @@ const GetOrder = (props) => {
                                 modFilters.green = false;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             } else {
                                 let modFilters = { ...filters };
                                 modFilters.yellow = true;
@@ -441,12 +456,12 @@ const GetOrder = (props) => {
                                 modFilters.grey = true;
 
                                 setFilters(modFilters);
-                                let orders = await findOrder(searchText, originalOrders, modFilters);
-                                setOrders(orders);
+                                const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                                setOrders(ordrs);
                             }
                         }}>
                             <Badge danger style={styles.filterBadge}>
-                                <Icon name="close" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="close" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -457,11 +472,11 @@ const GetOrder = (props) => {
                             modFilters.grey = false;
 
                             setFilters(modFilters);
-                            let orders = await findOrder(searchText, originalOrders, modFilters);
-                            setOrders(orders);
+                            const ordrs = await findOrder(searchText, originalOrders, modFilters);
+                            setOrders(ordrs);
                         }}>
                             <Badge danger style={styles.filterBadgeNonSelected}>
-                                <Icon name="close" style={{ fontSize: 14, color: "#fff" }} />
+                                <Icon name="close" style={{ fontSize: 14, color: '#fff' }} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -498,7 +513,7 @@ const styles = StyleSheet.create({
     titlePage: {
         fontSize: FONT_SIZE + 10, //30,
         fontWeight: 'bold',
-        textAlign: 'left'
+        textAlign: 'left',
     },
     viewContent: {
         flex: 1,

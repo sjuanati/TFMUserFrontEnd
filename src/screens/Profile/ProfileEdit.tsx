@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -25,11 +25,11 @@ import ActivityIndicator from '../../UI/ActivityIndicator';
 import { setData, setAddress } from '../../store/actions/user';
 import { setIsModalProfileOpen } from '../../store/actions/modal';
 
-const ProfileEdit = (props) => {
+const ProfileEdit = () => {
 
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
-    const avatar = useTypedSelector(state => state.avatar);
+    //const avatar = useTypedSelector(state => state.avatar);
     const modal = useTypedSelector(state => state.modal);
     const [name, setName] = useState(user.name);
     const [gender, setGender] = useState(user.gender);
@@ -37,7 +37,7 @@ const ProfileEdit = (props) => {
     if (user.birthday) {
         parsedBirthday = new Date(moment(user.birthday).format('YYYY-MM-DD'));
     } else {
-        parsedBirthday = new Date(moment('1980-01-01').format('YYYY-MM-DD'))
+        parsedBirthday = new Date(moment('1980-01-01').format('YYYY-MM-DD'));
         user.birthday = parsedBirthday;
     }
     const [birthday, setBirthday] = useState(parsedBirthday);
@@ -47,25 +47,13 @@ const ProfileEdit = (props) => {
     const [locality, setLocality] = useState(user.locality);
     const [zipcode, setZipcode] = useState(user.zip_code);
     const [country, setCountry] = useState(user.country);
-    const [photo, setPhoto] = useState('');
+    //const [photo, setPhoto] = useState('');
     const [isPickerOpen, setIsPickerOpen] = useState(false);
     const [isLoading, setIsLoding] = useState(false);
-    let gndProfile: any;
-    const MALE = 'ios-male';
-    const FEMALE = 'ios-female';
-    const OTHERS = 'ios-transgender';
-    if (user.gender === 'Female') {
-        gndProfile = FEMALE;
-    } else if (user.gender === 'Others') {
-        gndProfile = OTHERS;
-    } else {
-        gndProfile = MALE;
-    }
-    const [genderIcon, setgenderIcon] = useState(gndProfile);
 
-    useEffect(() => {
-        setPhoto(avatar.photo);
-    }, [avatar.photo]);
+    // useEffect(() => {
+    //     setPhoto(avatar.photo);
+    // }, [avatar.photo]);
 
     const checkTextInput = async () => {
         return new Promise((resolve) => {
@@ -99,7 +87,7 @@ const ProfileEdit = (props) => {
                             }
                         })
                         .catch(err => {
-                            console.log('Error at ProfileEdit.js -> checkTextInput() :', err);
+                            console.log('Error at ProfileEdit.tsx -> checkTextInput() :', err);
                             resolve(false);
                         });
                 } else { resolve(true); }
@@ -128,7 +116,8 @@ const ProfileEdit = (props) => {
         setIsPickerOpen(true);
     };
 
-    const datePickerHandler = (event, selectedDate) => {
+    //const datePickerHandler = (event, selectedDate: Date) => {
+    const datePickerHandler = (event: any, selectedDate: Date) => {
         const currentDate = selectedDate || birthday;
         if (Platform.OS === 'android') { setIsPickerOpen(false); }
         setBirthday(currentDate);
@@ -147,7 +136,8 @@ const ProfileEdit = (props) => {
         setLocality(user.locality);
         setZipcode(user.zip_code);
         setCountry(user.country);
-        setPhoto(avatar.photo);
+        //setPhoto(avatar.photo);
+
         //TODO: Remove files if App closes, but not during the execution. Otherwise, the photo can't be loaded
         // Alt: Load photo in binary into avatar.photo, and delete the file right afterwards.
         //removePhotoFromFile();
@@ -156,7 +146,6 @@ const ProfileEdit = (props) => {
     const saveProfile = async () => {
         if (await checkTextInput() && checkAge()) {
             setIsLoding(true);
-
             // Update User in Redux
             dispatch(setData(
                 user.id,
@@ -166,6 +155,8 @@ const ProfileEdit = (props) => {
                 gender,
                 name,
                 phone,
+                user.eth_address,
+                user.user_status,
                 user.eth_address,
             ));
             dispatch(setAddress(
@@ -204,7 +195,7 @@ const ProfileEdit = (props) => {
                         email: email.toLowerCase().trim(),
                         birthday: birthday,
                         phone: phone,
-                        photo: (photo) ? `${user.id}.jpg` : null,
+                        photo: null/*(photo) ? `${user.id}.jpg` : null*/,
                     },
                 }, {
                     headers: {
@@ -281,27 +272,18 @@ const ProfileEdit = (props) => {
             buttonIndex => {
                 if (buttonIndex === 1) {
                     setGender('Male');
-                    setgenderIcon(MALE);
+                    //setgenderIcon(MALE);
                 } else if (buttonIndex === 2) {
                     setGender('Female');
-                    setgenderIcon(FEMALE);
+                    //setgenderIcon(FEMALE);
                 } else if (buttonIndex === 3) {
                     setGender('Others');
-                    setgenderIcon(OTHERS);
+                    //setgenderIcon(OTHERS);
                 }
             }
         );
 
-    const handleGenderAndroid = (value: string) => {
-        setGender(value);
-        if (value === 'Male') {
-            setgenderIcon(MALE);
-        } else if (value === 'Female') {
-            setgenderIcon(FEMALE);
-        } else if (value === 'Others') {
-            setgenderIcon(OTHERS);
-        }
-    };
+    const handleGenderAndroid = (value: string) => setGender(value);
 
     return (
         <Modal visible={modal.isModalProfileOpen} animationType="slide">
@@ -363,7 +345,7 @@ const ProfileEdit = (props) => {
                                     <TextInput
                                         style={styles.inputTextIOS}
                                         placeholder={'Choose'}
-                                        onTouchStart={() => { handleGenderIOS() }}
+                                        onTouchStart={() => { handleGenderIOS(); }}
                                         value={gender} />
                                 }
                             </View>
@@ -374,7 +356,7 @@ const ProfileEdit = (props) => {
                                         style={(Platform.OS === 'ios') ? styles.inputTextIOS : styles.inputTextAndroid}
                                         editable={false}
                                         pointerEvents="none"
-                                        onTouchStart={() => { showDatePicker() }}
+                                        onTouchStart={() => { showDatePicker(); }}
                                         value={moment(birthday).format('DD-MM-YYYY')} />
                                 </TouchableOpacity>
                                 {(isPickerOpen) ?
@@ -411,7 +393,7 @@ const ProfileEdit = (props) => {
                             <View style={styles.containerAddress}>
                                 <Text style={styles.text}>Domicilio </Text>
                                 <View style={styles.inputContainerAddress}>
-                                    <Text style={[styles.text, styles.textAddress]}>Calle </Text>
+                                    <Text style={[styles.text, styles.textAddress]}>Street </Text>
                                     <TextInput
                                         style={(Platform.OS === 'ios') ? styles.inputTextIOS : styles.inputTextAndroid}
                                         maxLength={99}
@@ -419,7 +401,7 @@ const ProfileEdit = (props) => {
                                         value={street} />
                                 </View>
                                 <View style={styles.inputContainerAddress}>
-                                    <Text style={[styles.text, styles.textAddress]}>Ciudad </Text>
+                                    <Text style={[styles.text, styles.textAddress]}>Location </Text>
                                     <TextInput
                                         style={(Platform.OS === 'ios') ? styles.inputTextIOS : styles.inputTextAndroid}
                                         maxLength={99}
@@ -427,19 +409,19 @@ const ProfileEdit = (props) => {
                                         value={locality} />
                                 </View>
                                 <View style={styles.inputContainerAddress}>
-                                    <Text style={[styles.text, styles.textAddress]}>Código postal </Text>
+                                    <Text style={[styles.text, styles.textAddress]}>Postal code </Text>
                                     <TextInput
                                         style={(Platform.OS === 'ios') ? styles.inputTextIOS : styles.inputTextAndroid}
                                         maxLength={9}
-                                        onChangeText={(value) => { setZipcode(value) }}
+                                        onChangeText={(value) => { setZipcode(value); }}
                                         value={zipcode} />
                                 </View>
                                 <View style={styles.inputContainerAddress}>
-                                    <Text style={[styles.text, styles.textAddress]}>País </Text>
+                                    <Text style={[styles.text, styles.textAddress]}>Country </Text>
                                     <TextInput
                                         style={(Platform.OS === 'ios') ? styles.inputTextIOS : styles.inputTextAndroid}
                                         maxLength={49}
-                                        onChangeText={(value) => { setCountry(value) }}
+                                        onChangeText={(value) => { setCountry(value); }}
                                         value={country} />
                                 </View>
                             </View>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     View,
@@ -8,18 +9,25 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
-//mport Cons from '../../shared/Constants';
+import { useDispatch } from 'react-redux';
 import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
 import { clearCart } from '../../store/actions/order';
-import { useDispatch } from 'react-redux';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import ActivityIndicator from '../../UI/ActivityIndicator';
-import visaLogo from '../../assets/images/global/visa.png'
+import visaLogo from '../../assets/images/global/visa.png';
 import bitacorasLogo from '../../assets/images/global/bitacoras.png';
 
-const PurchaseOrder = (props) => {
+type Props = {
+    route: RouteProp<HomeStackParamList, 'PurchaseOrder'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'PurchaseOrder'>
+};
+
+const PurchaseOrder = (props: Props) => {
 
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
@@ -36,7 +44,7 @@ const PurchaseOrder = (props) => {
     const fetchTokenBalance = async () => {
         await axios.get(`${httpUrl}/token/get/balance`, {
             params: { recipient: user.eth_address },
-            headers: { authorization: user.token }
+            headers: { authorization: user.token },
         }).then(res => {
             // Convert string into Float of 2 decimals
             const amount = Math.round(parseFloat(res.data) * 100) / 100;
@@ -45,7 +53,7 @@ const PurchaseOrder = (props) => {
             console.log('Error in Token.js -> fetchTokenBalance(): ', err);
             setBalance(-2);
         });
-    }
+    };
 
     const fetchSpendTokens = async () => {
         if (user.favPharmacyEthAddress) {
@@ -103,7 +111,7 @@ const PurchaseOrder = (props) => {
             })
                 .then((response) => {
                     dispatch(clearCart(true));
-                    console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`)
+                    console.log(`Order ${response.data[0].order_id} stored in PostgreSQL`);
                     props.navigation.navigate('Home');
                 })
                 .catch(async err => {

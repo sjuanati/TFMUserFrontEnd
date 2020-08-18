@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     View,
@@ -18,11 +19,18 @@ import { useTypedSelector } from '../../store/reducers/reducer';
 import { httpUrl } from '../../../urlServer';
 import { ListItem } from 'react-native-elements';
 import ActivityIndicator from '../../UI/ActivityIndicator';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TokenStackParamList, EarnToken } from '../../navigation/StackNavigator';
 import bayer_test from '../../assets/images/global/bayer.png';
 import pfizer_test from '../../assets/images/global/pfizer.png';
 
+type Props = {
+    route: RouteProp<TokenStackParamList, 'Tokens'>,
+    navigation: StackNavigationProp<TokenStackParamList, 'Tokens'>
+};
 
-const Token = (props) => {
+const Token = (props: Props) => {
 
     const user = useTypedSelector(state => state.user);
     const [balance, setBalance] = useState(-1);
@@ -36,13 +44,6 @@ const Token = (props) => {
         fetchEarnTokens();
     }, []);
 
-    // Load <balance> every time the screen is shown (in focus)
-    // useEffect(() => {
-    //     const focusListener = props.navigation.addListener("didFocus", () => {
-    //         fetchTokenBalance();
-    //     });
-    //     return () => focusListener.remove();
-    // }, []);
     useEffect(() => {
         const focusListener = props.navigation.addListener('focus', () => {
             fetchTokenBalance();
@@ -63,7 +64,7 @@ const Token = (props) => {
             //Alert.alert(`Balance can't be checked right now`);
             setBalance(-2);
         });
-    }
+    };
 
     const fetchEarnTokens = async () => {
         await axios.get(`${httpUrl}/token/earnTokens`, {
@@ -74,7 +75,7 @@ const Token = (props) => {
         }).catch(err => {
             console.log('Error in Token.js -> fetchEarnTokens(): ', err);
         });
-    }
+    };
 
     const fetchBuyTokens = async (parsedAmount: number) => {
         setIsLoading(true);
@@ -93,9 +94,9 @@ const Token = (props) => {
         }).then(() => {
             setIsLoading(false);
         });
-    }
+    };
 
-    const toggleTabView = val => (val !== tabView) ? setTabView(!tabView) : null;
+    const toggleTabView = (val: boolean) => (val !== tabView) ? setTabView(!tabView) : null;
 
     const getRemainingDays = (date: Date) => {
         const today = moment(); //.tz('Europe/Madrid');
@@ -132,28 +133,26 @@ const Token = (props) => {
         } catch (err) {
             console.log('Error on Token.js -> handlePurchase(): ', err);
         }
-    }
+    };
 
-    const renderItems = (val) => (
+    const renderItems = ({item}: {item: EarnToken}) => (
         <ListItem
-            title={val.item.earn_desc}
+            title={item.earn_desc}
             subtitle={
                 <View>
-                    <Text>Reward:    <Text style={styles.bold}>{val.item.earn_qty}</Text> PCT</Text>
-                    {getRemainingDays(val.item.validity_end_date)}
+                    <Text>Reward:    <Text style={styles.bold}>{item.earn_qty}</Text> PCT</Text>
+                    {getRemainingDays(item.validity_end_date)}
                 </View>
             }
             leftAvatar={{
-                source: (val.item.photo === 'bayer') ? bayer_test : pfizer_test,
+                source: (item.photo === 'bayer') ? bayer_test : pfizer_test,
                 size: 'medium',
             }}
-            onPress={() => props.navigation.navigate('EarnTokensDetail', { item: val.item, balance: balance })}
+            onPress={() => props.navigation.navigate('EarnTokensDetail', item)}
             bottomDivider
             chevron
         />
     );
-
-    //const addNumberHandler = (val) => console.log('Hey: ', val);
 
     /**
     * @dev Add number to the total amount.
@@ -162,7 +161,7 @@ const Token = (props) => {
     * - Maximum length for the total amount is 9 digits
     * @param num New number to be added to the right of the total amount
     */
-    const addNumberHandler = (num) => {
+    const addNumberHandler = (num: string) => {
         if ((!amount.includes(',') || (amount.includes(',') && num !== ',')) && amount.length < 9) {
             if (amount === '0') {
                 setAmount(num);
@@ -173,7 +172,7 @@ const Token = (props) => {
     };
 
     /**
-     * @dev Remove number from the total amount. 
+     * @dev Remove number from the total amount.
      * - If a number has a preceding comma, it deletes number & comma
      */
     const removeNumberHandler = () => {

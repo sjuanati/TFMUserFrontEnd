@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Spinner,
   Button,
   Text,
@@ -23,14 +23,14 @@ const emailGrey = require('../../assets/images/login/email.png');
 const image = require('../../assets/images/global/DrMax.png');
 const backgroundImage = require('../../assets/images/global/background.jpg');
 
-const SignIn = props => {
+const SignIn = (props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
-  const updateField = (key, value) => {
+  const updateField = (key: string, value: string) => {
     setUser({
       ...user,
       [key]: value,
@@ -80,50 +80,50 @@ const SignIn = props => {
             <Spinner color="#F4B13E" />
           </Content>
           : (
-          <Content>
-            <Form style={styles.form}>
-              <Item rounded
-                    style={styles.input}>
-                <Image
-                  style={styles.iconInput}
-                  source={emailGrey}/>
-                <Input autoCapitalize="none"
-                       placeholder="Email"
-                       keyboardType="email-address"
-                       maxLength={254}
-                       onChangeText={(mail) => updateField('email', mail)}
-                       value={user.email}/>
-              </Item>
-              <Item rounded
-                    style={styles.input}>
-                <Image
-                  style={styles.iconInput}
-                  source={lockGrey}/>
-                <Input autoCapitalize="none"
-                       secureTextEntry={true}
-                       maxLength={254}
-                       placeholder="Password"
-                       onChangeText={(pass) => updateField('password', pass)}
-                       value={user.password}/>
-              </Item>
-              <Button block rounded
-                      style={styles.button}
-                      onPress={login}>
-                <Text>Acceder</Text>
-              </Button>
-            </Form>
-            <Text style={styles.text}>
-              <Text>¿No tienes cuenta? </Text>
-              <Text style={styles.bold}
-                    onPress={() => props.navigation.navigate('SignUp')}>
-                Crea una
+            <Content>
+              <Form style={styles.form}>
+                <Item rounded
+                  style={styles.input}>
+                  <Image
+                    style={styles.iconInput}
+                    source={emailGrey} />
+                  <Input autoCapitalize="none"
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    maxLength={254}
+                    onChangeText={(mail) => updateField('email', mail)}
+                    value={user.email} />
+                </Item>
+                <Item rounded
+                  style={styles.input}>
+                  <Image
+                    style={styles.iconInput}
+                    source={lockGrey} />
+                  <Input autoCapitalize="none"
+                    secureTextEntry={true}
+                    maxLength={254}
+                    placeholder="Password"
+                    onChangeText={(pass) => updateField('password', pass)}
+                    value={user.password} />
+                </Item>
+                <Button block rounded
+                  style={styles.button}
+                  onPress={login}>
+                  <Text>Acceder</Text>
+                </Button>
+              </Form>
+              <Text style={styles.text}>
+                <Text>¿No tienes cuenta? </Text>
+                <Text style={styles.bold}
+                  onPress={() => props.navigation.navigate('SignUp')}>
+                  Crea una
               </Text>
-            </Text>
-          </Content>
-        )}
+              </Text>
+            </Content>
+          )}
       </ImageBackground>
     </Container>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   text: {
     marginTop: '2%',
     textAlign: 'center',
-    width: '100%'
+    width: '100%',
   },
   input: {
     color: 'white',

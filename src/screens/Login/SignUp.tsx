@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
    View,
    Alert,
@@ -37,7 +37,7 @@ const phoneGrey = require('../../assets/images/login/phone.png');
 const userGrey = require('../../assets/images/login/user.png');
 const emailGrey = require('../../assets/images/login/email.png');
 
-const SignUp = (props) => {
+const SignUp: FC = (props) => {
 
    const dispatch = useDispatch();
    const [isLegalAccepted, setIsLegalAccepted] = useState(false);
@@ -49,7 +49,7 @@ const SignUp = (props) => {
       repeatPassword: '',
       phone: '',
    });
-   const updateField = (key, value) => {
+   const updateField = (key: string, value: string) => {
       setUser({
          ...user,
          [key]: value,
@@ -135,7 +135,7 @@ const SignUp = (props) => {
             style={styles.backgroundImage}
             source={backgroundImage}>
             <KeyboardAvoidingView
-               behavior={Platform.OS === 'ios' ? 'padding' : null}
+               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                keyboardVerticalOffset={Platform.OS === 'ios' ? -30 : 500}
                style={styles.containerKeyboard}>
                <Image
@@ -154,7 +154,7 @@ const SignUp = (props) => {
                               <Image
                                  style={styles.iconInput}
                                  source={userGrey} />
-                              <Input type="text"
+                              <Input
                                  placeholder="Nombre"
                                  maxLength={254}
                                  onChangeText={(name) => updateField('name', name)}
@@ -165,8 +165,8 @@ const SignUp = (props) => {
                               <Image
                                  style={styles.iconInput}
                                  source={emailGrey} />
-                              <Input type="text"
-                                 autoCapitalize='none'
+                              <Input
+                                 autoCapitalize="none"
                                  placeholder="Email"
                                  keyboardType="email-address"
                                  maxLength={254}
@@ -178,7 +178,7 @@ const SignUp = (props) => {
                               <Image
                                  style={styles.iconInput}
                                  source={phoneGrey} />
-                              <Input type="number"
+                              <Input
                                  maxLength={20}
                                  placeholder="Telefono"
                                  keyboardType="phone-pad"
@@ -190,9 +190,9 @@ const SignUp = (props) => {
                               <Image
                                  style={styles.iconInput}
                                  source={lockGrey} />
-                              <Input autoCapitalize="none"
+                              <Input
+                                 autoCapitalize="none"
                                  secureTextEntry={true}
-                                 type="text"
                                  maxLength={254}
                                  placeholder="Password"
                                  onChangeText={(pass) => updateField('password', pass)}
@@ -203,9 +203,9 @@ const SignUp = (props) => {
                               <Image
                                  style={styles.iconInput}
                                  source={lockGrey} />
-                              <Input autoCapitalize="none"
+                              <Input
+                                 autoCapitalize="none"
                                  secureTextEntry={true}
-                                 type="text"
                                  maxLength={254}
                                  placeholder="Repeat password"
                                  onChangeText={(repeatPass) => updateField('repeatPassword', repeatPass)}

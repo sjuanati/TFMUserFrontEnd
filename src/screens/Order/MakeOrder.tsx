@@ -6,14 +6,21 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { setScanned } from '../../store/actions/order';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import scanLogo from '../../assets/images/global/scanner.png';
 import searchLogo from '../../assets/images/global/search.png';
 
+type Props = {
+    route: RouteProp<HomeStackParamList, 'MakeOrder'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'MakeOrder'>
+};
 
-const MakeOrder = (props) => {
+const MakeOrder = (props: Props) => {
 
     const dispatch = useDispatch();
     //const scanned = useSelector((state: RootState) => state.order.scanned);

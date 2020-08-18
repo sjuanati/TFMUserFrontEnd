@@ -11,7 +11,7 @@ export const setFavPharmacy = (
     favPharmacyEthAddress: favPharmacyEthAddress,
 });
 
-export const setToken = (token: string) => ({
+export const setToken = (token: any) => ({
     type: actionTypes.SET_TOKEN,
     token: token,
 });
@@ -42,7 +42,7 @@ export const setData = (
 });
 
 export const setAddress = (
-    address_id: string,
+    address_id: number,
     address_status: number,
     street: string,
     locality: string,

@@ -10,11 +10,25 @@ import {
 import moment from 'moment';
 //import tz from 'moment-timezone';
 import Cons from '../../shared/Constants';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TokenStackParamList } from '../../navigation/StackNavigator';
 import CheckBox from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const EarnTokensDetail = (props) => {
+type Props = {
+    route: RouteProp<TokenStackParamList, 'EarnTokensDetail'>,
+    navigation: StackNavigationProp<TokenStackParamList, 'EarnTokensDetail'>
+};
 
-    const { item, balance } = props.route.params;
+const EarnTokensDetail = (props: Props) => {
+    const {
+        earn_desc,
+        earn_desc_long,
+        earn_qty,
+        supplier_desc,
+        validity_end_date,
+        validity_start_date} = props.route.params;
+
     const [isLegalAccepted, setIsLegalAccepted] = useState(false);
 
     const renderDate = (startDate: Date, endDate: Date) => {
@@ -26,17 +40,17 @@ const EarnTokensDetail = (props) => {
     const renderDescription = () => (
         <View>
             <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>{item.earn_desc}</Text>
-                <Text style={styles.subHeaderText}>Sponsored by {item.supplier_desc}</Text>
+                <Text style={styles.headerText}>{earn_desc}</Text>
+                <Text style={styles.subHeaderText}>Sponsored by {supplier_desc}</Text>
             </View>
             <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Summary: </Text>
-                <Text style={styles.sectionValue}>{(item.earn_desc_long) ? item.earn_desc_long : 'No description provided'}</Text>
+                <Text style={styles.sectionValue}>{(earn_desc_long) ? earn_desc_long : 'No description provided'}</Text>
             </View>
             <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Period: </Text>
                 <Text style={styles.sectionValue}>
-                    {renderDate(item.validity_start_date, item.validity_end_date)}
+                    {renderDate(validity_start_date, validity_end_date)}
                 </Text>
             </View>
             <View style={styles.sectionContainer}>
@@ -47,7 +61,7 @@ const EarnTokensDetail = (props) => {
             </View>
             <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Reward: </Text>
-                <Text style={[styles.sectionValue, styles.bold]}>{item.earn_qty} PCT</Text>
+                <Text style={[styles.sectionValue, styles.bold]}>{earn_qty} PCT</Text>
             </View>
         </View>
     );

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     View,
@@ -21,11 +22,20 @@ import { useTypedSelector } from '../../store/reducers/reducer';
 import { httpUrl } from '../../../urlServer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { OrderStackParamList, OrderType } from '../../navigation/StackNavigator';
 
-const GetOrderDetail = (props) => {
+type Props = {
+    route: RouteProp<OrderStackParamList, 'OrderDetail'>,
+    navigation: StackNavigationProp<OrderStackParamList, 'OrderDetail'>
+};
+
+const GetOrderDetail = (props: Props) => {
 
     const [loading, setLoading] = useState(true);
-    const [order, setOrder] = useState([]);
+    //const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState<OrderType[]>([]);
     const [orderTraceStatus, setOrderTraceStatus] = useState('PENDING');
     const user = useTypedSelector(state => state.user);
 
@@ -34,13 +44,12 @@ const GetOrderDetail = (props) => {
             .catch(error => {
                 console.warn(JSON.stringify(error));
             });
-    },[]);
+    }, []);
 
     const startFunctions = async () => {
         try {
-            //const order_id = props.navigation.getParam('order');
             const { order_id } = props.route.params;
-            console.log('order_id:',order_id);
+            console.log('order_id:', order_id);
             await getOrder(user.id, order_id, user.token);
             await fetchOrderTraceGlobal(order_id);
             setLoading(false);
@@ -49,7 +58,7 @@ const GetOrderDetail = (props) => {
         }
     };
 
-    const fetchOrderTraceGlobal = async (order_id) => {
+    const fetchOrderTraceGlobal = async (order_id: string) => {
         await axios.get(`${httpUrl}/trace/order/global`, {
             params: { order_id: order_id },
             headers: { authorization: user.token },
@@ -60,17 +69,17 @@ const GetOrderDetail = (props) => {
         });
     };
 
-    const getOrder = async (user_id, order_id, token) => {
+    const getOrder = async (user_id: number, order_id: string, token: string) => {
         axios.get(`${httpUrl}/order/get/item/user`, {
             params: {
                 user_id: user_id,
                 order_id: order_id,
             },
-            headers: { authorization: token }
+            headers: { authorization: token },
         }).then(async res => {
             if (res.status === 200 || res.status === 304) {
-                let order = res.data;
-                setOrder(ordr => [...ordr, ...order]);
+                const allOrders = res.data;
+                setOrder(ordr => [...ordr, ...allOrders]);
                 setLoading(false);
             } else {
                 showToast('There was an error');
@@ -84,7 +93,7 @@ const GetOrderDetail = (props) => {
     const cancelOrder = async () => {
         Alert.alert(
             'Do you want to cancel the order?',
-            null,
+            '',
             [
                 {
                     text: 'Cancel',
@@ -127,7 +136,7 @@ const GetOrderDetail = (props) => {
         });
     };
 
-    const StatusOrder = ({ status }) => {
+    const StatusOrder = ({ status }: { status: number }) => {
         if (status === 0) {
             return (<Text style={styles.statusGrey}>DRAFT</Text>);
         } else if (status === 1) {
@@ -147,7 +156,7 @@ const GetOrderDetail = (props) => {
         }
     };
 
-    const renderItem = ({ item, index }) => {
+    const renderItem = ({ item, index }: {item: any, index: number}) => {
         item.screen = 'GetOrderDetail';
         return (
             <ListItem
@@ -169,7 +178,7 @@ const GetOrderDetail = (props) => {
             <FlatList
                 data={order}
                 renderItem={renderItem}
-                keyExtractor={item => item.order_item.toString()} />
+                keyExtractor={(item: OrderType) => item.order_item.toString()} />
         );
     };
 
@@ -210,7 +219,7 @@ const GetOrderDetail = (props) => {
                         color="red"
                     />);
         }
-    }
+    };
 
     const RenderPage = () => (
         <View>
@@ -303,7 +312,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonText: {
-        color: 'white'
+        color: 'white',
     },
     buttonDetails: {
         backgroundColor: '#00A591',

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Spinner } from 'native-base';
 import {
@@ -9,8 +10,11 @@ import {
     Platform,
     StyleSheet,
     PixelRatio,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList, Pharma } from '../../navigation/StackNavigator';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
@@ -28,7 +32,25 @@ import fontSize from '../../shared/FontSize';
 // Font size management
 let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
 
-const PharmacySearch = (props) => {
+type Props = {
+    route: RouteProp<HomeStackParamList, 'PharmacySearch'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'PharmacySearch'>
+};
+
+interface Position {
+    latitude: number;
+    longitude: number;
+}
+
+interface Pharmacy {
+    pharmacy_id: number;
+    pharmacy_desc: string;
+    gps_latitude: number;
+    gps_longitude: number;
+    distance: number;
+}
+
+const PharmacySearch = (props: Props) => {
 
     const [pharmacies, setPharmacies] = useState([]);
     const [filteredPharmacies, setFilteredPharmacies] = useState([]);
@@ -38,6 +60,8 @@ const PharmacySearch = (props) => {
     const [showList, setShowList] = useState(true);
     const [currentPosition, setcurrentPosition] = useState({});
     const user = useTypedSelector(state => state.user);
+    // const LATITUDE_DELTA = 0.1;
+    // const LONGITUDE_DELTA = 0.04;
 
     useEffect(() => {
         requestLocationPermission();
@@ -76,22 +100,22 @@ const PharmacySearch = (props) => {
                     default:
                         break;
                 }
-            })
+            });
     };
 
     // Find current user's location. If found, fetch pharmacies from DB
     const locateCurrentPosition = () => {
         Geolocation.getCurrentPosition(
             async position => {
-                const currentPosition = {
+                const curPosition = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     latitudeDelta: 0.09,
                     longitudeDelta: 0.035,
                 };
-                console.log('Current location:', currentPosition);
-                setcurrentPosition(currentPosition);
-                await fetchPharmacies(currentPosition);
+                console.log('Current location:', curPosition);
+                setcurrentPosition(curPosition);
+                await fetchPharmacies(curPosition);
             },
             error => {
                 Alert.alert(error.message);
@@ -103,7 +127,7 @@ const PharmacySearch = (props) => {
     };
 
     // Retrieve all pharmacies from DB
-    const fetchPharmacies = async (currentPos) => {
+    const fetchPharmacies = async (currentPos: Position) => {
         await axios.get(`${httpUrl}/pharmacy/get`, {
             timeout: 50000,
             headers: {
@@ -127,47 +151,49 @@ const PharmacySearch = (props) => {
     };
 
     // Calculate distance from current location to a given location and store in pharmacies' array
-    const calculateDistance = (pharmacies, currentPos) => {
-        for (let i = 0; i < pharmacies.length; i++) {
-            (pharmacies[i].gps_latitude && pharmacies[i].gps_longitude)
-                ? pharmacies[i].distance = getDistance(
+    const calculateDistance = (pharma: [Pharmacy], currentPos: Position) => {
+        for (let i = 0; i < pharma.length; i++) {
+            (pharma[i].gps_latitude && pharma[i].gps_longitude)
+                ? pharma[i].distance = getDistance(
                     { latitude: currentPos.latitude, longitude: currentPos.longitude },
-                    { latitude: pharmacies[i].gps_latitude, longitude: pharmacies[i].gps_longitude })
-                : pharmacies[i].distance = -1;
+                    { latitude: pharma[i].gps_latitude, longitude: pharma[i].gps_longitude })
+                : pharma[i].distance = -1;
         }
     };
 
     // Give format (km or m) to distance
-    const formatDistance = (distance) => {
+    const formatDistance = (distance: number) => {
         if (distance >= 1000) {
             return `${(distance / 1000).toFixed(1)} km`;
         } else if (distance > 0) {
             return `${distance.toFixed(1)} m`;
-        } else { 
+        } else {
             return 'N/A';
         }
     };
 
     // Show list of pharmacies around
-    const renderItemPharmaciesAround = (values) => {
+    const renderItemPharmaciesAround = ({ item }: { item: Pharma }) => {
+        console.log('values:', item);
         return (
             <ListItem
-                title={values.item.pharmacy_desc}
-                rightTitle={formatDistance(values.item.distance)}
-                onPress={() => props.navigation.navigate('PharmacyDetails', { item: values.item })}
+                title={item.pharmacy_desc}
+                rightTitle={formatDistance(item.distance)}
+                onPress={() => props.navigation.navigate('PharmacyDetails', { item: item })}
+                //onPress={() => props.navigation.navigate('PharmacyDetails', item)}
                 bottomDivider
                 chevron />
         );
     };
 
-    const updateSearch = search => {
+    const updateSearch = (val: string) => {
         setSearch(search);
         setFilteredPharmacies(pharmacies);
         filteredPharmacies;
         const filter = pharmacies
-            .filter((item) => {
+            .filter((item: Pharmacy) => {
                 const lowerCaseItem = item.pharmacy_desc.toLowerCase();
-                return lowerCaseItem.includes(search.toLowerCase());
+                return lowerCaseItem.includes(val.toLowerCase());
             });
         setFilteredPharmacies(filter);
     };
@@ -186,9 +212,9 @@ const PharmacySearch = (props) => {
                             placeholder="Search your pharmacy"
                             onChangeText={updateSearch}
                             value={search}
-                            autoCapitalize='none'
+                            autoCapitalize="none"
                             maxLength={100}
-                            selectionColor={Cons.COLORS.ORANGE}
+                            //selectionColor={Cons.COLORS.ORANGE}
                             inputStyle={styles.searchFieldInput}
                             containerStyle={styles.searchFieldContainer}
                             platform={Platform.OS === 'ios' ? 'ios' : 'android'} />
@@ -227,10 +253,10 @@ const PharmacySearch = (props) => {
                             ? <View>
                                 <FlatList
                                     // Sort results by distance
-                                    data={filteredPharmacies.sort((a, b) => {
-                                        return a.distance - b.distance
+                                    data={filteredPharmacies.sort((a: Pharmacy, b: Pharmacy) => {
+                                        return a.distance - b.distance;
                                     })}
-                                    keyExtractor={(item) => item.pharmacy_id.toString()}
+                                    keyExtractor={(item: Pharmacy) => item.pharmacy_id.toString()}
                                     renderItem={renderItemPharmaciesAround} />
                             </View>
                             : <MapView
@@ -239,7 +265,7 @@ const PharmacySearch = (props) => {
                                 provider={PROVIDER_GOOGLE}
                                 showsMyLocationButton={true}
                                 initialRegion={currentPosition}>
-                                {filteredPharmacies.map((pharma) => {
+                                {filteredPharmacies.map((pharma: Pharmacy) => {
                                     if (pharma.gps_latitude && pharma.gps_longitude) {
                                         return (<Marker
                                             key={pharma.pharmacy_id.toString()}

@@ -1,29 +1,31 @@
 import * as actionTypes from '../actions/actionTypes';
+import { RootState } from './reducer';
 
 const initialState = {
-    favPharmacyID: null,
-    favPharmacyDesc: null,
-    favPharmacyEthAddress: null,
-    id: null,
-    token: null,
-    birthday: null,
-    email: null,
-    gender: null,
-    name: null,
-    phone: null,
-    address_id: null,
-    user_status: null,
-    address_satus: null,
-    street: null,
-    locality: null,
-    province: null,
-    zip_code: null,
-    country: null,
-    photo: null,
-    eth_address: null,
+    favPharmacyID: 0,
+    favPharmacyDesc: '',
+    favPharmacyEthAddress: '',
+    id: 0,
+    token: '',
+    birthday: new Date(),  //TBC
+    email: '',
+    gender: '',
+    name: '',
+    phone: '',
+    address_id: 0,
+    user_status: 0,
+    address_status: 0,
+    street: '',
+    locality: '',
+    province: '',
+    zip_code: '',
+    country: '',
+    photo: '',
+    eth_address: '',
+    type: '',
 };
 
-const setFavPharmacy = (state, action) => {
+const setFavPharmacy = (state: RootState['user'], action: RootState['user']) => {
     return {
         ...state,
         ...{favPharmacyID: action.favPharmacyID,
@@ -33,14 +35,14 @@ const setFavPharmacy = (state, action) => {
     };
 };
 
-const setToken = (state, action) => {
+const setToken = (state: RootState['user'], action: RootState['user']) => {
     return {
         ...state,
         ...{token: action.token},
     };
 };
 
-const setData = (state, action) => {
+const setData = (state: RootState['user'], action: RootState['user']) => {
     return {
         ...state,
         ...{id: action.id,
@@ -57,7 +59,7 @@ const setData = (state, action) => {
     };
 };
 
-const setAddress = (state, action) => {
+const setAddress = (state: RootState['user'], action: RootState['user']) => {
     return {
         ...state,
         ...{address_id: action.address_id,
@@ -71,7 +73,7 @@ const setAddress = (state, action) => {
     };
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: RootState['user']) => {
     switch (action.type) {
         case actionTypes.SET_FAV_PHARMACY: return setFavPharmacy(state, action);
         case actionTypes.SET_TOKEN: return setToken(state, action);

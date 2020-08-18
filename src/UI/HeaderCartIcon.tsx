@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {FC} from 'react';
 import { Text, View, Image, StyleSheet, PixelRatio } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from '../store/reducers/reducer';
 const Cart = require('../assets/images/global/cart.png');
 import Cons from '../shared/Constants';
 
@@ -8,9 +8,9 @@ import Cons from '../shared/Constants';
 let FONT_SIZE = 16;
 if (PixelRatio.getFontScale() > 1) {FONT_SIZE = 12;}
 
-const shoppingCartIcon = () => {
+const HeaderCartIcon: FC = () => {
 
-    const cartItems = useSelector(state => state.order.items);
+    const cartItems = useTypedSelector(state => state.order.items);
 
     return (
         <View>
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default shoppingCartIcon;
+export default HeaderCartIcon;

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native';
 const drmaxLogo = require('../assets/images/global/DrMax.png');
 
-const headerLogo = (props) => {
+const headerLogo = () => {
 
     return (
         <View style={styles.header}>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     View,
@@ -8,6 +9,9 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList, Product as Prod } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
@@ -15,14 +19,21 @@ import ActivityIndicator from '../../UI/ActivityIndicator';
 import { ListItem, SearchBar } from 'react-native-elements';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 
+type Props = {
+    route: RouteProp<HomeStackParamList, 'MakeOrderChoose'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'MakeOrderChoose'>
+};
 
-const MakeOrderChoose = (props) => {
+interface Product {
+    item: Prod
+}
+
+const MakeOrderChoose = (props: Props) => {
 
     const user = useTypedSelector(state => state.user);
     const order = useTypedSelector(state => state.order.items);
     const [search, setSearch] = useState('');
     const [products, setProducts] = useState([]);
-    const [productsLast5, setProductsLast5] = useState([]);
     const [typingTimeout, setIsTypingTimeout] = useState(0);
     const [isLoading, setIsLoding] = useState(false);
     const TIMER = 500;
@@ -35,19 +46,22 @@ const MakeOrderChoose = (props) => {
 
     // Launch product query 500ms after typing the search string
     useEffect(() => {
-        if (typingTimeout) clearTimeout(typingTimeout);
+        if (typingTimeout) { clearTimeout(typingTimeout); }
         setIsTypingTimeout(setTimeout(() => {
             //if (search && search.length >= MIN_CHARACTERS) fetchProducts();
             if (search) {
-                if (search.length >= MIN_CHARACTERS) fetchProducts();
-                else setProducts([]);
+                if (search.length >= MIN_CHARACTERS) {
+                    fetchProducts();
+                } else {
+                    setProducts([]);
+                }
             }
-        }, TIMER))
+        }, TIMER));
     }, [search]);
 
     // Update search string
-    const updateSearch = search => {
-        setSearch(search);
+    const updateSearch = (val: string) => {
+        setSearch(val);
     };
 
     // On cancel search, remove product list
@@ -56,8 +70,9 @@ const MakeOrderChoose = (props) => {
     };
 
     // Show list of Products found
-    const renderProduct = (values) => {
+    const renderProduct = (values: Product) => {
         values.item.screen = 'MakeOrderChoose';
+        console.log('values.item:', values.item);
         return (
             <ListItem
                 title={values.item.product_desc}
@@ -82,7 +97,7 @@ const MakeOrderChoose = (props) => {
             headers: { authorization: user.token },
         })
             .then(response => {
-                if (response.data !== '') setProducts(response.data);
+                if (response.data !== '') { setProducts(response.data); }
             })
             .catch(async err => {
                 handleAxiosErrors(props, err);
@@ -102,7 +117,6 @@ const MakeOrderChoose = (props) => {
             .then(response => {
                 if (response.data !== '') {
                     setProducts(response.data);
-                    setProductsLast5(response.data);
                 }
             })
             .catch(async err => {
@@ -122,10 +136,9 @@ const MakeOrderChoose = (props) => {
                 onCancel={cancelSearch}
                 onClear={cancelSearch}
                 value={search}
-                autoCapitalize='none'
+                autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={100}
-                //containerStyle={styles.button}
                 platform={Platform.OS === 'ios' ? 'ios' : 'android'} />
             <View>
                 <ActivityIndicator isLoading={isLoading} />

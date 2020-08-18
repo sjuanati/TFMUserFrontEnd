@@ -1,4 +1,4 @@
-// Libs
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Alert,
@@ -19,33 +19,76 @@ import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import { httpUrl } from '../../../urlServer';
 import globalStyles from '../../UI/Style';
 import Cons from '../../shared/Constants';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 
-const PharmacyDetail = (props) => {
+interface Pharmacy {
+    pharmacy_id: number,
+    pharmacy_desc: string,
+    eth_address: string,
+    owner_name: string,
+    address: string,
+    zip_code: string,
+    locality: string,
+    phone_number: string,
+    instagram: string,
+    facebook: string,
+    email: string,
+    web: string
+}
 
-    const [pharmacy, setPharmacy] = useState({});
-    const [schedule, setSchedule] = useState([]);
+interface Schedule {
+    result: string[],
+    isOpen: boolean,
+    day: number
+}
+
+type Props = {
+    route: RouteProp<HomeStackParamList, 'PharmacyDetails'>,
+    navigation: StackNavigationProp<HomeStackParamList, 'PharmacyDetails'>
+};
+
+const PharmacyDetail = (props: Props) => {
+
+    //const [pharmacy, setPharmacy] = useState({});
+    const [pharmacy, setPharmacy] = useState<Pharmacy>({
+        pharmacy_id: 0,
+        pharmacy_desc: '',
+        eth_address: '',
+        owner_name: '',
+        address: '',
+        zip_code: '',
+        locality: '',
+        phone_number: '',
+        instagram: '',
+        facebook: '',
+        email: '',
+        web: '',
+    });
+    //const [schedule, setSchedule] = useState([String]); //useState(String([]));
+    const [schedule, setSchedule] = useState<String[]>();
     const [openNow, setOpenNow] = useState(false);
     const [isShowingSchedule, setIsShowingSchedule] = useState(false);
     const [weekday, setWeekday] = useState(-1);
     const user = useTypedSelector(state => state.user);
     const dispatch = useDispatch();
-    let resultSchedule: any;
-    let resultOpenNow: any;
-    let resDay: any;
 
     // Retrieve schedule from given pharmacy
-    const fetchSchedule = async (item) => {
+    const fetchSchedule = async (item: Pharmacy) => {
         await axios.get(`${httpUrl}/pharmacy/schedule/get`, {
             params: { pharmacy_id: item.pharmacy_id },
-            headers: { authorization: user.token }
+            headers: { authorization: user.token },
         })
             .then(response => {
                 if (response.data.length > 0) {
                     const res = response.data;
-                    [resultSchedule, resultOpenNow, resDay] = PharmacySchedule(res);
-                    setSchedule(resultSchedule);
-                    setOpenNow(resultOpenNow);
-                    setWeekday(resDay);
+                    console.log('res:', res);
+                    //const [resultSchedule, resultOpenNow, resDay] = PharmacySchedule(res);
+                    const { result, isOpen, day }: Schedule = PharmacySchedule(res);
+                    setSchedule(result);
+                    setOpenNow(isOpen);
+                    setWeekday(day);
                 }
             })
             .catch(async err => {
@@ -54,8 +97,9 @@ const PharmacyDetail = (props) => {
     };
 
     useEffect(() => {
-        //let item = props.navigation.getParam('item');
         const { item } = props.route.params;
+        //const { item }: Pharma = props.route.params;
+        console.log('item:', item);
         setPharmacy(item);
         fetchSchedule(item);
     }, []);
@@ -65,8 +109,8 @@ const PharmacyDetail = (props) => {
             pharmacy.pharmacy_id,
             pharmacy.pharmacy_desc,
             pharmacy.eth_address));
-        props.navigation.goBack(null);
-        props.navigation.goBack(null);
+        props.navigation.goBack();
+        props.navigation.goBack();
     };
 
     const toggleIsShowingSchedule = () => {
@@ -75,7 +119,7 @@ const PharmacyDetail = (props) => {
     };
 
     // Does a phone call to the given phone number
-    const handlePhoneCall = phoneNumber => {
+    const handlePhoneCall = (phoneNumber: string) => {
         const phoneCall = `tel:${phoneNumber}`;
 
         Linking.canOpenURL(phoneCall)
@@ -148,14 +192,14 @@ const PharmacyDetail = (props) => {
     };
 
     // Opens a URL in the browser
-    const handleURL = url => {
+    const handleURL = (url: string) => {
 
         Linking.canOpenURL(url)
             .then((supported) => {
                 if (supported) {
                     Linking.openURL(url);
                 } else {
-                    Alert.alert(`No se puede abrir el navegador`);
+                    Alert.alert('Can\'t open browser');
                 }
             })
             .catch(err => {
@@ -192,9 +236,9 @@ const PharmacyDetail = (props) => {
                         {(isShowingSchedule)
                             ? schedule.map((item, index) => {
                                 if (weekday === index) {
-                                    return (<Text style={styles.valuesSelected} key={index}> {item} </Text>)
+                                    return (<Text style={styles.valuesSelected} key={index}> {item} </Text>);
                                 } else {
-                                    return (<Text style={styles.valuesNormal} key={index}> {item} </Text>)
+                                    return (<Text style={styles.valuesNormal} key={index}> {item} </Text>);
                                 }
                             })
                             : null}
@@ -202,7 +246,7 @@ const PharmacyDetail = (props) => {
                     <Text style={[styles.textBold, styles.vMargin]}> Address: </Text>
                     <Text style={styles.valuesNormal}>
                         {(weekday === -1)
-                            ? 'No disponible'
+                            ? 'Not available'
                             : `${pharmacy.address} \n ${pharmacy.zip_code} ${pharmacy.locality}`
                         }
                     </Text>

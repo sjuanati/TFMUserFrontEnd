@@ -29,7 +29,65 @@ import CartIcon from '../UI/HeaderCartIcon';
 import BackIcon from '../UI/HeaderBackIcon';
 import HeaderLogo from '../UI/HeaderLogo';
 
-const HomeStack = createStackNavigator();
+export interface Product {
+    item_id: number,
+    dose_form: string,
+    dose_qty: string,
+    leaflet_url: string,
+    max_date: Date,
+    prescription: boolean,
+    price: number,
+    product_desc: string,
+    product_id: number,
+    screen: string,
+}
+
+export interface Pharma {
+    communication: string,
+    country: string,
+    creation_date: Date,
+    distance: number,
+    email: string,
+    eth_address: string,
+    facebook: string,
+    gps_latitude: number,
+    gps_longitude: number,
+    icon: null,
+    instagram: string,
+    locality: string,
+    municipality: string,
+    nif: string,
+    opening_hours: null,
+    owner_name: string,
+    password: string,
+    pharmacy_code: string,
+    pharmacy_desc: string,
+    pharmacy_id: number,
+    phone_number: string,
+    province: string,
+    status: number,
+    street: string,
+    token: string,
+    update_date: Date,
+    web: string,
+    whatsapp: string,
+    zip_code: string
+}
+
+export type HomeStackParamList = {
+    Home: undefined;
+    PharmacySearch: undefined;
+    PharmacyDetails: Pharma;
+    MakeOrder: undefined;
+    MakeOrderScan: undefined;
+    MakeOrderChoose: undefined;
+    OrderSummary: undefined;
+    PurchaseOrder: undefined;
+    ProductDetail: Product;
+};
+
+//const HomeStack = createStackNavigator();
+const HomeStack = createStackNavigator<HomeStackParamList>();
 
 const HomeStackScreen = () => (
     <HomeStack.Navigator
@@ -82,7 +140,31 @@ const HomeStackScreen = () => (
     </HomeStack.Navigator>
 );
 
-const OrderStack = createStackNavigator();
+export interface OrderType {
+    chat_id: number,
+    creation_date: Date,
+    order_id: string,
+    order_item: number,
+    order_id_app: number,
+    pharmacy_desc: string,
+    pharmacy_id: number,
+    status: number,
+    status_desc: string,
+    total_price: number,
+    unseen: boolean,
+    user_id: number,
+}
+
+export type OrderStackParamList = {
+    Orders: undefined;
+    OrderDetail: { order_id: string };
+    OrderSummary: undefined;
+    OrderTrace: { order_id: string };
+    ProductDetail: undefined;
+};
+
+//const OrderStack = createStackNavigator();
+const OrderStack = createStackNavigator<OrderStackParamList>();
 
 const OrderStackScreen = () => (
     <OrderStack.Navigator
@@ -119,7 +201,25 @@ const OrderStackScreen = () => (
     </OrderStack.Navigator>
 );
 
-const TokenStack = createStackNavigator();
+
+export interface EarnToken {
+    earn_desc: string,
+    earn_desc_long: string,
+    earn_qty: 50,
+    id: string,
+    photo: string,
+    supplier_desc: string,
+    validity_end_date: Date,
+    validity_start_date: Date,
+}
+
+export type TokenStackParamList = {
+    Tokens: undefined;
+    EarnTokensDetail: EarnToken;
+};
+
+//const TokenStack = createStackNavigator();
+const TokenStack = createStackNavigator<TokenStackParamList>();
 
 const TokenStackScreen = () => (
     <TokenStack.Navigator
@@ -143,6 +243,7 @@ const TokenStackScreen = () => (
             options={{ headerShown: true }} />
     </TokenStack.Navigator>
 );
+
 
 const ProfileStack = createStackNavigator();
 

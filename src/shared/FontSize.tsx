@@ -1,13 +1,13 @@
 
-const fontSize = (fontSize, fontScale) => {
+const fontSize = (fontSizeParam: number, fontScale: number) => {
     //console.log('fontScale: ', fontScale);
-    if ((fontScale > 1) && (fontSize < 1.2)) {
-        return fontSize - 5;
+    if ((fontScale > 1) && (fontSizeParam < 1.2)) {
+        return fontSizeParam - 5;
     } else if (fontScale > 1.2) {
-        return fontSize - 8;
+        return fontSizeParam - 8;
     } else {
-        return fontSize;
+        return fontSizeParam;
     }
-}
+};
 
 export default fontSize;

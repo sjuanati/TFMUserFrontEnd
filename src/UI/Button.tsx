@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import globalStyles from './Style'
+import globalStyles from './Style';
 
 const button = (params) => {
 
