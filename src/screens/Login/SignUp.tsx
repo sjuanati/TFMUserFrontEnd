@@ -81,21 +81,20 @@ const SignUp = (props: Props) => {
 
    // Opens a URL in the browser
    const handleURL = () => {
-      const url = 'https://www.doctormax.es/privacidad-y-condiciones-de-uso/'
+      const url = 'https://www.doctormax.es/privacidad-y-condiciones-de-uso/';
       Linking.canOpenURL(url)
          .then((supported) => {
             if (supported) {
                Linking.openURL(url);
             } else {
-               Alert.alert(`Can't open browser`);
+               Alert.alert('Can\'t open browser');
             }
          })
          .catch(err => {
             Alert.alert('Browser error');
-            console.log('Error on SignUp.js -> handleURL(): ', err);
+            console.log('Error in SignUp.tsx -> handleURL(): ', err);
          });
    };
-
 
    const register = () => {
       if (user.email && user.password) {

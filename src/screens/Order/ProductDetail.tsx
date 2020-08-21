@@ -57,7 +57,7 @@ const ProductDetail = (props: Props) => {
                     Alert.alert('Can\'t open browser');
                 }
             })
-            .catch(err => console.warn('Error on MakeOrderDetail.js -> handleURL(): ', err));
+            .catch(err => console.warn('Error in ProductDetail.tsx -> handleURL(): ', err));
     };
 
     // Order detail can be reached from two different screens:

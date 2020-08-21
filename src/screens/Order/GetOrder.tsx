@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
     Badge,
@@ -29,7 +30,8 @@ import { useTypedSelector } from '../../store/reducers/reducer';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { OrderStackParamList, OrderType } from '../../navigation/StackNavigator';
+import { OrderStackParamList } from '../../navigation/StackNavigator';
+import { Order, Filter } from '../../shared/Interfaces';
 
 // Font size management
 let FONT_SIZE = fontSize(20, PixelRatio.getFontScale());
@@ -39,21 +41,13 @@ type Props = {
     navigation: StackNavigationProp<OrderStackParamList, 'Orders'>
 };
 
-interface FilterType {
-    grey: boolean,
-    red: boolean,
-    yellow: boolean,
-    green: boolean
-}
-
 const GetOrder = (props: Props) => {
 
-    const [loading, setLoading] = useState(true);
-    //const [orders, setOrders] = useState([]);
-    const [orders, setOrders] = useState<OrderType[]>();
-    const [originalOrders, setOriginalOrders] = useState([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [originalOrders, setOriginalOrders] = useState<Order[]>([]);
     const user = useTypedSelector(state => state.user);
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<Filter>({
         grey: true,
         red: true,
         yellow: true,
@@ -88,16 +82,16 @@ const GetOrder = (props: Props) => {
         });
     };
 
-    const findOrder = (text: string, arrayOrders: OrderType, modFilters: FilterType) => {
-        return new Promise(async (resolve) => {
+    const findOrder = (text: string, arrayOrders: Order[], modFilters: Filter) => {
+        return new Promise<Order[]>(async (resolve) => {
             if (text !== '') {
                 const ordersToFilter = await applyFilter(modFilters, arrayOrders);
-                const res = ordersToFilter.filter((ordr: OrderType) => {
+                const res = ordersToFilter.filter((ordr: Order) => {
                     let condition = new RegExp(text);
                     return condition.test(ordr.pharmacy_desc);
                 });
-                let initialOrder = { order_id: 0, header: true };
-                res.unshift(initialOrder);
+                // let initialOrder = { order_id: 0, header: true };
+                // res.unshift(initialOrder);
                 setOrders(res);
                 resolve(res);
             } else {
@@ -108,26 +102,25 @@ const GetOrder = (props: Props) => {
         });
     };
 
-    const applyFilter = async (filters: FilterType, arrayOrders: any) => {
-        return new Promise((resolve) => {
+    const applyFilter = async (filter: Filter, arrayOrders: Order[]) => {
+        return new Promise<Order[]>((resolve) => {
 
-            let finalArray = [];
-            if (filters.grey && filters.red && filters.yellow && filters.green) {
+            let finalArray: Order[] = [];
+            if (filter.grey && filter.red && filter.yellow && filter.green) {
                 finalArray = arrayOrders;
-            } else if (!filters.grey && !filters.red && filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 2 || ordr.status === 4);
-            } else if (!filters.grey && !filters.red && !filters.yellow && filters.green) {
-                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 5);
-            } else if (!filters.grey && filters.red && !filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 6);
-            } else if (filters.grey && !filters.red && !filters.yellow && !filters.green) {
-                finalArray = arrayOrders.filter((ordr: OrderType) => ordr.status === 1 || ordr.status === 3);
-            } else if (!filters.grey && !filters.red && !filters.yellow && !filters.green) {
+            } else if (!filter.grey && !filter.red && filter.yellow && !filter.green) {
+                finalArray = arrayOrders.filter((ordr: Order) => ordr.status === 2 || ordr.status === 4);
+            } else if (!filter.grey && !filter.red && !filter.yellow && filter.green) {
+                finalArray = arrayOrders.filter((ordr: Order) => ordr.status === 5);
+            } else if (!filter.grey && filter.red && !filter.yellow && !filter.green) {
+                finalArray = arrayOrders.filter((ordr: Order) => ordr.status === 6);
+            } else if (filter.grey && !filter.red && !filter.yellow && !filter.green) {
+                finalArray = arrayOrders.filter((ordr: Order) => ordr.status === 1 || ordr.status === 3);
+            } else if (!filter.grey && !filter.red && !filter.yellow && !filter.green) {
                 finalArray = [];
             }
-
-            let initialItem = finalArray.find((item: OrderType) => item.order_id === 0);
-            if (!initialItem) { finalArray.unshift({ order_id: 0, header: true }); }
+            // let initialItem = finalArray.find((item: Order) => item.order_id === '0');
+            // if (!initialItem) { finalArray.unshift({ order_id: 0, header: true }); }
             resolve(finalArray);
         });
     };
@@ -171,19 +164,20 @@ const GetOrder = (props: Props) => {
             <View>
                 {(item.item.header) ?
                     <ListItem itemDivider
-                        style={{ marginLeft: 0 }}
+                        //style={{ marginLeft: 0 }}
                         id={item.item.order_id.toString()}>
-                        <Left style={{ flex: 0.6 }}>
+                        <Left style={styles.flex06}>
                             <Text>Order</Text>
                         </Left>
-                        <Body style={{ flex: 0.4 }}>
+                        <Body style={styles.flex04}>
                             <Text>Status</Text>
                         </Body>
                     </ListItem>
                     :
-                    <ListItem style={{ marginLeft: 0 }}
+                    <ListItem
+                        //style={{ marginLeft: 0 }}
                         id={item.item.order_id.toString()}>
-                        <Body style={{ flex: 0.6, paddingLeft: 5 }}>
+                        <Body style={[styles.paddingLeft5, styles.flex06]}>
                             <TouchableOpacity onPress={() => openOrder(item)}>
                                 {(item.item.pharmacy_desc && item.item.pharmacy_desc) ?
                                     <Text>{item.item.pharmacy_desc}</Text> :
@@ -198,7 +192,7 @@ const GetOrder = (props: Props) => {
                                 }
                             </TouchableOpacity>
                         </Body>
-                        <Body style={{ flex: 0.4 }}>
+                        <Body style={styles.flex04}>
                             <TouchableOpacity onPress={() => openOrder(item)}>
                                 <StatusOrder status={item.item.status} />
                             </TouchableOpacity>
@@ -258,7 +252,7 @@ const GetOrder = (props: Props) => {
                 : <View style={styles.viewContent}>
                     <FlatList data={orders}
                         renderItem={renderItem}
-                        keyExtractor={(item: OrderType) => item.order_id.toString()}
+                        keyExtractor={(item: Order) => item.order_id.toString()}
                         refreshControl={
                             <RefreshControl
                                 refreshing={loading}
@@ -316,8 +310,8 @@ const GetOrder = (props: Props) => {
                                 setOrders(ordrs);
                             }
                         }}>
-                            <Badge style={{ backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', width: 25, height: 25, marginHorizontal: 7, marginTop: 15 }}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
+                            <Badge style={styles.badgeSelected}>
+                                <Icon name="ellipsis1" type="AntDesign" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -328,8 +322,8 @@ const GetOrder = (props: Props) => {
                             const ordrs = await findOrder(searchText, originalOrders, modFilters);
                             setOrders(ordrs);
                         }}>
-                            <Badge style={{ backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', width: 25, height: 25, marginHorizontal: 7, marginTop: 15, opacity: 0.5 }}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
+                            <Badge style={[styles.badgeSelected, styles.opacity]}>
+                                <Icon name="ellipsis1" type="AntDesign" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -358,7 +352,7 @@ const GetOrder = (props: Props) => {
                             }
                         }}>
                             <Badge warning style={styles.filterBadge}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -373,7 +367,7 @@ const GetOrder = (props: Props) => {
                             setOrders(ordrs);
                         }}>
                             <Badge warning style={styles.filterBadgeNonSelected}>
-                                <Icon name="ellipsis1" type="AntDesign" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="ellipsis1" type="AntDesign" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -402,7 +396,7 @@ const GetOrder = (props: Props) => {
                             }
                         }}>
                             <Badge success style={styles.filterBadge}>
-                                <Icon name="checkmark" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="checkmark" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -417,7 +411,7 @@ const GetOrder = (props: Props) => {
                             setOrders(ordrs);
                         }}>
                             <Badge success style={styles.filterBadgeNonSelected}>
-                                <Icon name="checkmark" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="checkmark" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -446,7 +440,7 @@ const GetOrder = (props: Props) => {
                             }
                         }}>
                             <Badge danger style={styles.filterBadge}>
-                                <Icon name="close" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="close" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={async () => {
@@ -461,7 +455,7 @@ const GetOrder = (props: Props) => {
                             setOrders(ordrs);
                         }}>
                             <Badge danger style={styles.filterBadgeNonSelected}>
-                                <Icon name="close" style={{ fontSize: 14, color: '#fff' }} />
+                                <Icon name="close" style={styles.checkmark} />
                             </Badge>
                         </TouchableOpacity>
                 }
@@ -547,6 +541,31 @@ const styles = StyleSheet.create({
     statusRed: {
         color: '#d9534f',
         fontSize: 13,
+    },
+    checkmark: {
+        fontSize: 14,
+        color: '#fff',
+    },
+    flex04: {
+        flex: 0.4,
+    },
+    flex06: {
+        flex: 0.6,
+    },
+    paddingLeft5: {
+        paddingLeft: 5,
+    },
+    badgeSelected: {
+        backgroundColor: 'grey',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 25,
+        height: 25,
+        marginHorizontal: 7,
+        marginTop: 15,
+    },
+    opacity: {
+        opacity: 0.5,
     },
 });
 

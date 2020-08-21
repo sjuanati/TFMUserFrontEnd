@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import showToast from './Toast';
+import { AxiosError } from 'axios';
 
-const HandleAxiosErrors = async (props: any, err: any) => {
+const HandleAxiosErrors = async (props: any, err: AxiosError) => {
     if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         showToast('Please sign in again', 'warning');
         await AsyncStorage.clear();

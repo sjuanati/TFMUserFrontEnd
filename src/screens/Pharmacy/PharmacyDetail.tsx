@@ -22,27 +22,7 @@ import Cons from '../../shared/Constants';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/StackNavigator';
-
-interface Pharmacy {
-    pharmacy_id: number,
-    pharmacy_desc: string,
-    eth_address: string,
-    owner_name: string,
-    address: string,
-    zip_code: string,
-    locality: string,
-    phone_number: string,
-    instagram: string,
-    facebook: string,
-    email: string,
-    web: string
-}
-
-// interface Schedule {
-//     result: string[],
-//     isOpen: boolean,
-//     day: number
-// }
+import { Pharmacy, ScheduleOutput } from '../../shared/Interfaces';
 
 type Props = {
     route: RouteProp<HomeStackParamList, 'PharmacyDetails'>,
@@ -51,26 +31,11 @@ type Props = {
 
 const PharmacyDetail = (props: Props) => {
 
-    //const [pharmacy, setPharmacy] = useState({});
-    const [pharmacy, setPharmacy] = useState<Pharmacy>({
-        pharmacy_id: 0,
-        pharmacy_desc: '',
-        eth_address: '',
-        owner_name: '',
-        address: '',
-        zip_code: '',
-        locality: '',
-        phone_number: '',
-        instagram: '',
-        facebook: '',
-        email: '',
-        web: '',
-    });
-    //const [schedule, setSchedule] = useState([String]); //useState(String([]));
+    const [pharmacy, setPharmacy] = useState<Pharmacy>();
     const [schedule, setSchedule] = useState<String[]>();
-    const [openNow, setOpenNow] = useState(false);
-    const [isShowingSchedule, setIsShowingSchedule] = useState(false);
-    const [weekday, setWeekday] = useState(-1);
+    const [openNow, setOpenNow] = useState<boolean>(false);
+    const [isShowingSchedule, setIsShowingSchedule] = useState<boolean>(false);
+    const [weekday, setWeekday] = useState<number>(-1);
     const user = useTypedSelector(state => state.user);
     const dispatch = useDispatch();
 
@@ -82,10 +47,8 @@ const PharmacyDetail = (props: Props) => {
         })
             .then(response => {
                 if (response.data.length > 0) {
-                    const res = response.data;
-                    console.log('res:', res);
-                    //const [resultSchedule, resultOpenNow, resDay] = PharmacySchedule(res);
-                    const { result, isOpen, day }: any = PharmacySchedule(res);
+                    const res = response.data[0];
+                    const { result, isOpen, day }: ScheduleOutput = PharmacySchedule(res);
                     setSchedule(result);
                     setOpenNow(isOpen);
                     setWeekday(day);
@@ -97,20 +60,20 @@ const PharmacyDetail = (props: Props) => {
     };
 
     useEffect(() => {
-        const { item }: any = props.route.params;
-        //const { item }: Pharma = props.route.params;
-        console.log('item:', item);
+        const { item } = props.route.params;
         setPharmacy(item);
         fetchSchedule(item);
     }, []);
 
     const goBack = () => {
-        dispatch(setFavPharmacy(
-            pharmacy.pharmacy_id,
-            pharmacy.pharmacy_desc,
-            pharmacy.eth_address));
-        props.navigation.goBack();
-        props.navigation.goBack();
+        if (pharmacy) {
+            dispatch(setFavPharmacy(
+                pharmacy.pharmacy_id,
+                pharmacy.pharmacy_desc,
+                pharmacy.eth_address));
+            props.navigation.goBack();
+            props.navigation.goBack();
+        }
     };
 
     const toggleIsShowingSchedule = () => {
@@ -131,7 +94,7 @@ const PharmacyDetail = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.log('Error on Pharmacy.js -> handlePhoneCall(): ', err);
+                console.log('Error in PharmacyDetail.tsx -> handlePhoneCall(): ', err);
             });
     };
 
@@ -150,7 +113,7 @@ const PharmacyDetail = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.log('Error on Pharmacy.js -> handleFacebook(): ', err);
+                console.log('Error in PharmacyDetail.tsx -> handleFacebook(): ', err);
             });
     };
 
@@ -170,7 +133,7 @@ const PharmacyDetail = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.warn('Error on Pharmacy.js -> handleInstagram(): ', err);
+                console.warn('Error in PharmacyDetail.tsx -> handleInstagram(): ', err);
             });
     };
 
@@ -187,7 +150,7 @@ const PharmacyDetail = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.warn('Error on Pharmacy.js -> handleEmail(): ', err);
+                console.warn('Error in PharmacyDetail.tsx -> handleEmail(): ', err);
             });
     };
 
@@ -203,80 +166,84 @@ const PharmacyDetail = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.warn('Error on Pharmacy.js -> handleURL(): ', err);
+                console.warn('Error in PharmacyDetail.tsx -> handleURL(): ', err);
             });
     };
 
     return (
         <ScrollView>
-            <View style={styles.container}>
-                <View style={[styles.header, styles.vMargin]}>
-                    <Text style={styles.headerText}> {pharmacy.pharmacy_desc} </Text>
-                </View>
-                <View style={styles.body}>
-                    <Text style={[styles.containerText, styles.vMargin]}>
-                        <Text style={styles.textBold}> Pharmacist: </Text>
-                        <Text style={styles.textSmaller}> {pharmacy.owner_name} </Text>
-                    </Text>
-                    <TouchableOpacity
-                        onPress={() => toggleIsShowingSchedule()}>
-                        <View style={[styles.containerText, styles.vMargin]}>
-                            <Text style={styles.textBold}> Schedule: </Text>
-                            {(weekday === -1)
-                                ? <Text style={styles.valuesNormal}> Not available </Text>
-                                : (openNow)
-                                    ? <Text style={styles.open}> Open Now </Text>
-                                    : <Text style={styles.closed}> Closed Now </Text>}
-                            {(weekday !== -1)
-                                ? (openNow)
-                                    ? <Icon name="ios-arrow-down" size={30} color="green" />
-                                    : <Icon name="ios-arrow-down" size={30} color="red" />
+            {(pharmacy)
+                ? <View style={styles.container}>
+                    <View style={[styles.header, styles.vMargin]}>
+                        <Text style={styles.headerText}> {pharmacy.pharmacy_desc} </Text>
+                    </View>
+                    <View style={styles.body}>
+                        <Text style={[styles.containerText, styles.vMargin]}>
+                            <Text style={styles.textBold}> Pharmacist: </Text>
+                            <Text style={styles.textSmaller}> {pharmacy.owner_name} </Text>
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => toggleIsShowingSchedule()}>
+                            <View style={[styles.containerText, styles.vMargin]}>
+                                <Text style={styles.textBold}> Schedule: </Text>
+                                {(weekday === -1)
+                                    ? <Text style={styles.valuesNormal}> Not available </Text>
+                                    : (openNow)
+                                        ? <Text style={styles.open}> Open Now </Text>
+                                        : <Text style={styles.closed}> Closed Now </Text>}
+                                {(weekday !== -1)
+                                    ? (openNow)
+                                        ? <Icon name="ios-arrow-down" size={30} color="green" />
+                                        : <Icon name="ios-arrow-down" size={30} color="red" />
+                                    : null}
+                            </View>
+                            {(isShowingSchedule)
+                                ? schedule?.map((item, index) => {
+                                    if (weekday === index) {
+                                        return (<Text style={styles.valuesSelected} key={index}> {item} </Text>);
+                                    } else {
+                                        return (<Text style={styles.valuesNormal} key={index}> {item} </Text>);
+                                    }
+                                })
                                 : null}
-                        </View>
-                        {(isShowingSchedule)
-                            ? schedule?.map((item, index) => {
-                                if (weekday === index) {
-                                    return (<Text style={styles.valuesSelected} key={index}> {item} </Text>);
-                                } else {
-                                    return (<Text style={styles.valuesNormal} key={index}> {item} </Text>);
-                                }
-                            })
-                            : null}
-                    </TouchableOpacity>
-                    <Text style={[styles.textBold, styles.vMargin]}> Address: </Text>
-                    <Text style={styles.valuesNormal}>
-                        {(weekday === -1)
-                            ? 'Not available'
-                            : `${pharmacy.address} \n ${pharmacy.zip_code} ${pharmacy.locality}`
-                        }
-                    </Text>
-                </View>
-                <View style={styles.containerButtons}>
-                    <TouchableOpacity onPress={() => handlePhoneCall(pharmacy.phone_number)}>
-                        <Icon name="ios-call" size={35} color="grey" style={styles.item} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleInstagram(pharmacy.instagram)}>
-                        <Icon name="logo-instagram" size={35} color="grey" style={styles.item} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleFacebook(pharmacy.facebook)}>
-                        <Icon name="logo-facebook" size={35} color="grey" style={styles.item} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleEmail(pharmacy.email)}>
-                        <Icon name="ios-at" size={35} color="grey" style={styles.item} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleURL(pharmacy.web)}>
-                        <Icon name="ios-globe" size={35} color="grey" style={styles.item} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.buttonOKContainer}>
-                    <TouchableOpacity
-                        style={[globalStyles.button, styles.button]}
-                        onPress={() => goBack()}>
-                        <Text style={styles.buttonText}> Choose </Text>
-                    </TouchableOpacity>
-                </View>
+                        </TouchableOpacity>
+                        <Text style={[styles.textBold, styles.vMargin]}> Address: </Text>
+                        <Text style={styles.valuesNormal}>
+                            {(weekday === -1)
+                                ? 'Not available'
+                                : `${pharmacy.street} \n${pharmacy.zip_code} ${pharmacy.locality}`
+                            }
+                        </Text>
+                    </View>
+                    <View style={styles.containerButtons}>
+                        <TouchableOpacity onPress={() => handlePhoneCall(pharmacy.phone_number)}>
+                            <Icon name="ios-call" size={35} color="grey" style={styles.item} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleInstagram(pharmacy.instagram)}>
+                            <Icon name="logo-instagram" size={35} color="grey" style={styles.item} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleFacebook(pharmacy.facebook)}>
+                            <Icon name="logo-facebook" size={35} color="grey" style={styles.item} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleEmail(pharmacy.email)}>
+                            <Icon name="ios-at" size={35} color="grey" style={styles.item} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleURL(pharmacy.web)}>
+                            <Icon name="ios-globe" size={35} color="grey" style={styles.item} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonOKContainer}>
+                        <TouchableOpacity
+                            style={[globalStyles.button, styles.button]}
+                            onPress={() => goBack()}>
+                            <Text style={styles.buttonText}> Choose </Text>
+                        </TouchableOpacity>
+                    </View>
 
-            </View>
+                </View>
+                :
+                null}
+
         </ScrollView>
     );
 };

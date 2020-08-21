@@ -13,7 +13,8 @@ import { httpUrl } from '../../../urlServer';
 import { RNCamera } from 'react-native-camera';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList, Product } from '../../navigation/StackNavigator';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
+import { Product } from '../../shared/Interfaces';
 import { addItem, setScanned } from '../../store/actions/order';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../store/reducers/reducer';
@@ -32,8 +33,8 @@ const MakeOrderScan = (props: Props) => {
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
     const [barcode, setBarcode] = useState(null);
-    const [isAlreadyScanned, setIsAlreadyScanned] = useState(false);
-    const [isFlashOn, setIsFlashOn] = useState(false);
+    const [isAlreadyScanned, setIsAlreadyScanned] = useState<boolean>(false);
+    const [isFlashOn, setIsFlashOn] = useState<boolean>(false);
 
     useEffect(() => {
         if (barcode && !isAlreadyScanned) { fetchPrescription(barcode); }
@@ -67,7 +68,7 @@ const MakeOrderScan = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.log('Error in MakeOrderScan.js -> fetchPrescription(): ', err);
+                console.log('Error in MakeOrderScan.tsx -> fetchPrescription(): ', err);
             });
     };
 

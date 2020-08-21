@@ -13,7 +13,6 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
 } from 'react-native';
-
 import axios from 'axios';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
@@ -30,8 +29,8 @@ const ProfileEdit = () => {
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
     const modal = useTypedSelector(state => state.modal);
-    const [name, setName] = useState(user.name);
-    const [gender, setGender] = useState(user.gender);
+    const [name, setName] = useState<string>(user.name);
+    const [gender, setGender] = useState<string>(user.gender);
     let parsedBirthday: Date;
     if (user.birthday) {
         parsedBirthday = new Date(moment(user.birthday).format('YYYY-MM-DD'));
@@ -39,18 +38,18 @@ const ProfileEdit = () => {
         parsedBirthday = new Date(moment('1980-01-01').format('YYYY-MM-DD'));
         user.birthday = parsedBirthday;
     }
-    const [birthday, setBirthday] = useState(parsedBirthday);
-    const [phone, setPhone] = useState(user.phone);
-    const [email, setEmail] = useState(user.email);
-    const [street, setStreet] = useState(user.street);
-    const [locality, setLocality] = useState(user.locality);
-    const [zipcode, setZipcode] = useState(user.zip_code);
-    const [country, setCountry] = useState(user.country);
-    const [isPickerOpen, setIsPickerOpen] = useState(false);
-    const [isLoading, setIsLoding] = useState(false);
+    const [birthday, setBirthday] = useState<Date>(parsedBirthday);
+    const [phone, setPhone] = useState<string>(user.phone);
+    const [email, setEmail] = useState<string>(user.email);
+    const [street, setStreet] = useState<string>(user.street);
+    const [locality, setLocality] = useState<string>(user.locality);
+    const [zipcode, setZipcode] = useState<string>(user.zip_code);
+    const [country, setCountry] = useState<string>(user.country);
+    const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoding] = useState<boolean>(false);
 
     const checkTextInput = async () => {
-        return new Promise((resolve) => {
+        return new Promise<boolean>((resolve) => {
 
             // Check if email is filled in
             if (email && user.email) {
@@ -81,7 +80,7 @@ const ProfileEdit = () => {
                             }
                         })
                         .catch(err => {
-                            console.log('Error at ProfileEdit.tsx -> checkTextInput() :', err);
+                            console.log('Error in ProfileEdit.tsx -> checkTextInput() :', err);
                             resolve(false);
                         });
                 } else { resolve(true); }
@@ -110,7 +109,6 @@ const ProfileEdit = () => {
         setIsPickerOpen(true);
     };
 
-    //const datePickerHandler = (event, selectedDate: Date) => {
     const datePickerHandler = (event: any, selectedDate: Date) => {
         const currentDate = selectedDate || birthday;
         if (Platform.OS === 'android') { setIsPickerOpen(false); }
@@ -130,10 +128,6 @@ const ProfileEdit = () => {
         setLocality(user.locality);
         setZipcode(user.zip_code);
         setCountry(user.country);
-
-        //TODO: Remove files if App closes, but not during the execution. Otherwise, the photo can't be loaded
-        // Alt: Load photo in binary into avatar.photo, and delete the file right afterwards.
-        //removePhotoFromFile();
     };
 
     const saveProfile = async () => {
@@ -174,7 +168,7 @@ const ProfileEdit = () => {
 
     // Save User's profile (name, gender, email) to DB
     const saveProfileToDB = async () => {
-        return new Promise((resolve) => {
+        return new Promise<boolean>((resolve) => {
 
             if (user.id) {
                 axios.post(`${httpUrl}/users/profile/set`, {
@@ -204,11 +198,11 @@ const ProfileEdit = () => {
                     })
                     .catch(error => {
                         Alert.alert('Error when saving profile');
-                        console.log('Error at ProfileEdit.js -> saveProfileToDB() :', error);
+                        console.log('Error in ProfileEdit.tsx -> saveProfileToDB() :', error);
                         resolve(false);
                     });
             } else {
-                console.log('Warning on ProfileEdit.js -> saveProfileToDB(): No User to save Profile');
+                console.log('Warning in ProfileEdit.tsx -> saveProfileToDB(): No User to save Profile');
                 resolve(false);
             }
         });
@@ -216,7 +210,7 @@ const ProfileEdit = () => {
 
     // Save User's address (street, locality, zipcode, country) to DB
     const saveAddressToDB = async () => {
-        return new Promise((resolve) => {
+        return new Promise<boolean>((resolve) => {
 
             if (user.id) {
                 axios.post(`${httpUrl}/users/address/set`, {
@@ -243,11 +237,11 @@ const ProfileEdit = () => {
                     })
                     .catch(err => {
                         Alert.alert('Error when saving address');
-                        console.log('Error at ProfileEdit.js -> saveAddressToDB() :', err);
+                        console.log('Error in ProfileEdit.tsx -> saveAddressToDB() :', err);
                         resolve(false);
                     });
             } else {
-                console.log('Warning on ProfileEdit.js -> saveAddressToDB(): No User to save Address');
+                console.log('Warning in ProfileEdit.tsx -> saveAddressToDB(): No User to save Address');
                 resolve(false);
             }
         });

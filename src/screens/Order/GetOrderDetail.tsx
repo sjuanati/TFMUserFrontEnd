@@ -24,7 +24,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { OrderStackParamList, OrderType } from '../../navigation/StackNavigator';
+import { OrderStackParamList } from '../../navigation/StackNavigator';
+import { Order } from '../../shared/Interfaces';
 
 type Props = {
     route: RouteProp<OrderStackParamList, 'OrderDetail'>,
@@ -33,10 +34,9 @@ type Props = {
 
 const GetOrderDetail = (props: Props) => {
 
-    const [loading, setLoading] = useState(true);
-    //const [order, setOrder] = useState([]);
-    const [order, setOrder] = useState<OrderType[]>([]);
-    const [orderTraceStatus, setOrderTraceStatus] = useState('PENDING');
+    const [loading, setLoading] = useState<boolean>(true);
+    const [order, setOrder] = useState<Order[]>([]);
+    const [orderTraceStatus, setOrderTraceStatus] = useState<string>('PENDING');
     const user = useTypedSelector(state => state.user);
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const GetOrderDetail = (props: Props) => {
         }).then(res => {
             setOrderTraceStatus(res.data);
         }).catch(err => {
-            console.log('Error in GetOrderDetail.js -> fetchOrderTraceGlobal() : ', err);
+            console.log('Error in GetOrderDetail.tsx -> fetchOrderTraceGlobal() : ', err);
         });
     };
 
@@ -178,7 +178,7 @@ const GetOrderDetail = (props: Props) => {
             <FlatList
                 data={order}
                 renderItem={renderItem}
-                keyExtractor={(item: OrderType) => item.order_item.toString()} />
+                keyExtractor={(item: Order) => item.order_item.toString()} />
         );
     };
 

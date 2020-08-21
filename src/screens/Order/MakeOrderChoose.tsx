@@ -11,7 +11,8 @@ import {
 import axios from 'axios';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList, Product as Prod } from '../../navigation/StackNavigator';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
+import { Product as Prod } from '../../shared/Interfaces';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import globalStyles from '../../UI/Style';
 import { httpUrl } from '../../../urlServer';
@@ -32,10 +33,10 @@ const MakeOrderChoose = (props: Props) => {
 
     const user = useTypedSelector(state => state.user);
     const order = useTypedSelector(state => state.order.items);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState<string>('');
     const [products, setProducts] = useState([]);
-    const [typingTimeout, setIsTypingTimeout] = useState(0);
-    const [isLoading, setIsLoding] = useState(false);
+    const [typingTimeout, setIsTypingTimeout] = useState<number>(0);
+    const [isLoading, setIsLoding] = useState<boolean>(false);
     const TIMER = 500;
     const MIN_CHARACTERS = 3;
 
@@ -48,7 +49,6 @@ const MakeOrderChoose = (props: Props) => {
     useEffect(() => {
         if (typingTimeout) { clearTimeout(typingTimeout); }
         setIsTypingTimeout(setTimeout(() => {
-            //if (search && search.length >= MIN_CHARACTERS) fetchProducts();
             if (search) {
                 if (search.length >= MIN_CHARACTERS) {
                     fetchProducts();
@@ -101,7 +101,7 @@ const MakeOrderChoose = (props: Props) => {
             })
             .catch(async err => {
                 handleAxiosErrors(props, err);
-                console.log('Error on MakeOrderChoose.js -> fetchProducts() : ', err);
+                console.log('Error in MakeOrderChoose.tsx -> fetchProducts() : ', err);
             })
             .then(() => {
                 setIsLoding(false);
@@ -121,7 +121,7 @@ const MakeOrderChoose = (props: Props) => {
             })
             .catch(async err => {
                 handleAxiosErrors(props, err);
-                console.log('Error on MakeOrderChoose.js -> fetchProductsLast5() : ', err);
+                console.log('Error in MakeOrderChoose.tsx -> fetchProductsLast5() : ', err);
             })
             .then(() => {
                 setIsLoding(false);

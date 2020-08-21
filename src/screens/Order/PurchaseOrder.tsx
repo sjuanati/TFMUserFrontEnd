@@ -33,9 +33,9 @@ const PurchaseOrder = (props: Props) => {
     const user = useTypedSelector(state => state.user);
     const order = useTypedSelector(state => state.order.items);
     const price = useTypedSelector(state => state.order.price);
-    const [balance, setBalance] = useState(-1);
-    const [isSelected, setIsSelected] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
+    const [balance, setBalance] = useState<number>(-1);
+    const [isSelected, setIsSelected] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         fetchTokenBalance();
@@ -50,7 +50,7 @@ const PurchaseOrder = (props: Props) => {
             const amount = Math.round(parseFloat(res.data) * 100) / 100;
             setBalance(amount);
         }).catch(err => {
-            console.log('Error in Token.js -> fetchTokenBalance(): ', err);
+            console.log('Error in PurchaseOrder.tsx -> fetchTokenBalance(): ', err);
             setBalance(-2);
         });
     };
@@ -68,7 +68,7 @@ const PurchaseOrder = (props: Props) => {
             }).then(() => {
                 console.log('purchase with tokens OK!');
             }).catch(err => {
-                console.log('Error in Token.js -> fetchSpendTokens(): ', err);
+                console.log('Error in PurchaseOrder.tsx -> fetchSpendTokens(): ', err);
             }).then(() => {
                 setIsLoading(false);
             });
@@ -116,11 +116,11 @@ const PurchaseOrder = (props: Props) => {
                 })
                 .catch(async err => {
                     handleAxiosErrors(props, err);
-                    Alert.alert('Error al procesar el pedido');
-                    console.log('Error at OrderSummary.js -> saveOrderToDB() :', err);
+                    Alert.alert('Error sending order');
+                    console.log('Error in PurchaseOrder.tsx -> saveOrderToDB() :', err);
                 });
         } else {
-            console.log('Warning on OrderSummary.js -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
+            console.log('Warning in PurchaseOrder.tsx -> saveOrderToDB(): No User, Product/s or Pharmacy to save Order');
         }
     };
 
@@ -138,10 +138,10 @@ const PurchaseOrder = (props: Props) => {
                 })
                 .catch(async err => {
                     handleAxiosErrors(props, err);
-                    console.log('Error on OrderSummary.js -> saveLastPharmacyToDB() :', err);
+                    console.log('Error in PurchaseOrder.tsx -> saveLastPharmacyToDB() :', err);
                 });
         } else {
-            console.log('Warning on OrderSummary.js -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
+            console.log('Warning on PurchaseOrder.tsx -> saveLastPharmacyToDB(): No User or Pharmacy to save Order');
         }
     };
 

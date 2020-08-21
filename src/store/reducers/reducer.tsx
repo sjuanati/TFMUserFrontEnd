@@ -14,13 +14,8 @@ export interface RootStateOrderItems {
 }
 
 export interface RootState {
-  avatar: {
-    photo: string,
-    type: string,  //redux action type
-  },
   modal: {
     isModalProfileOpen: boolean,
-    type: string;  //redux action type
   },
   order: {
     items: RootStateOrderItems[],
@@ -28,7 +23,6 @@ export interface RootState {
     scanned: boolean,
     price: number,
     ordersPage: boolean,
-    type: string,  //redux action type
   },
   user: {
     favPharmacyID: number,
@@ -51,7 +45,6 @@ export interface RootState {
     country: string,
     photo: string,
     eth_address: string,
-    type: string,  //redux action type
   },
 }
 

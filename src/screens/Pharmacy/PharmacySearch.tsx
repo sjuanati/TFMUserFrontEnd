@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList, Pharma } from '../../navigation/StackNavigator';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
+import { Pharmacy } from '../../shared/Interfaces';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
@@ -42,26 +43,16 @@ interface Position {
     longitude: number;
 }
 
-interface Pharmacy {
-    pharmacy_id: number;
-    pharmacy_desc: string;
-    gps_latitude: number;
-    gps_longitude: number;
-    distance: number;
-}
-
 const PharmacySearch = (props: Props) => {
 
-    const [pharmacies, setPharmacies] = useState([]);
-    const [filteredPharmacies, setFilteredPharmacies] = useState([]);
-    const [search, setSearch] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-    const [isGPS, setIsGPS] = useState(false);
-    const [showList, setShowList] = useState(true);
+    const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
+    const [filteredPharmacies, setFilteredPharmacies] = useState<Pharmacy[]>([]);
+    const [search, setSearch] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isGPS, setIsGPS] = useState<boolean>(false);
+    const [showList, setShowList] = useState<boolean>(true);
     const [currentPosition, setcurrentPosition] = useState({});
     const user = useTypedSelector(state => state.user);
-    // const LATITUDE_DELTA = 0.1;
-    // const LONGITUDE_DELTA = 0.04;
 
     useEffect(() => {
         requestLocationPermission();
@@ -119,7 +110,7 @@ const PharmacySearch = (props: Props) => {
             },
             error => {
                 Alert.alert(error.message);
-                console.log('Error on PharmacySearch.js -> locateCurrentPosition(): ', error);
+                console.log('Error in PharmacySearch.tsx -> locateCurrentPosition(): ', error);
                 setIsGPS(false);
             },
             { enableHighAccuracy: true, timeout: 10000/*, maximumAge: 1000*/ }
@@ -146,7 +137,7 @@ const PharmacySearch = (props: Props) => {
             })
             .catch(async err => {
                 handleAxiosErrors(props, err);
-                console.log('Error on PharmacySearch.js -> fetchPharmacies() : ', err);
+                console.log('Error in PharmacySearch.tsx -> fetchPharmacies() : ', err);
             });
     };
 
@@ -173,13 +164,12 @@ const PharmacySearch = (props: Props) => {
     };
 
     // Show list of pharmacies around
-    const renderItemPharmaciesAround = ({ item }: { item: Pharma }) => {
+    const renderItemPharmaciesAround = ({ item }: { item: Pharmacy }) => {
         return (
             <ListItem
                 title={item.pharmacy_desc}
                 rightTitle={formatDistance(item.distance)}
                 onPress={() => props.navigation.navigate('PharmacyDetails', { item: item })}
-                //onPress={() => props.navigation.navigate('PharmacyDetails', item)}
                 bottomDivider
                 chevron />
         );
@@ -196,8 +186,6 @@ const PharmacySearch = (props: Props) => {
             });
         setFilteredPharmacies(filter);
     };
-
-    // TODO: debounce query to launch the search after a few milisecons after typing
 
     const { height } = Dimensions.get('window');
 

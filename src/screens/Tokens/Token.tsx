@@ -21,7 +21,8 @@ import { ListItem } from 'react-native-elements';
 import ActivityIndicator from '../../UI/ActivityIndicator';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TokenStackParamList, EarnToken } from '../../navigation/StackNavigator';
+import { TokenStackParamList } from '../../navigation/StackNavigator';
+import { EarnToken } from '../../shared/Interfaces';
 import bayer_test from '../../assets/images/global/bayer.png';
 import pfizer_test from '../../assets/images/global/pfizer.png';
 
@@ -33,11 +34,11 @@ type Props = {
 const Token = (props: Props) => {
 
     const user = useTypedSelector(state => state.user);
-    const [balance, setBalance] = useState(-1);
-    const [tabView, setTabView] = useState(true);
-    const [earnTokens, setEarnTokens] = useState([]);
-    const [amount, setAmount] = useState('0');
-    const [isLoading, setIsLoading] = useState(false);
+    const [balance, setBalance] = useState<number>(-1);
+    const [tabView, setTabView] = useState<boolean>(true);
+    const [earnTokens, setEarnTokens] = useState<EarnToken[]>([]);
+    const [amount, setAmount] = useState<string>('0');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         fetchTokenBalance();
@@ -131,11 +132,11 @@ const Token = (props: Props) => {
                 { cancelable: false }
             );
         } catch (err) {
-            console.log('Error on Token.js -> handlePurchase(): ', err);
+            console.log('Error in Token.tsx -> handlePurchase(): ', err);
         }
     };
 
-    const renderItems = ({item}: {item: EarnToken}) => (
+    const renderItems = ({ item }: { item: EarnToken }) => (
         <ListItem
             title={item.earn_desc}
             subtitle={

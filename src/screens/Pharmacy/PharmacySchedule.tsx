@@ -1,11 +1,11 @@
 import moment from 'moment';
+import { Schedule, ScheduleOutput } from '../../shared/Interfaces';
 
 // Given a Pharmacy schedule, it returns a structured schedule, if it is open now
 // and the day of the week
-const ParseSchedule = (res: any) => {
-
+const ParseSchedule = (res: Schedule): ScheduleOutput => {
     try {
-        const s = res[0];
+        const s = res;
         const mon = [s.mon_start_am, s.mon_end_am, s.mon_start_pm, s.mon_end_pm];
         const tue = [s.tue_start_am, s.tue_end_am, s.tue_start_pm, s.tue_end_pm];
         const wed = [s.wed_start_am, s.wed_end_am, s.wed_start_pm, s.wed_end_pm];
@@ -62,14 +62,18 @@ const ParseSchedule = (res: any) => {
             }
             n = n + 4;
         }
-        //return [result, isOpen, day];
         return {
             result: result,
             isOpen: isOpen,
             day: day,
         };
     } catch (err) {
-        console.log('Error on PharmacySchedule.js -> parseSchedule() : ', err);
+        console.log('Error in PharmacySchedule.tsx -> parseSchedule() : ', err);
+        return {
+            result: [],
+            isOpen: false,
+            day: 0,
+        };
     }
 };
 

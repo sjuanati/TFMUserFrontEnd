@@ -33,7 +33,7 @@ type Props = {
 
 const SignIn = (props: Props) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -57,12 +57,11 @@ const SignIn = (props: Props) => {
           await AsyncStorage.setItem('token', userToken);
           const userId = JSON.stringify(res.data.id);
           await AsyncStorage.setItem('user', userId);
-          //await AsyncStorage.setItem('user', JSON.stringify(res.data));
           setLoading(false);
           //props.navigation.navigate('Main');
           dispatch(setToken(userToken));
         } else {
-          showToast('There was an error', 'default');
+          showToast('There was an error', 'warning');
           setLoading(false);
         }
       }).catch((err) => {
@@ -70,7 +69,7 @@ const SignIn = (props: Props) => {
         setLoading(false);
       });
     } else {
-      showToast('Fill in all parameters', 'default');
+      showToast('Fill in all parameters', 'warning');
     }
   };
 

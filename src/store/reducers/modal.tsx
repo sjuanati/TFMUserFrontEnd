@@ -1,12 +1,18 @@
 import * as actionTypes from '../actions/actionTypes';
 import { RootState } from './reducer';
 
+type Modal = RootState['modal'];
+
+interface State extends Modal {}
+interface Action extends Modal {
+    type: string
+}
+
 const initialState = {
     isModalProfileOpen: false,
-    type: '',
 };
 
-const setIsModalProfileOpen = (state: RootState['modal'], action: RootState['modal']) => {
+const setIsModalProfileOpen = (state: State, action: Action) => {
     return {
         ...state,
         ...{
@@ -15,7 +21,7 @@ const setIsModalProfileOpen = (state: RootState['modal'], action: RootState['mod
     };
 };
 
-const reducer = (state = initialState, action: RootState['modal']) => {
+const reducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case actionTypes.SET_MODAL_PROFILE: return setIsModalProfileOpen(state, action);
         default: return state;

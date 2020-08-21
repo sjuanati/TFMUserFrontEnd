@@ -11,15 +11,11 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { httpUrl } from '../../../urlServer';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/StackNavigator';
-import { httpUrl } from '../../../urlServer';
-import Icon from 'react-native-vector-icons/Ionicons';
-
-// Components
-import Cons from '../../shared/Constants';
 import choosePharmacyLogo from '../../assets/images/home/Placeholder-yellow.png';
 import otcLogo from '../../assets/images/home/OTC-yellow.png';
 import pillLogo from '../../assets/images/home/Pill-Yellow.png';
@@ -29,6 +25,8 @@ import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import AsyncStorage from '@react-native-community/async-storage';
 import { setOrdered } from '../../store/actions/order';
 import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
+import Cons from '../../shared/Constants';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const FONT_SIZE = fontSize(24, PixelRatio.getFontScale());
 
@@ -42,8 +40,6 @@ const Home = (props: Props) => {
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
     const ordered = useTypedSelector(state => state.order.ordered);
-    //const [loading, setLoading] = useState(false);
-    //const [isActiveAccount, setIsActiveAccount] = useState(false);
 
     useEffect(() => {
         const checkCart = () => {
@@ -81,16 +77,8 @@ const Home = (props: Props) => {
                                     res[0].status,
                                     res[0].eth_address,
                                 ));
-                                // If User is disabled, go to AccountDisabled screen
-                                // if (res[0].status === 0) {
-                                //     console.log(`User ${usr} disabled!`);
-                                //     props.navigation.navigate('AccountDisabled', {
-                                //         user_id: usr,
-                                //     });
-                                // } else {
                                 fetchPharmacy(parseInt(usr, 10), tkn);
                                 fetchAddress(parseInt(usr, 10), tkn);
-                                //}
                             }
                         })
                         .catch(async err => {
@@ -159,7 +147,7 @@ const Home = (props: Props) => {
                 }
             })
             .catch(err => {
-                console.log('Error in insideSession.js -> fetchAddress():', err);
+                console.log('Error in Home.tsx -> fetchAddress():', err);
             });
     };
 
@@ -201,7 +189,7 @@ const Home = (props: Props) => {
 
     const openOrder = () => {
         if (!user.favPharmacyID) {
-            showToast('Choose pharmacy to make an Order', 'default');
+            showToast('Choose pharmacy to make an Order', 'warning');
         } else {
             props.navigation.navigate('MakeOrder');
         }

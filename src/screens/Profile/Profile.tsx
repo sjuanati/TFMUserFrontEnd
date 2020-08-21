@@ -72,7 +72,7 @@ const Profile = () => {
                 }
             })
             .catch(err => {
-                Alert.alert("There's been an error with the Browser");
+                Alert.alert('Error with browser');
                 console.log('Error on Profile.js -> handleURL(): ', err);
             });
     };
@@ -191,20 +191,6 @@ const styles = StyleSheet.create({
         color: '#525775',
         fontSize: 16,
     },
-    // image: {
-    //     flex: 1,
-    //     width: undefined,
-    //     height: undefined,
-    // },
-    // profileImage: {
-    //     width: 150,
-    //     height: 150,
-    //     borderRadius: 150 / 2,
-    //     borderColor: Cons.COLORS.DARK_GREY,
-    //     borderWidth: 0.5,
-    //     overflow: 'hidden',
-    //     marginBottom: 20,
-    // },
     button: {
         marginTop: 10,
         marginBottom: 30,

@@ -1,8 +1,12 @@
 import * as actionTypes from '../actions/actionTypes';
 import { RootState, RootStateOrderItems } from './reducer';
 
-// - 4 order actions: add item, remove item, clear cart (when the order is confirmed),
-//  order cart (true when the order is confirmed)
+type Order = RootState['order'];
+
+interface State extends Order {}
+interface Action extends Order, RootStateOrderItems {
+    type: string,
+}
 
 const initialState = {
     items: [],
@@ -10,13 +14,13 @@ const initialState = {
     scanned: false,
     price: 0,
     ordersPage: true,
-    type: '', //TBC
 };
 
-//interface RootStates extends Array<RootState['order']['items']>{}
+// - 4 order actions: add item, remove item, clear cart (when the order is confirmed),
+//  order cart (true when the order is confirmed)
 
 // // Add item to the Order. Price is rounded to two decimals
-const addItem = (state: RootState['order'], action: RootState['order'] & RootStateOrderItems) => {
+const addItem = (state: State, action: Action) => {
     const newItem = [{
         item_id: action.item_id,
         product_id: action.product_id,
@@ -39,7 +43,7 @@ const addItem = (state: RootState['order'], action: RootState['order'] & RootSta
 };
 
 // Remove item from the Order
-const removeItem = (state: RootState['order'], action: RootStateOrderItems) => {
+const removeItem = (state: State, action: Action) => {
     state.items = state.items.filter(item => item.item_id !== action.item_id);
 
     let totalPrice = 0;
@@ -50,37 +54,36 @@ const removeItem = (state: RootState['order'], action: RootStateOrderItems) => {
 };
 
 // Clear the Order
-const clearCart = (state: RootState['order'], action: RootState['order']) => {
+const clearCart = (state: State, action: Action) => {
     state = {
         items: [],
         ordered: action.ordered,
         scanned: false,
         price: 0,
         ordersPage: true,
-        type: '', //TBC
     };
     return state;
 };
 
 // Order is confirmed
-const setOrdered = (state: RootState['order'], action: RootState['order']) => {
+const setOrdered = (state: State, action: Action) => {
     state.ordered = action.ordered;
     return state;
 };
 
 // Set OrdersPage
-const setOrdersPage = (state: RootState['order'], action: RootState['order']) => {
+const setOrdersPage = (state: State, action: Action) => {
     state.ordersPage = action.ordersPage;
     return state;
 };
 
 // Set Scanned
-const setScanned = (state: RootState['order'], action: RootState['order']) => {
+const setScanned = (state: State, action: Action) => {
     state.scanned = action.scanned;
     return state;
 };
 
-const reducer = (state = initialState, action: RootState['order'] & RootStateOrderItems) => {
+const reducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_CART: return addItem(state, action);
         case actionTypes.REMOVE_FROM_CART: return removeItem(state, action);

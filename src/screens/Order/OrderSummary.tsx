@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList, OrderType } from '../../navigation/StackNavigator';
+import { HomeStackParamList } from '../../navigation/StackNavigator';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import Cons from '../../shared/Constants';
 import globalStyles from '../../UI/Style';

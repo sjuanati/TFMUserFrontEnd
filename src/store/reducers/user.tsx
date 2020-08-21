@@ -1,13 +1,20 @@
 import * as actionTypes from '../actions/actionTypes';
 import { RootState } from './reducer';
 
+type User = RootState['user'];
+
+interface State extends User {}
+interface Action extends User {
+    type: string,
+}
+
 const initialState = {
     favPharmacyID: 0,
     favPharmacyDesc: '',
     favPharmacyEthAddress: '',
     id: 0,
     token: '',
-    birthday: new Date(),  //TBC
+    birthday: new Date(),
     email: '',
     gender: '',
     name: '',
@@ -22,10 +29,9 @@ const initialState = {
     country: '',
     photo: '',
     eth_address: '',
-    type: '',
 };
 
-const setFavPharmacy = (state: RootState['user'], action: RootState['user']) => {
+const setFavPharmacy = (state: State, action: Action) => {
     return {
         ...state,
         ...{favPharmacyID: action.favPharmacyID,
@@ -35,14 +41,14 @@ const setFavPharmacy = (state: RootState['user'], action: RootState['user']) => 
     };
 };
 
-const setToken = (state: RootState['user'], action: RootState['user']) => {
+const setToken = (state: State, action: Action) => {
     return {
         ...state,
         ...{token: action.token},
     };
 };
 
-const setData = (state: RootState['user'], action: RootState['user']) => {
+const setData = (state: State, action: Action) => {
     return {
         ...state,
         ...{id: action.id,
@@ -59,7 +65,7 @@ const setData = (state: RootState['user'], action: RootState['user']) => {
     };
 };
 
-const setAddress = (state: RootState['user'], action: RootState['user']) => {
+const setAddress = (state: State, action: Action) => {
     return {
         ...state,
         ...{address_id: action.address_id,
@@ -73,7 +79,7 @@ const setAddress = (state: RootState['user'], action: RootState['user']) => {
     };
 };
 
-const reducer = (state = initialState, action: RootState['user']) => {
+const reducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case actionTypes.SET_FAV_PHARMACY: return setFavPharmacy(state, action);
         case actionTypes.SET_TOKEN: return setToken(state, action);

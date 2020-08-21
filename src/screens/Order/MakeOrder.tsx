@@ -23,7 +23,6 @@ type Props = {
 const MakeOrder = (props: Props) => {
 
     const dispatch = useDispatch();
-    //const scanned = useSelector((state: RootState) => state.order.scanned);
     const scanned = useTypedSelector(state => state.order.scanned);
 
     const scanPrescription = () => {
