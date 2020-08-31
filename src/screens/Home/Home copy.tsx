@@ -5,6 +5,7 @@ import {
     View,
     Alert,
     Image,
+    PixelRatio,
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
@@ -15,16 +16,19 @@ import { useTypedSelector } from '../../store/reducers/reducer';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/StackNavigator';
+import choosePharmacyLogo from '../../assets/images/home/Placeholder-yellow.png';
+import otcLogo from '../../assets/images/home/OTC-yellow.png';
+import pillLogo from '../../assets/images/home/Pill-Yellow.png';
+import showToast from '../../shared/Toast';
+import fontSize from '../../shared/FontSize';
 import handleAxiosErrors from '../../shared/handleAxiosErrors';
 import AsyncStorage from '@react-native-community/async-storage';
-import { setOrdered, setScanned } from '../../store/actions/order';
+import { setOrdered } from '../../store/actions/order';
 import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
+import Cons from '../../shared/Constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-// import scanLogo from '../../assets/images/global/scanner.png';
-import scanLogo from '../../assets/images/home/barcode-scanner-100.png';
-import searchLogo from '../../assets/images/home/search-bar-100.png';
-import pharmacyLogo from '../../assets/images/home/pharmacy-shop-100.png';
+const FONT_SIZE = fontSize(24, PixelRatio.getFontScale());
 
 type Props = {
     route: RouteProp<HomeStackParamList, 'Home'>,
@@ -36,7 +40,6 @@ const Home = (props: Props) => {
     const dispatch = useDispatch();
     const user = useTypedSelector(state => state.user);
     const ordered = useTypedSelector(state => state.order.ordered);
-    const scanned = useTypedSelector(state => state.order.scanned);
 
     useEffect(() => {
         const checkCart = () => {
@@ -148,100 +151,103 @@ const Home = (props: Props) => {
             });
     };
 
-    const scanPrescription = () => {
-        dispatch(setScanned(false));
-        props.navigation.navigate('MakeOrderScan');
-    };
+    const renderChoosePharmacy = () => (
+        <View style={[styles.containerChoosePharmacy, styles.containerRow]}>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={() => props.navigation.navigate('PharmacySearch')}>
+                <Text style={styles.textItem}> Choose </Text>
+                <Text style={styles.textItem}>  Pharmacy </Text>
+                <Image source={choosePharmacyLogo} style={styles.icon} />
+            </TouchableOpacity>
+            {(user.favPharmacyID)
+                ? <View style={[styles.favPharma, styles.containerRow]}>
+                    <Icon name="ios-checkmark-circle-outline" size={30} color="green" />
+                    <View style={styles.container}>
+                        <Text style={styles.favPharmaText}> Pharmacy </Text>
+                        <Text style={styles.favPharmaText}> {user.favPharmacyDesc} </Text>
+                    </View>
+                </View>
+                : null}
+        </View>
+    );
 
-    const chooseProduct = () => {
-        props.navigation.navigate('MakeOrderChoose');
-    };
+    const renderOrderProduct = () => (
+        <View style={styles.containerOrderProduct}>
+            <TouchableOpacity
+                style={styles.circle}
+                onPress={openOrder}>
+                <Text style={styles.textItem}> What do </Text>
+                <Text style={styles.textItem}> you need? </Text>
+                <View style={styles.containerRow}>
+                    <Image source={pillLogo} style={styles.icon} />
+                    <Image source={otcLogo} style={styles.icon} />
+                </View>
+            </TouchableOpacity>
+        </View>
+    );
 
-    const choosePharmacy = () => {
-        props.navigation.navigate('PharmacySearch');
+    const openOrder = () => {
+        if (!user.favPharmacyID) {
+            showToast('Choose pharmacy to make an Order', 'warning');
+        } else {
+            props.navigation.navigate('MakeOrder');
+        }
     };
 
     return (
         <View style={styles.container}>
-
-            <TouchableOpacity
-                onPress={() => choosePharmacy()}
-                style={styles.box}>
-                <Text style={styles.headerText}> Choose Pharmacy </Text>
-                <Image source={pharmacyLogo} style={[styles.logo, styles.logoPharma]} />
-                {(user.favPharmacyID)
-                    ? <View style={styles.favPharma}>
-                        <Icon name="ios-checkmark-circle-outline" size={30} color="green" />
-                        <Text> Pharmacy {user.favPharmacyDesc} </Text>
-                    </View>
-                    : <Text> No pharmacy selected {user.favPharmacyDesc} </Text>}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={() => scanPrescription()}
-                style={styles.box}>
-                <Text style={styles.headerText}> Scan Prescription </Text>
-                <Image source={scanLogo} style={styles.logo} />
-                {(scanned) ? <Text style={styles.notFoundText}> Prescription not found </Text> : null}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={() => chooseProduct()}
-                style={styles.box}>
-                <Text style={styles.headerText}> Choose Product </Text>
-                <Image source={searchLogo} style={styles.logo} />
-            </TouchableOpacity>
+            {renderChoosePharmacy()}
+            {renderOrderProduct()}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    textItem: {
+        fontSize: FONT_SIZE,
+        marginBottom: 5,
+    },
+    favPharmaText: {
+        fontSize: FONT_SIZE - 4,
+        paddingTop: 5,
+    },
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'white',
     },
-    favPharma: {
-        flexDirection: 'row',
+    containerChoosePharmacy: {
+        alignItems: 'flex-start',
+        width: '100%',
+        aspectRatio: 10 / 4,
+        paddingLeft: 10,
+    },
+    containerOrderProduct: {
         alignItems: 'center',
-        paddingTop: 10,
+        aspectRatio: 10 / 4,
     },
-    box: {
+
+    containerRow: {
+        flexDirection: 'row',
+    },
+    circle: {
+        height: 160,
+        width: 160,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: Cons.COLORS.YELLOW,
+        backgroundColor: Cons.COLORS.WHITE,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 15,
-        borderColor: 'grey',
-        borderWidth: 1,
-        height: 160,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        backgroundColor: '#F0EDE5', // Coconut Milk
-        elevation: 4,
-        shadowOffset: { width: 3, height: 3 },
-        shadowColor: 'grey',
-        shadowOpacity: 1,
-        shadowRadius: 10,
+        marginTop: 15,
     },
-    headerText: {
-        fontSize: 18,
-        fontWeight: '500',
+    favPharma: {
+        paddingLeft: 15,
+        paddingTop: 80,
     },
-    notFoundText: {
-        fontSize: 16,
-        color: 'red',
-    },
-    logo: {
-        marginTop: 10,
-        width: 70,
-        height: 70,
-        resizeMode: 'contain',
-    },
-    logoPharma: {
-        marginTop: 7,
-        width: 60,
-        height: 60,
-        resizeMode: 'contain',
+    icon: {
+        height: 55,
+        width: 55,
     },
 });
 

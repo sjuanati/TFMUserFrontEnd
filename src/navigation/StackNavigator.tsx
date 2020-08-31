@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home/Home';
 import PharmacySearch from '../screens/Pharmacy/PharmacySearch';
 import PharmacyDetails from '../screens/Pharmacy/PharmacyDetail';
-import MakeOrder from '../screens/Order/MakeOrder';
 import MakeOrderScan from '../screens/Order/MakeOrderScan';
 import MakeOrderChoose from '../screens/Order/MakeOrderChoose';
 import OrderSummary from '../screens/Order/OrderSummary';
@@ -67,10 +66,6 @@ const HomeStackScreen = () => (
         <HomeStack.Screen
             name="PharmacyDetails"
             component={PharmacyDetails}
-            options={{ headerShown: true }} />
-        <HomeStack.Screen
-            name="MakeOrder"
-            component={MakeOrder}
             options={{ headerShown: true }} />
         <HomeStack.Screen
             name="MakeOrderScan"

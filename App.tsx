@@ -6,7 +6,7 @@ import orderReducer from './src/store/reducers/order';
 import userReducer from './src/store/reducers/user';
 //import avatarReducer from './src/store/reducers/avatar';
 import modalReducer from './src/store/reducers/modal';
-import { Root } from 'native-base'
+import { Root } from 'native-base';
 
 // Set global state variables through Redux
 const rootReducer = combineReducers({
