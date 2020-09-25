@@ -40,15 +40,15 @@ PODS:
   - GoogleMaps/Base (3.5.0)
   - GoogleMaps/Maps (3.5.0):
     - GoogleMaps/Base
-  - Permission-Camera (2.1.5):
+  - Permission-Camera (2.2.1):
     - RNPermissions
-  - Permission-LocationWhenInUse (2.1.5):
+  - Permission-LocationWhenInUse (2.2.1):
     - RNPermissions
-  - Permission-Microphone (2.1.5):
+  - Permission-Microphone (2.2.1):
     - RNPermissions
-  - Permission-Notifications (2.1.5):
+  - Permission-Notifications (2.2.1):
     - RNPermissions
-  - Permission-PhotoLibrary (2.1.5):
+  - Permission-PhotoLibrary (2.2.1):
     - RNPermissions
   - RCTRequired (0.63.0)
   - RCTTypeSafety (0.63.0):
@@ -216,22 +216,22 @@ PODS:
     - React-cxxreact (= 0.63.0)
     - React-jsi (= 0.63.0)
   - React-jsinspector (0.63.0)
-  - react-native-camera (3.36.0):
-    - React
-    - react-native-camera/RCT (= 3.36.0)
-    - react-native-camera/RN (= 3.36.0)
-  - react-native-camera/RCT (3.36.0):
-    - React
-  - react-native-camera/RN (3.36.0):
-    - React
+  - react-native-camera (3.40.0):
+    - React-Core
+    - react-native-camera/RCT (= 3.40.0)
+    - react-native-camera/RN (= 3.40.0)
+  - react-native-camera/RCT (3.40.0):
+    - React-Core
+  - react-native-camera/RN (3.40.0):
+    - React-Core
   - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
     - React
-  - react-native-image-picker (2.3.3):
-    - React
+  - react-native-image-picker (2.3.4):
+    - React-Core
   - react-native-maps (0.27.1):
     - React
   - react-native-safe-area-context (0.7.3):
@@ -296,25 +296,25 @@ PODS:
     - React-Core (= 0.63.0)
     - React-cxxreact (= 0.63.0)
     - React-jsi (= 0.63.0)
-  - RNCAsyncStorage (1.11.0):
+  - RNCAsyncStorage (1.12.0):
     - React
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPicker (1.6.6):
-    - React
+  - RNCPicker (1.8.0):
+    - React-Core
   - RNDateTimePicker (2.6.2):
     - React
-  - RNGestureHandler (1.7.0):
+  - RNGestureHandler (1.8.0):
     - React
-  - RNPermissions (2.1.5):
+  - RNPermissions (2.2.1):
+    - React-Core
+  - RNReanimated (1.13.1):
     - React
-  - RNReanimated (1.13.0):
-    - React
-  - RNScreens (2.10.1):
+  - RNScreens (2.11.0):
     - React
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (7.0.0):
+  - RNVectorIcons (7.1.0):
     - React
   - toolbar-android (0.1.0-rc.2):
     - React
@@ -487,11 +487,11 @@ SPEC CHECKSUMS:
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
-  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
-  Permission-LocationWhenInUse: 3624cf08c12c6019926aba3054efee7f4f8ee91e
-  Permission-Microphone: 0ffabc3fe1c75cfb260525ee3f529383c9f4368c
-  Permission-Notifications: 231d0e1db2300b686548587d384ba414e6a93332
-  Permission-PhotoLibrary: 4d2eff62c8f4b8a27bcf045c0e36f5047efbbf20
+  Permission-Camera: df27a639d7891ea78a224101c5913a2bd9eb418c
+  Permission-LocationWhenInUse: 5b6d6f65f28ff886fb98d6008d23a3c7f5265823
+  Permission-Microphone: b7d3473413954a6f4a86dfc86d491350ecea8dd5
+  Permission-Notifications: 18976870b05c334b133b1b953fd0ed48ffd98cc9
+  Permission-PhotoLibrary: a0712e750782edc99eb0869f8d116df1beafe213
   RCTRequired: e46bb77db03887b3e200d34b08515c804669db99
   RCTTypeSafety: 270fed6675c42f80fb87b47d626ef3cede1505e6
   React: e008906ff1328f9bccb345ff4f7826397ad223fc
@@ -502,12 +502,12 @@ SPEC CHECKSUMS:
   React-jsi: 254710f3a97e587427bfbf3011dacec2af66a1fc
   React-jsiexecutor: 0e0cb4e170ca72d4bb1179843d08dcbea3d100ac
   React-jsinspector: fc661eff8edbfb7e22119382c13f33bcadde0f3c
-  react-native-camera: 8a63c369af9383fcedea9a73fe234c7efb234d24
-  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+  react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
+  react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
-  react-native-image-picker: 3d3f85baabca60a00b75fb8facc1376db7bbdafa
+  react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
-  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
+  react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   React-RCTActionSheet: aadd91a1d6cbfae50dd41f140004f816e9e47ade
   React-RCTAnimation: 7fa2ef6c0ef1e3f0b7d2261c827ec94412deb5e6
   React-RCTBlob: ccbbc70295aee3a76a70323b48f63fb7a7fcffd6
@@ -518,17 +518,17 @@ SPEC CHECKSUMS:
   React-RCTText: ba503bf4cce41881ca258ba789c33e017955efdd
   React-RCTVibration: 77ab1cf4a5eb854b88ad5ed3e9d8509ed124525e
   ReactCommon: f63556ee9e41e9802257228237e5e660451a03cf
-  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPicker: 494015f2b7ec4bee5484b6f235aa19691426dcdb
+  RNCAsyncStorage: 3eea36d9460c5159b592f9ecbe5a77f8aca98006
+  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNCPicker: a724b3aa22b182697c190a8fd7b060b66119e136
   RNDateTimePicker: dc9dab744823a2c734dbc7362cdf57a3adba3c43
-  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
-  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
-  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
-  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNPermissions: 0819badb1d289f9497e7c5535c2e050d9f62a89d
+  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
+  RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
-  toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
   Yoga: 7d2edc5b410474191962e6dee88ee67f9b328b6b
 
 PODFILE CHECKSUM: e4ca9dc9dcc528f214b772c659373c0233cb26be

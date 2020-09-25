@@ -4,7 +4,6 @@ import {
     Text,
     Modal,
     Alert,
-    Picker,
     Platform,
     TextInput,
     StyleSheet,
@@ -16,6 +15,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
+import {Picker} from '@react-native-community/picker';
 import { useTypedSelector } from '../../store/reducers/reducer';
 import DatePicker from '@react-native-community/datetimepicker';
 import { httpUrl } from '../../../urlServer';

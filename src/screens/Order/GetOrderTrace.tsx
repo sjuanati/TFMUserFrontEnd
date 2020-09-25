@@ -80,7 +80,9 @@ const GetOrderTrace = (props: Props) => {
                     <View style={styles.rowContainer}>
                         <Text style={styles.rowHeader}> Signed by: </Text>
                         <Text style={styles.rowValue}>
-                            {(values.item.order_status < 2) ? values.item.name : 'Pharmacy ' + values.item.pharmacy_desc}
+                            {(values.item.order_status < 2)
+                                ? values.item.name
+                                : 'Pharmacy ' + values.item.pharmacy_desc}
                         </Text>
                     </View>
                 </View>}

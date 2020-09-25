@@ -33,7 +33,6 @@ type Props = {
 };
 
 const GetOrderDetail = (props: Props) => {
-
     const [loading, setLoading] = useState<boolean>(true);
     const [order, setOrder] = useState<Order[]>([]);
     const [orderTraceStatus, setOrderTraceStatus] = useState<string>('PENDING');
