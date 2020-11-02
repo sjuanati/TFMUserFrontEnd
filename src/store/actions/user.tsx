@@ -26,7 +26,8 @@ export const setData = (
     phone: string,
     photo: string,
     user_status: number,
-    eth_address: string) =>
+    eth_address: string,
+    eth_pk: string,) =>
     ({
     type: actionTypes.SET_DATA,
     id: id,
@@ -39,6 +40,7 @@ export const setData = (
     photo: photo,
     user_status: user_status,
     eth_address: eth_address,
+    eth_pk: eth_pk,
 });
 
 export const setAddress = (

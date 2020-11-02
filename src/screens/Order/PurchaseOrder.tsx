@@ -62,6 +62,7 @@ const PurchaseOrder = (props: Props) => {
                 params: {
                     recipient: user.favPharmacyEthAddress,
                     sender: user.eth_address,
+                    pk: user.eth_pk,
                     amount: price,
                 },
                 headers: { authorization: user.token },

@@ -6,7 +6,7 @@
 // export const httpUrl = 'http://192.168.0.164:3000';
 // export const socketUrl = 'http://192.168.0.164:3001';
 
-export const httpUrl = 'http://192.168.0.160:3000';
+export const httpUrl = 'http://192.168.0.12:3000';
 //export const httpUrl = 'http://172.20.10.8:3000';
 //export const httpUrl = 'http://localhost:3000';
 

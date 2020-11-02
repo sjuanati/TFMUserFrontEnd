@@ -29,6 +29,7 @@ const initialState = {
     country: '',
     photo: '',
     eth_address: '',
+    eth_pk: '',
 };
 
 const setFavPharmacy = (state: State, action: Action) => {
@@ -61,6 +62,7 @@ const setData = (state: State, action: Action) => {
             photo: action.photo,
             user_status: action.user_status,
             eth_address: action.eth_address,
+            eth_pk: action.eth_pk,
         },
     };
 };

@@ -45,6 +45,7 @@ export interface RootState {
     country: string,
     photo: string,
     eth_address: string,
+    eth_pk: string,
   },
 }
 

@@ -73,6 +73,7 @@ const Home = (props: Props) => {
                                     res[0].photo,
                                     res[0].status,
                                     res[0].eth_address,
+                                    res[0].eth_prkey,
                                 ));
                                 fetchPharmacy(parseInt(usr, 10), tkn);
                                 fetchAddress(parseInt(usr, 10), tkn);
