@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
-//import tz from 'moment-timezone';
 import Keypad from '../../UI/Keypad';
 import PaymentVISA from '../../UI/PaymentVISA';
 import Cons from '../../shared/Constants';
@@ -100,8 +99,8 @@ const Token = (props: Props) => {
     const toggleTabView = (val: boolean) => (val !== tabView) ? setTabView(!tabView) : null;
 
     const getRemainingDays = (date: Date) => {
-        const today = moment(); //.tz('Europe/Madrid');
-        const end_date = moment(date); //.tz('Europe/Madrid');
+        const today = moment();
+        const end_date = moment(date);
         const remainingDays = end_date.diff(today, 'days');
 
         if (remainingDays < 0) {

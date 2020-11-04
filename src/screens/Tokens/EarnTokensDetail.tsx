@@ -8,7 +8,6 @@ import {
     Alert,
 } from 'react-native';
 import moment from 'moment';
-//import tz from 'moment-timezone';
 import Cons from '../../shared/Constants';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -32,8 +31,8 @@ const EarnTokensDetail = (props: Props) => {
     const [isLegalAccepted, setIsLegalAccepted] = useState(false);
 
     const renderDate = (startDate: Date, endDate: Date) => {
-        const start = moment(startDate)/*.tz('Europe/Madrid')*/.format('Do MMMM YY');
-        const end = moment(endDate)/*.tz('Europe/Madrid')*/.format('Do MMMM YY');
+        const start = moment(startDate).format('Do MMMM YY');
+        const end = moment(endDate).format('Do MMMM YY');
         return `${start}  -  ${end}`;
     };
 

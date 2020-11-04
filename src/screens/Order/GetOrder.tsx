@@ -119,8 +119,6 @@ const GetOrder = (props: Props) => {
             } else if (!filter.grey && !filter.red && !filter.yellow && !filter.green) {
                 finalArray = [];
             }
-            // let initialItem = finalArray.find((item: Order) => item.order_id === '0');
-            // if (!initialItem) { finalArray.unshift({ order_id: 0, header: true }); }
             resolve(finalArray);
         });
     };
@@ -150,7 +148,6 @@ const GetOrder = (props: Props) => {
 
     const openOrder = async ({ item }: { item: any }) => {
         if (item) {
-            //dispatch(setOrdersPage(false));
             props.navigation.navigate('OrderDetail', {
                 order_id: item.order_id,
             });
@@ -164,7 +161,6 @@ const GetOrder = (props: Props) => {
             <View>
                 {(item.item.header) ?
                     <ListItem itemDivider
-                        //style={{ marginLeft: 0 }}
                         id={item.item.order_id.toString()}>
                         <Left style={styles.flex06}>
                             <Text>Order</Text>
@@ -175,7 +171,6 @@ const GetOrder = (props: Props) => {
                     </ListItem>
                     :
                     <ListItem
-                        //style={{ marginLeft: 0 }}
                         id={item.item.order_id.toString()}>
                         <Body style={[styles.paddingLeft5, styles.flex06]}>
                             <TouchableOpacity onPress={() => openOrder(item)}>

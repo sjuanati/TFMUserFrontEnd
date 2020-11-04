@@ -8,5 +8,4 @@ export const SET_DATA = 'SET_DATA';
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const SET_ORDERS_PAGE = 'SET_ORDERS_PAGE';
 export const SET_SCANNED = 'SET_SCANNED';
-//export const SET_AVATAR = 'SET_AVATAR';
 export const SET_MODAL_PROFILE = 'SET_MODAL_PROFILE';

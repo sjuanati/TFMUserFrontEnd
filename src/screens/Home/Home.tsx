@@ -21,7 +21,6 @@ import { setOrdered, setScanned } from '../../store/actions/order';
 import { setFavPharmacy, setData, setAddress } from '../../store/actions/user';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-// import scanLogo from '../../assets/images/global/scanner.png';
 import scanLogo from '../../assets/images/home/barcode-scanner-100.png';
 import searchLogo from '../../assets/images/home/search-bar-100.png';
 import pharmacyLogo from '../../assets/images/home/pharmacy-shop-100.png';

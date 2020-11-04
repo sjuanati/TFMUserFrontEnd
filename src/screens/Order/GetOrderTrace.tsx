@@ -15,8 +15,6 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { OrderStackParamList } from '../../navigation/StackNavigator';
 
-//const box_width = 50;
-
 type Props = {
     route: RouteProp<OrderStackParamList, 'OrderTrace'>,
     navigation: StackNavigationProp<OrderStackParamList, 'OrderTrace'>
@@ -121,12 +119,6 @@ const styles = StyleSheet.create({
     rowValue: {
         width: 300,
     },
-    // box: {
-    //     width: box_width,
-    //     height: box_width,
-    //     borderRadius: box_width / 2,
-    //     backgroundColor: 'green',
-    // },
     textHeader: {
         fontSize: 16,
         fontWeight: 'bold',
